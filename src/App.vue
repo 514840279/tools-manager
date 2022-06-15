@@ -1,59 +1,36 @@
+
 <template>
-  <div>
-    <!-- <HelloWorld msg="Welcome to Your Vue.js App"/> -->
-    <!-- <div class="app">{{store.state.home.count}}
-    <button @click="add">+值</button> <button @click="del">-值</button> 
-    </div> -->
-    <Index />
-    <Login />
-  </div>
+  <Admin v-if="viewF === ViewType.Admin" />
+  <Index v-if="viewF === ViewType.User" />
+  <Login v-if="viewF === ViewType.Login" />
+  <Error v-if="viewF === ViewType.Error" />
 </template>
+<script setup   lang="ts">
 
-<script>
-// import HelloWorld from './components/HelloWorld.vue'
+
+import Admin from './views/Admin.vue'
 import Index from './views/index.vue'
-import Login from './views/login/index.vue'
+import Login from './views/Login.vue'
+import Error from './views/Error.vue'
 
 
-import { useStore } from 'vuex';
+import { ViewType } from './interface/View'
 
-export default {
-  name: 'App',
-  components: {
-    // HelloWorld,
-    Index,
-    Login
-  },
-  setup() {
-		const store = useStore();
-		const add = () => {
-      store.dispatch('totalFunAdd',store.state.home.count)
-    }
-    const del = () => {
-      store.dispatch('totalFunDel', store.state.home.count)
-    }
-    return {
-      add,
-      del,
-      store
-    }
-	},
+// TODO 判断登录后信息展示 默认登录页面 
+let viewF: ViewType = ViewType.Admin;
 
-}
+
+
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 0px;
-}
-body{
-  padding: 0px;
+html,
+body {
   margin: 0px;
+  padding: 0px;
 }
 
+.el-header {
+  padding: 0px;
+}
 </style>

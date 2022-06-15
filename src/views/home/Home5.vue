@@ -1,31 +1,10 @@
 <template>
-    <div id="Home5">
-        Home5
-    </div>
+    <div> home5 </div>
 </template>
-<script>
 
+<script setup lang="ts">
 
-export default {
-    name:'Home5',
-    components: {},
-    data(){
-        return{
-           
-        }
-    },
-    mounted(){
-        this.init();
-    },
-    methods:{
-        init() {
-           
-        }
-    }
-}
 </script>
-<style scoped>
-#Home5{
 
-}
+<style scoped>
 </style>

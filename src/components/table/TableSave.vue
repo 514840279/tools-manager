@@ -1,7 +1,7 @@
 <template>
     <div id="TableSave">
-        <el-form ref="form" :model="row" label-width="120px" :label-position="labelPosition">
-            <el-form-item v-for="(item,index) in columns" :key="index"  :label="item.title">
+        <el-form ref="form" :model="row" label-width="120px" :label-position="parents.labelPosition">
+            <el-form-item v-for="(item, index) in parents.columns" :key="index" :label="item.title">
                 <el-input v-model="row[item.name]"></el-input>
             </el-form-item>
             <el-form-item>
@@ -11,55 +11,40 @@
         </el-form>
     </div>
 </template>
-<script>
+<script lang="ts" setup>
+import { onMounted, ref } from 'vue';
+import { Column } from '../../interface/Table'
+
+const parents = withDefaults(defineProps<{
+    info?: any,
+    columns?: Array<Column>,
+    labelPosition?: String
+}>(), {
+    info: () => { },
+    columns: () => [],
+    labelPosition: () => "top"
+});
+
+const emit = defineEmits(["onSave", "update:info", "onCancel"]);
+
+let row = ref<any>({});
+
+onMounted(() => {
+    row.value = parents.info;
+})
 
 
-export default {
-    name:'TableSave',
-    components: {},
-    props:{
-        info:{
-            type:Object
-        },
-        columns:{
-            type:Array
-        },
-        labelPosition:{
-            type:String,
-            default(){
-                return　'top'
-            }
-        }
-    },
-    data(){
-        return{
-           row:{}
-        }
-    },
-    mounted(){
-        this.init();
-    },
-    methods:{
-        init() {
-            this.row = this.info;
-        },
-        onSave(){
-            this.$emit('update:info', this.row);
-            this.$emit('onSave');
-        },
-        onCancel(){
-            this.$emit('onCancel');
-        }
-    },
-    watch: {
-        info: function (val) {
-            this.row = val
-        }
-    }
+function onSave() {
+    emit('update:info', row.value);
+    emit('onSave');
 }
+function onCancel() {
+    emit('onCancel');
+}
+
+
+
 </script>
 <style scoped>
-#Table{
-
-}
+#Table {}
 </style>

@@ -1,65 +1,49 @@
 <template>
     <div id="TableSortColumnSelect">
-        <el-select v-model="value" size="mini" style="width:100%"  @change="handleChange">
-            <el-option
-                v-for="(cl,idx) in sortColumns"
-                :key="idx"
-                :label="cl.sortTitle"
-                :value="cl.sortName"
-            >
+        <el-select v-model="sortName" size="small" style="width:100%" @change="handleChange">
+            <el-option v-for="(cl, idx) in sortColumns" :key="idx" :label="cl.sortTitle" :value="cl.sortName">
             </el-option>
         </el-select>
     </div>
 </template>
-<script>
+<script lang="ts" setup>
+import { onMounted, ref } from 'vue';
+import { SortColumn } from '../../interface/Table'
 
-
-export default {
-    name:'TableSortColumnSelect',
-    components: {},
-    props:{
-        sortColumns:{
-            type: Array
-        },
-        item:{
-            type: Object
-        },
-        index:{
-            type: Number
-        },
-        parameters:{
-            type: Array
-        },
-    },
-    data(){
-        return{
-           row:null,
-           value:null,
-           pdata:null,
-        }
-    },
-    created(){
-        this.value = this.item.sortName;
-        this.pdata = this.parameters;
-    },
-    mounted(){
-        this.value = this.item.sortName;
-        this.pdata = this.parameters;
-    },
-    methods:{
-        handleChange(va){
-            this.sortColumns.forEach(item =>{
-                if(item.sortName == va){
-                    item.sortIndex = this.index+1;
-                    this.pdata.splice(this.index, 1,item);
-                }
-            });
+const parents = withDefaults(defineProps<{
+    sortColumns: Array<SortColumn>,
+    item: SortColumn
+}>(), {
+    sortColumns: () => [],
+    item: () => {
+        return {
+            sortIndex: 0,
+            sortTitle: "未知",
+            sortOrder: "未知",
+            sortName: "未知",
         }
     }
+});
+
+
+let sortName = ref<String>();
+
+onMounted(() => {
+    sortName.value = parents.item.sortName;
+})
+
+
+function handleChange(va: String) {
+    parents.sortColumns.forEach(item => {
+        if (item.sortName == va) {
+            parents.item = item;
+        }
+    });
 }
+
 </script>
 <style scoped>
-#TableSortColumnSelect{
+#TableSortColumnSelect {
     margin: 0px;
     padding: 0px;
     width: 100%;
