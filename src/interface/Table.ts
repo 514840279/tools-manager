@@ -1,56 +1,72 @@
 export interface PageParam{
     pageNumber: number,
-    sizes: Array<Number>,
-    pageSize: Number,
-    totalElements: Number,
+    sizes: Array<number>,
+    pageSize: number,
+    totalElements: number,
     info?: Object,
     sortList?: Array<SortColumn>,
     searchList?: Array<SearchParamters>
 }
 export interface Column{
-    name: String,
-    title: String,
-    width?: Number,
-    resizable?: Boolean,
-    align?:String,
-    show?: Boolean,
-    sort?: Boolean,
-    sortOrder?:String,
-    searchType?:String,
-    searchDataFormatter?: String,
-    searchDataDefault?: String,
-    searchDataArray?:String,
-    search?: Boolean
+    name: string,
+    title: string,
+    width?: number,
+    resizable?: boolean,
+    align?:string,
+    show?: boolean,
+    type?:string,
+    sort?: boolean,
+    sortOrder?: string,
+    searchPlaceholder?: string,
+    searchType?:string,
+    searchDataFormatter?: string,
+    searchDataDefault?: string,
+    searchDataArray?:string,
+    search?: boolean
 }
 
 export interface SortColumn{
     sortIndex: number,
-    sortTitle: String,
-    sortOrder: String,
-    sortName: String,
+    sortTitle: string,
+    sortOrder: string,
+    sortName: string,
 }
 export interface SearchColumn{
-    searchName: String,
-    searchTitle: String,
-    searchType: String,
-    searchDataFormatter?: String,
-    searchDataDefault?:String,
-    searchDataArray?:String,
-    searchPlaceholder?: String,
+    searchName: string,
+    searchTitle: string,
+    searchType: string,
+    searchDataFormatter?: string,
+    searchDataDefault?:string,
+    searchDataArray?:string,
+    searchPlaceholder?: string,
+
+}
+export enum SearchType{
+    TEXT = 'text',
+    INTEGER = 'integer',
+    INTEGER_RANGE = 'integerrange',
+    ICON = 'icon',
+    COLOR = 'color',
+    DATE = 'date',
+    DATETIME = 'datetime',
+    DATERANGE = 'daterange',
+    SELECT = 'select',
+    REDIO = 'redio',
+    CHECKBOX = 'checkbox'
 }
 
 export interface SearchParamters{
-    operator: String,
-    column: String,
-    title: String,
-    symbol: String,
-    data: String,
-    searchPlaceholder?: String,
-    showdata: Boolean
+    operator: string,
+    column: string,
+    title: string,
+    symbol: string,
+    data: string,
+    searchPlaceholder?: string,
+    showdata: boolean
 }
 
 export interface TableProps{
-    rootUrl?:String,
+    rootUrl?:string,
     page?: PageParam,
     columns?: Array<Column>,
     optionBtn?:Object

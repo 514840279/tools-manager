@@ -65,7 +65,16 @@ const routes = [
     path: '/databasetype',
     name: "databasetype",
     component: () => import('../views/database/type/Index.vue'),
-  },{
+  
+  }, {
+    path: '/index',
+    name: "index",
+    component: () => import('../views/database/index/Index.vue'),
+  }, { 
+    path: '/database',
+    name: "database",
+    component: () => import('../views/database/database/Index.vue'),
+  }, { 
     path: '/error',
     name: "error",
     component: Err,

@@ -2,7 +2,8 @@
     <div id="TableSave">
         <el-form ref="form" :model="row" label-width="120px" :label-position="parents.labelPosition">
             <el-form-item v-for="(item, index) in parents.columns" :key="index" :label="item.title">
-                <el-input v-model="row[item.name]"></el-input>
+                <Icon v-if="item.type == SearchType.ICON" :columnName="item.name" :icon="row[item.name]" type="info" @onSelect="selectIcon"></Icon>
+                <el-input v-else v-model="row[item.name]"></el-input>
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" @click="onSave">保存</el-button>
@@ -12,12 +13,13 @@
     </div>
 </template>
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue';
-import { Column } from '../../interface/Table'
+import { onBeforeMount, ref } from 'vue';
+import { Column, SearchType } from '../../interface/Table'
+import Icon from '../select/icon/Index.vue'
 
 const parents = withDefaults(defineProps<{
     info?: any,
-    columns?: Array<Column>,
+    columns: Array<Column>,
     labelPosition?: String
 }>(), {
     info: () => { },
@@ -25,11 +27,12 @@ const parents = withDefaults(defineProps<{
     labelPosition: () => "top"
 });
 
+
 const emit = defineEmits(["onSave", "update:info", "onCancel"]);
 
 let row = ref<any>({});
 
-onMounted(() => {
+onBeforeMount(() => {
     row.value = parents.info;
 })
 
@@ -40,6 +43,13 @@ function onSave() {
 }
 function onCancel() {
     emit('onCancel');
+}
+
+function selectIcon(param: any) {
+    console.log(row.value)
+    row.value[param.columnName] = param.icon;
+    console.log(row.value)
+
 }
 
 

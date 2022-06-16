@@ -126,7 +126,7 @@ const asides: Array<Aside> = [
         icon: "Message",
         data: [
           { index: "2-1-2", text: "数据类型", link: "/databasetype" },
-          { index: "2-1-4", text: "索引类型", link: "/userindex" },
+          { index: "2-1-4", text: "索引类型", link: "/index" },
           { index: "2-1-1", text: "数据库", link: "/database" },
           { index: "2-1-3", text: "表管理", link: "/tables" },
           { index: "2-1-5", text: "字段管理", link: "/columns" },

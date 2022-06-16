@@ -1,7 +1,7 @@
 <template>
     <el-row>
         <el-col :span="searchSize / 20" v-for="(item, index) in columns" :key="index" class="ainput">
-            <el-input size="small" v-model="parents.searchParameters[index].data" :placeholder="item.searchPlaceholder" @input="handleSearch()" />
+            <el-input v-if="item.searchType == 'text'" size="small" v-model="parents.searchParameters[index].data" :placeholder="item.searchPlaceholder" @input="handleSearch()" />
         </el-col>
         <el-col :span="2">
             <el-button title="确定" @click="handleSearch()" type="success" icon="Check" circle size="small"></el-button>
@@ -12,7 +12,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import { SearchColumn, SearchParamters } from '../../interface/Table'
+import { SearchColumn, SearchParamters, SearchType } from '../../interface/Table'
 
 
 const parents = withDefaults(defineProps<{
@@ -32,7 +32,6 @@ const emit = defineEmits(["searchTable"]);
 
 onMounted(() => {
     columns.value = parents.searchColumns;
-
     init();
 });
 

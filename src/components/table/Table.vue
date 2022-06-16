@@ -24,6 +24,11 @@
                 <div id="Table" ref="print">
                     <el-table id="tableid" v-loading="loading" :data="dataList" style="width: 100%">
                         <el-table-column v-for="(column, ind) in activeColumns" :key="ind" :prop="column.name" :label="column.title" :width="column.width == null ? '' : column.width" :align="column.align == null ? 'left' : column.align" :resizable="column.resizable == null ? false : column.resizable">
+                            <template v-if="column.type == SearchType.ICON" #default="scope">
+                                <el-icon :size="15" :title="scope.row[column.name]">
+                                    <component :is="scope.row[column.name]"></component>
+                                </el-icon>
+                            </template>
                         </el-table-column>
                         <el-table-column fixed="right" label="操作" width="124" v-if="localOptionBtn.opt">
                             <template #default="scope">
@@ -55,7 +60,7 @@
 
 <script lang="ts" setup>
 import { onBeforeMount, ref, computed } from 'vue';
-import { PageParam, Column, SortColumn, SearchColumn, SearchParamters, OptionBtn } from '../../interface/Table'
+import { PageParam, Column, SortColumn, SearchColumn, SearchParamters, OptionBtn, SearchType } from '../../interface/Table'
 // import axios from 'axios';
 import http from '../../plugins/http';
 import TableSave from './TableSave.vue'
@@ -68,12 +73,13 @@ import TableSearch from './TableSearch.vue'
 
 
 const parents = withDefaults(defineProps<{
-    rootUrl?: String,
+    rootUrl: String,
+    columns: Array<Column>,
     page?: PageParam,
-    columns?: Array<Column>,
     optionBtn?: OptionBtn
 }>(), {
     rootUrl: () => "",
+    columns: () => [],
     page: () => {
         return {
             pageNumber: 1,
@@ -82,8 +88,10 @@ const parents = withDefaults(defineProps<{
             totalElements: 0,
         }
     },
-    columns: () => [],
-    optionBtn: () => { }
+    optionBtn: () => {
+        return {
+        }
+    }
 
 });
 
@@ -122,7 +130,7 @@ let localOptionBtn = ref<OptionBtn>({
         totalElements: 0
     },
     // 表加载
-    loading = ref<Boolean>(true);
+    loading = ref<boolean>(true);
 // 表格数据
 let dataList = ref<Array<any>>([]),
     // 编辑的数据
@@ -135,7 +143,7 @@ let dataList = ref<Array<any>>([]),
     /*{
         name= name,                                 
         search=true,
-        search-type= text/integer/integerrange
+        search-type= text/integer/integerrange/icon/color
         // search-type= date/datetime/daterange
         // search-data-formatter= 'yyyy-MM-dd'/'yyyy-MM-dd HH=mm=ss'
         // search-type= select/redio/checkbox
@@ -168,6 +176,10 @@ onBeforeMount(() => {
 
 // 初始化参数
 function init(): void {
+    //  默认值补充
+    parents.columns.forEach(item => {
+        item.type = item.type == null ? SearchType.TEXT : item.type
+    })
     // 查询条件
     showColumns.value.forEach((item, index) => {
         // 排序查询条件
@@ -186,7 +198,7 @@ function init(): void {
         // 准备查询条件
         if (item.search != null) {
             // 默认值设置
-            let searchType = item.searchType == null ? 'text' : item.searchType;
+            let searchType = item.searchType == null ? SearchType.TEXT : item.searchType;
             // 添加可选条件
             searchColumns.push({
                 "searchName": item.name,
@@ -195,7 +207,7 @@ function init(): void {
                 "searchDataFormatter": item.searchDataFormatter,
                 "searchDataDefault": item.searchDataDefault,
                 "searchDataArray": item.searchDataArray,
-                "searchPlaceholder": "请输入" + item.title,
+                "searchPlaceholder": item.searchPlaceholder == null ? "请输入" + item.title : item.searchPlaceholder,
             });
         }
         // 默认值设置
@@ -218,7 +230,6 @@ function initTable(): void {
     param.searchList = searchParameters.value;
 
     http.post<any>(url.page, param).then((reponse) => {
-        debugger
         if (reponse.data != null && reponse.code == 200) {
             dataList.value = reponse.data.content;
             var size = reponse.data.totalElements;
@@ -256,7 +267,7 @@ function handleShowSort(): void {
     }
 }
 // 每页大小
-function handleSizeChange(val: Number): void {
+function handleSizeChange(val: number): void {
     param.pageSize = val;
     initTable();
 }
