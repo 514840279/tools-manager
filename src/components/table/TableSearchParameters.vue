@@ -11,18 +11,19 @@
                 <TableSearchSymbolSelect :item="item" :index="index" v-model:parameters="parents.searchParameters"></TableSearchSymbolSelect>
             </el-col>
             <el-col :span="6" v-if="item.showdata">
-                <el-select v-if="item.searchType == SearchType.SELECT" v-model="parents.searchParameters[index].data" class="m-2" :placeholder="item.searchPlaceholder" size="small" clearable="true">
+                <el-select v-if="item.searchType == SearchType.SELECT" v-model="parents.searchParameters[index].data" class="full" :placeholder="item.searchPlaceholder" size="small" clearable="true">
                     <el-option v-for="op in item.searchDataArray" :key="op.value" :label="op.label" :value="op.value" />
                 </el-select>
-                <el-input v-else size="small" v-model="item.data" :placeholder="item.searchPlaceholder" />
+                <el-input-number v-else-if="item.searchType == SearchType.INTEGER" size="small" v-model="item.data" :placeholder="item.searchPlaceholder" class="full"></el-input-number>
+                <el-input v-else="item.searchType == SearchType.TEXT" size="small" v-model="item.data" :placeholder="item.searchPlaceholder" />
             </el-col>
             <el-col :span="1">
-                <el-button @click="handleDelSearch(item, index)" icon="Remove" circle size="small" title="删除"></el-button>
+                <!-- <el-button @click="handleDelSearch(item, index)" icon="Remove" circle size="small" title="删除"></el-button> -->
             </el-col>
         </el-row>
         <el-row>
             <el-col :span="12">
-                <el-button @click="handleAddSearch" type="success" icon="Plus" circle size="small" title="添加"></el-button>
+                <!-- <el-button @click="handleAddSearch" type="success" icon="Plus" circle size="small" title="添加"></el-button> -->
                 <el-button @click="handleSearch" type="success" icon="Check" circle size="small" title="确定"></el-button>
             </el-col>
         </el-row>
@@ -106,12 +107,12 @@ function handleSearchOperator(item: SearchParamters, index: number) {
 }
 // 删除条件
 function handleDelSearch(item: SearchParamters, index: number) {
-    
+
     parameters.value.splice(index, 1);
 }
 
 </script>
-<style scoped>
+<style lang="scss" scoped>
 #TableSearchParameters {
     margin: 0px;
     padding: 8px;
@@ -119,5 +120,9 @@ function handleDelSearch(item: SearchParamters, index: number) {
     min-height: 150px;
     max-height: 320px;
     overflow-y: scroll;
+
+    .full {
+        width: 100%;
+    }
 }
 </style>

@@ -3,9 +3,10 @@
         <el-form ref="form" :model="row" label-width="120px" :label-position="parents.labelPosition">
             <el-form-item v-for="(item, index) in parents.columns" :key="index" :label="item.title">
                 <Icon v-if="item.type == SearchType.ICON" :columnName="item.name" :icon="row[item.name]" type="info" @onSelect="selectIcon"></Icon>
-                <el-select v-else-if="item.type == SearchType.SELECT" v-model="row[item.name]" class="m-2" placeholder="Select" size="large">
+                <el-select v-else-if="item.type == SearchType.SELECT" v-model="row[item.name]" class="m-2" placeholder="Select" size="small">
                     <el-option v-for="op in item.searchDataArray" :key="op.value" :label="op.label" :value="op.value" />
                 </el-select>
+                <el-input-number v-else-if="item.type == SearchType.INTEGER" v-model="row[item.name]"></el-input-number>
                 <el-input v-else v-model="row[item.name]"></el-input>
             </el-form-item>
             <el-form-item>
@@ -49,9 +50,7 @@ function onCancel() {
 }
 
 function selectIcon(param: any) {
-    console.log(row.value)
     row.value[param.columnName] = param.icon;
-    console.log(row.value)
 
 }
 

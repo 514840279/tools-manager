@@ -44,6 +44,7 @@ function init() {
         name: "tabsRows",
         title: "数据量",
         align: 'left',
+        type: SearchType.INTEGER,
         sort: true,
         search: true
     }, {

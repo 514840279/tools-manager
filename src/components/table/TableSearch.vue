@@ -1,11 +1,14 @@
 <template>
     <el-row>
-        <el-col :span="searchSize / 20" v-for="(item, index) in columns" :key="index" class="ainput">
+        <el-col :span="Math.floor(20 / searchSize)" v-for="(item, index) in columns" :key="index" class="ainput">
             <template v-if="item.searchType == SearchType.TEXT">
                 <el-input size="small" v-model="parents.searchParameters[index]['data']" :placeholder="item.searchPlaceholder" @input="handleSearch()" />
             </template>
+            <template v-if="item.searchType == SearchType.INTEGER">
+                <el-input-number class="full" size="small" v-model="parents.searchParameters[index]['data']" :placeholder="item.searchPlaceholder" @change="handleSearch()" />
+            </template>
             <template v-else-if="item.searchType == SearchType.SELECT">
-                <el-select v-model="parents.searchParameters[index]['data']" class="m-2" :placeholder="item.searchPlaceholder" size="small" @change="handleSearch()" clearable="true">
+                <el-select v-model="parents.searchParameters[index]['data']" class="full" :placeholder="item.searchPlaceholder" size="small" @change="handleSearch()" :clearable="true">
                     <el-option v-for="op in item.searchDataArray" :key="op.value" :label="op.label" :value="op.value" />
                 </el-select>
             </template>
@@ -45,13 +48,13 @@ onMounted(() => {
 function init() {
     parents.searchColumns.forEach((column, index) => {
         if (index < 5) {
-            if (column.searchType == SearchType.SELECT) {
+            if (column.searchType == SearchType.SELECT || column.searchType == SearchType.INTEGER) {
                 parents.searchParameters.push({
                     operator: 'and',
                     column: column.searchName,
                     title: column.searchTitle,
                     symbol: "eq",
-                    data: "",
+                    data: undefined,
                     searchPlaceholder: column.searchPlaceholder,
                     showdata: true,
                     searchDataArray: column.searchDataArray,
@@ -88,5 +91,9 @@ function handleReset() {
 <style lang="scss" scoped>
 .ainput {
     padding: 0px 5px;
+}
+
+.full {
+    width: 100%;
 }
 </style>

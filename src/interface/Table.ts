@@ -66,7 +66,7 @@ export interface SearchParamters{
     column: string,
     title: string,
     symbol: string,
-    data?: string,
+    data?: string|number|undefined,
     searchPlaceholder?: string,
     showdata: boolean,
     searchDataArray?: Array<SelectOptions>,

@@ -1,6 +1,6 @@
 
 <template>
-    <el-button text @click="dialogVisible = true" :icon="loicon" :type="parents.type" size="22"> 点击修改图标</el-button>
+    <el-button text @click="dialogVisible = true" :icon="loicon" :type="parents.type" size="small"> 点击修改图标</el-button>
     <el-dialog v-model="dialogVisible" title="图标列表选择" width="60%">
         <div>
             <ul class="item-list">
