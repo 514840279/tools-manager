@@ -1,7 +1,14 @@
 <template>
     <el-row>
         <el-col :span="searchSize / 20" v-for="(item, index) in columns" :key="index" class="ainput">
-            <el-input v-if="item.searchType == 'text'" size="small" v-model="parents.searchParameters[index].data" :placeholder="item.searchPlaceholder" @input="handleSearch()" />
+            <template v-if="item.searchType == SearchType.TEXT">
+                <el-input size="small" v-model="parents.searchParameters[index]['data']" :placeholder="item.searchPlaceholder" @input="handleSearch()" />
+            </template>
+            <template v-else-if="item.searchType == SearchType.SELECT">
+                <el-select v-model="parents.searchParameters[index]['data']" class="m-2" :placeholder="item.searchPlaceholder" size="small" @change="handleSearch()" clearable="true">
+                    <el-option v-for="op in item.searchDataArray" :key="op.value" :label="op.label" :value="op.value" />
+                </el-select>
+            </template>
         </el-col>
         <el-col :span="2">
             <el-button title="确定" @click="handleSearch()" type="success" icon="Check" circle size="small"></el-button>
@@ -38,15 +45,30 @@ onMounted(() => {
 function init() {
     parents.searchColumns.forEach((column, index) => {
         if (index < 5) {
-            parents.searchParameters.push({
-                operator: 'and',
-                column: column.searchName,
-                title: column.searchTitle,
-                symbol: "like",
-                data: "",
-                searchPlaceholder: column.searchPlaceholder,
-                showdata: true,
-            })
+            if (column.searchType == SearchType.SELECT) {
+                parents.searchParameters.push({
+                    operator: 'and',
+                    column: column.searchName,
+                    title: column.searchTitle,
+                    symbol: "eq",
+                    data: "",
+                    searchPlaceholder: column.searchPlaceholder,
+                    showdata: true,
+                    searchDataArray: column.searchDataArray,
+                    searchType: column.searchType
+                })
+            } else {
+                parents.searchParameters.push({
+                    operator: 'and',
+                    column: column.searchName,
+                    title: column.searchTitle,
+                    symbol: "like",
+                    data: "",
+                    searchPlaceholder: column.searchPlaceholder,
+                    showdata: true,
+                    searchType: column.searchType
+                })
+            }
         }
     });
     searchSize.value = parents.searchParameters.length;

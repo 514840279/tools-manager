@@ -19,15 +19,22 @@
                         </div>
                     </el-col>
                 </el-row>
-                <TableSearchParameters v-if="localOptionBtn.searchParam && showSearch" :searchColumns="searchColumns" v-model:searchParameters="searchParameters" @searchTable="initTable"></TableSearchParameters>
+                <TableSearchParameters v-if="localOptionBtn.searchParam && showSearch" :searchColumns="searchColumns" v-model:searchParameters="searchParameters" @searchTable="searchTable"></TableSearchParameters>
                 <TableSortParameters v-if="localOptionBtn.sort && showSort" :sortColumns="sortColumns" v-model:sortParameters="sortParameters" @sortTable="initTable"></TableSortParameters>
                 <div id="Table" ref="print">
                     <el-table id="tableid" v-loading="loading" :data="dataList" style="width: 100%">
                         <el-table-column v-for="(column, ind) in activeColumns" :key="ind" :prop="column.name" :label="column.title" :width="column.width == null ? '' : column.width" :align="column.align == null ? 'left' : column.align" :resizable="column.resizable == null ? false : column.resizable">
-                            <template v-if="column.type == SearchType.ICON" #default="scope">
-                                <el-icon :size="15" :title="scope.row[column.name]">
-                                    <component :is="scope.row[column.name]"></component>
-                                </el-icon>
+                            <template #default="scope">
+                                <div v-if="column.type == SearchType.ICON">
+                                    <el-icon :size="15" :title="scope.row[column.name]">
+                                        <component :is="scope.row[column.name]"></component>
+                                    </el-icon>
+                                </div>
+                                <div v-if="column.type == SearchType.SELECT">
+                                    <template v-for="(opt, i) in column.searchDataArray" :key="i">
+                                        <span v-if="showSelectText(opt, scope.row[column.name])">{{ opt.label }}</span>
+                                    </template>
+                                </div>
                             </template>
                         </el-table-column>
                         <el-table-column fixed="right" label="操作" width="124" v-if="localOptionBtn.opt">
@@ -60,7 +67,7 @@
 
 <script lang="ts" setup>
 import { onBeforeMount, ref, computed } from 'vue';
-import { PageParam, Column, SortColumn, SearchColumn, SearchParamters, OptionBtn, SearchType } from '../../interface/Table'
+import { PageParam, Column, SortColumn, SearchColumn, SearchParamters, OptionBtn, SearchType, SelectOptions } from '../../interface/Table'
 // import axios from 'axios';
 import http from '../../plugins/http';
 import TableSave from './TableSave.vue'
@@ -176,12 +183,11 @@ onBeforeMount(() => {
 
 // 初始化参数
 function init(): void {
-    //  默认值补充
-    parents.columns.forEach(item => {
-        item.type = item.type == null ? SearchType.TEXT : item.type
-    })
+
     // 查询条件
     showColumns.value.forEach((item, index) => {
+
+        item.type = item.type == null ? SearchType.TEXT : item.type
         // 排序查询条件
         if (item.sort != null) {
             // 默认值是 “asc” 
@@ -197,13 +203,11 @@ function init(): void {
 
         // 准备查询条件
         if (item.search != null) {
-            // 默认值设置
-            let searchType = item.searchType == null ? SearchType.TEXT : item.searchType;
             // 添加可选条件
             searchColumns.push({
                 "searchName": item.name,
                 "searchTitle": item.title,
-                "searchType": searchType,
+                "searchType": item.type,
                 "searchDataFormatter": item.searchDataFormatter,
                 "searchDataDefault": item.searchDataDefault,
                 "searchDataArray": item.searchDataArray,
@@ -350,6 +354,22 @@ function resetTable(): void {
 // 打印表格
 function printTable(): void {
     // $refs.print
+}
+
+//
+function searchTable(param: Array<SearchParamters>) {
+    searchParameters.value = param;
+    initTable();
+}
+//
+function showSelectText(opt: SelectOptions, column: string): boolean {
+    if (opt == null) {
+        return false;
+    }
+    if (opt.value == column) {
+        return true;
+    }
+    return false;
 }
 
 const activeColumns = computed<Column[]>(() => {

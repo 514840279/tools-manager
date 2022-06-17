@@ -1,6 +1,6 @@
 <template>
     <div id="TableSearchParameters">
-        <el-row v-for="(item, index) in parents.searchParameters" :key="index" class="prow">
+        <el-row v-for="(item, index) in parameters" :key="index" class="prow">
             <el-col :span="1">
                 <el-button v-if="index > 0" @click="handleSearchOperator(item, index)" size="small">{{ item.operator }}</el-button>
             </el-col>
@@ -11,7 +11,10 @@
                 <TableSearchSymbolSelect :item="item" :index="index" v-model:parameters="parents.searchParameters"></TableSearchSymbolSelect>
             </el-col>
             <el-col :span="6" v-if="item.showdata">
-                <el-input size="small" v-model="item.data" :placeholder="item.searchPlaceholder" />
+                <el-select v-if="item.searchType == SearchType.SELECT" v-model="parents.searchParameters[index].data" class="m-2" :placeholder="item.searchPlaceholder" size="small" clearable="true">
+                    <el-option v-for="op in item.searchDataArray" :key="op.value" :label="op.label" :value="op.value" />
+                </el-select>
+                <el-input v-else size="small" v-model="item.data" :placeholder="item.searchPlaceholder" />
             </el-col>
             <el-col :span="1">
                 <el-button @click="handleDelSearch(item, index)" icon="Remove" circle size="small" title="删除"></el-button>
@@ -27,7 +30,7 @@
 </template>
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue';
-import { SearchColumn, SearchParamters } from '../../interface/Table'
+import { SearchColumn, SearchParamters, SearchType } from '../../interface/Table'
 
 import TableSearchColumnSelect from './TableSearchColumnSelect.vue'
 import TableSearchSymbolSelect from './TableSearchSymbolSelect.vue'
@@ -43,17 +46,21 @@ const parents = withDefaults(defineProps<{
 
 let
     columns = ref<Array<SearchColumn>>([]),
-    // parameters = ref<Array<SearchParamters>>([]),
+    parameters = ref<Array<SearchParamters>>([]),
     plusNum = ref<number>(0),
-    columnsSize = ref<number>(0);
+    columnsSize = ref<number>(0)
+    ;
 
 const emit = defineEmits(["searchTable"]);
 
 
 onMounted(() => {
     columns.value = parents.searchColumns;
-    // parameters.value = parents.searchParameters;
-
+    parents.searchParameters.forEach(ite => {
+        if (ite.data != null) {
+            parameters.value.push(ite);
+        }
+    })
 });
 
 // 添加新的筛选条件
@@ -67,7 +74,9 @@ function handleAddSearch() {
         plusNum.value = 0;
     }
     let column = columns.value[plusNum.value];
-    parents.searchParameters.push({
+
+
+    parameters.value.push({
         operator: 'and',
         column: column.searchName,
         title: column.searchTitle,
@@ -75,6 +84,8 @@ function handleAddSearch() {
         data: "",
         searchPlaceholder: column.searchPlaceholder,
         showdata: true,
+        searchDataArray: column.searchDataArray,
+        searchType: column.searchType
     });
 
     plusNum.value++;
@@ -82,7 +93,7 @@ function handleAddSearch() {
 }
 // 查询筛选
 function handleSearch() {
-    emit("searchTable");
+    emit("searchTable", parameters.value);
 }
 // 修改连接符
 function handleSearchOperator(item: SearchParamters, index: number) {
@@ -91,11 +102,12 @@ function handleSearchOperator(item: SearchParamters, index: number) {
     } else {
         item.operator = 'and';
     }
-    parents.searchParameters.splice(index, 1, item);
+    parameters.value.splice(index, 1, item);
 }
 // 删除条件
 function handleDelSearch(item: SearchParamters, index: number) {
-    parents.searchParameters.splice(index, 1);
+    
+    parameters.value.splice(index, 1);
 }
 
 </script>
@@ -106,5 +118,6 @@ function handleDelSearch(item: SearchParamters, index: number) {
     background: rgb(248, 248, 248);
     min-height: 150px;
     max-height: 320px;
+    overflow-y: scroll;
 }
 </style>

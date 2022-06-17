@@ -87,7 +87,7 @@ const openedsIndex: Array<String> = ["0-1", "1-1", "2-1", "3-1", "4-1", "5-1", "
 // 菜单集
 const asides: Array<Aside> = [
   {
-    activeIndex: '0-1-1',
+    activeIndex: '0-1',
     submenu: [
       {
         index: "0-1",
@@ -101,7 +101,7 @@ const asides: Array<Aside> = [
     ]
   },
   {
-    activeIndex: '1-1-1',
+    activeIndex: '1-1',
     submenu: [
       {
         index: "1-1",
@@ -118,7 +118,7 @@ const asides: Array<Aside> = [
     ]
   },
   {
-    activeIndex: '2-1-1',
+    activeIndex: '2-1',
     submenu: [
       {
         index: "2-1",
@@ -153,7 +153,7 @@ const asides: Array<Aside> = [
     ]
   },
   {
-    activeIndex: '3-1-1',
+    activeIndex: '3-1',
     openedsIndex: [],
     submenu: [
       {
@@ -171,7 +171,7 @@ const asides: Array<Aside> = [
     ]
   },
   {
-    activeIndex: '4-1-1',
+    activeIndex: '4-1',
     submenu: [
       {
         index: "4-1",
@@ -188,7 +188,7 @@ const asides: Array<Aside> = [
     ]
   },
   {
-    activeIndex: '5-1-1',
+    activeIndex: '5-1',
     submenu: [
       {
         index: "5-1",
@@ -202,7 +202,7 @@ const asides: Array<Aside> = [
     ]
   },
   {
-    activeIndex: '6-1-1',
+    activeIndex: '6-1',
     submenu: [
       {
         index: "6-1",
@@ -217,7 +217,7 @@ const asides: Array<Aside> = [
     ]
   },
   {
-    activeIndex: '7-1-1',
+    activeIndex: '7-1',
     submenu: [
       {
         index: "7-1",

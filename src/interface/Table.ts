@@ -1,3 +1,4 @@
+// 表格分页信息
 export interface PageParam{
     pageNumber: number,
     sizes: Array<number>,
@@ -7,6 +8,7 @@ export interface PageParam{
     sortList?: Array<SortColumn>,
     searchList?: Array<SearchParamters>
 }
+// 表格的字段信息和控制条件
 export interface Column{
     name: string,
     title: string,
@@ -18,29 +20,32 @@ export interface Column{
     sort?: boolean,
     sortOrder?: string,
     searchPlaceholder?: string,
-    searchType?:string,
     searchDataFormatter?: string,
     searchDataDefault?: string,
-    searchDataArray?:string,
+    searchDataArray?:Array<SelectOptions>,
     search?: boolean
 }
 
+// 字段排序条件 数据格式
 export interface SortColumn{
     sortIndex: number,
     sortTitle: string,
     sortOrder: string,
     sortName: string,
 }
+// 字段查询条件 
 export interface SearchColumn{
     searchName: string,
     searchTitle: string,
     searchType: string,
     searchDataFormatter?: string,
     searchDataDefault?:string,
-    searchDataArray?:string,
+    searchDataArray?:Array<SelectOptions>,
     searchPlaceholder?: string,
 
 }
+
+// 控制字段类型的类型
 export enum SearchType{
     TEXT = 'text',
     INTEGER = 'integer',
@@ -55,23 +60,28 @@ export enum SearchType{
     CHECKBOX = 'checkbox'
 }
 
+// 查询参数数据 数据格式
 export interface SearchParamters{
     operator: string,
     column: string,
     title: string,
     symbol: string,
-    data: string,
+    data?: string,
     searchPlaceholder?: string,
-    showdata: boolean
+    showdata: boolean,
+    searchDataArray?: Array<SelectOptions>,
+    searchType: string
 }
 
+// 控件条件
 export interface TableProps{
-    rootUrl?:string,
+    rootUrl:string,
+    columns: Array<Column>,
     page?: PageParam,
-    columns?: Array<Column>,
     optionBtn?:Object
 }
 
+// 控件各个按钮组件的控制显示隐藏
 export interface OptionBtn{
     search?: boolean, // 开启查询功能
     searchParam?: boolean, // 开启查询功能
@@ -88,3 +98,8 @@ interface Optbtn{
     del?: boolean, // 删除 执行delete sql
 }
 
+// 下拉列表信息数据格式 value返回值，label显示
+export interface SelectOptions{
+    value: string|number,
+    label: string,
+} 

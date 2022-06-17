@@ -24,7 +24,8 @@ const parents = withDefaults(defineProps<{
             title: "不知道",
             symbol: "不知道",
             data: "不知道",
-            showdata: false
+            showdata: false,
+            searchType:""
         }
     },
     index: () => 0,
