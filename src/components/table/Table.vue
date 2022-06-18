@@ -2,12 +2,18 @@
     <div style="margin-top:20px;">
         <transition name="el-zoom-in-top">
             <div :class="show == 'page' ? 'transition-box' : null" v-show="show == 'page'">
-                <el-row>
+                <el-row class="arow">
+                    <el-col :span="24">
+                        <slot name="topSearch"></slot>
+                    </el-col>
+                </el-row>
+                <el-row class="brow">
                     <el-col :span="18">
                         <TableSearch v-if="localOptionBtn.search" :searchColumns="searchColumns" v-model:searchParameters="searchParameters" @searchTable="initTable"></TableSearch>
                     </el-col>
                     <el-col :span="6">
                         <div style="text-align: right; margin-right: 10px;">
+                            <slot name="rightBtn"></slot>
                             <el-button title="查询" v-if="localOptionBtn.searchParam" @click="handleShowShearch()" :type="searchBtnType" icon="Search" circle size="small"></el-button>
                             <el-button title="排序" v-if="localOptionBtn.sort" @click="handleShowSort()" :type="sortBtnType" icon="Sort" circle size="small"></el-button>
                             <el-button title="重置" @click="resetTable()" icon="Setting" circle size="small"></el-button>
@@ -83,7 +89,8 @@ const parents = withDefaults(defineProps<{
     rootUrl: String,
     columns: Array<Column>,
     page?: PageParam,
-    optionBtn?: OptionBtn
+    optionBtn?: OptionBtn,
+    datas?: Array<any>
 }>(), {
     rootUrl: () => "",
     columns: () => [],
@@ -114,7 +121,7 @@ let url = {
 // 按钮控制
 let localOptionBtn = ref<OptionBtn>({
     search: true, // 开启查询功能
-    searchParam: true, // 开启查询功能
+    searchParam: false, // 开启查询功能
     sort: true, // 开启排序功能
     add: true, // 添加
     page: true, // 翻页
@@ -173,6 +180,7 @@ let dataList = ref<Array<any>>([]),
     sortBtnType = ref<String>(),
     showSort = ref<Boolean>(false);
 
+
 onBeforeMount(() => {
     // innt
     init();
@@ -183,6 +191,7 @@ onBeforeMount(() => {
 
 // 初始化参数
 function init(): void {
+
 
     // 查询条件
     showColumns.value.forEach((item, index) => {
@@ -230,23 +239,37 @@ function init(): void {
 function initTable(): void {
     show.value = 'page';
     loading.value = true;
-    param.sortList = sortParameters.value;
-    param.searchList = searchParameters.value;
 
-    http.post<any>(url.page, param).then((reponse) => {
-        if (reponse.data != null && reponse.code == 200) {
-            dataList.value = reponse.data.content;
-            var size = reponse.data.totalElements;
-            if (size > 0 && dataList.value.length == 0) {
-                param.pageNumber = param.pageNumber - 1;
-                initTable();
+    if (parents.rootUrl != '') {
+        param.sortList = sortParameters.value;
+        param.searchList = searchParameters.value;
+
+        http.post<any>(url.page, param).then((reponse) => {
+            if (reponse.data != null && reponse.code == 200) {
+                dataList.value = reponse.data.content;
+                var size = reponse.data.totalElements;
+                if (size > 0 && dataList.value.length == 0) {
+                    param.pageNumber = param.pageNumber - 1;
+                    initTable();
+                }
+                param.totalElements = reponse.data.totalElements;
+                loading.value = false;
             }
-            param.totalElements = reponse.data.totalElements;
+        }).catch((err) => {
+            // TODO
+        });
+    } else {
+        debugger
+        if (parents.datas === undefined) {
+
+        } else {
+            let adata: any = parents.datas;
+            dataList.value = adata.content;
+            param.totalElements = adata.totalElements;
             loading.value = false;
         }
-    }).catch((err) => {
-        // TODO
-    });
+
+    }
 }
 // 显示 、隐藏 收索条件框
 function handleShowShearch(): void {
@@ -340,6 +363,7 @@ function resetTable(): void {
                 operator: 'and',
                 column: column.searchName,
                 title: column.searchTitle,
+                searchType: column.searchType,
                 symbol: "like",
                 data: "",
                 searchPlaceholder: column.searchPlaceholder,
@@ -385,6 +409,15 @@ const activeColumns = computed<Column[]>(() => {
 </script>
 
 <style lang="scss" scoped>
+.arow {
+    padding-left: 5px;
+}
+
+.brow {
+    margin-top: 8px;
+}
+
+
 .apagination {
     margin-top: 8px;
 
