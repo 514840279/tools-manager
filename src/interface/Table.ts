@@ -57,7 +57,8 @@ export enum SearchType{
     DATERANGE = 'daterange',
     SELECT = 'select',
     REDIO = 'redio',
-    CHECKBOX = 'checkbox'
+    CHECKBOX = 'checkbox',
+    OPERATION = 'operation'
 }
 
 // 查询参数数据 数据格式

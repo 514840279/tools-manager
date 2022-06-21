@@ -2,10 +2,10 @@
     <el-row>
         <el-col :span="Math.floor(20 / searchSize)" v-for="(item, index) in columns" :key="index" class="ainput">
             <template v-if="item.searchType == SearchType.TEXT">
-                <el-input size="small" v-model="parents.searchParameters[index]['data']" :placeholder="item.searchPlaceholder" @input="handleSearch()" />
+                <el-input size="small" v-model="parents.searchParameters[index]['data']" :placeholder="item.searchPlaceholder" @input="handleSearch()" :clearable="true" />
             </template>
             <template v-if="item.searchType == SearchType.INTEGER">
-                <el-input-number class="full" size="small" v-model="parents.searchParameters[index]['data']" :placeholder="item.searchPlaceholder" @change="handleSearch()" />
+                <el-input-number class="full" size="small" v-model="parents.searchParameters[index]['data']" :placeholder="item.searchPlaceholder" @change="handleSearch()" :clearable="true" />
             </template>
             <template v-else-if="item.searchType == SearchType.SELECT">
                 <el-select v-model="parents.searchParameters[index]['data']" class="full" :placeholder="item.searchPlaceholder" size="small" @change="handleSearch()" :clearable="true">

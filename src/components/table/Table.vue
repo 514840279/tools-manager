@@ -41,6 +41,9 @@
                                         <span v-if="showSelectText(opt, scope.row[column.name])">{{ opt.label }}</span>
                                     </template>
                                 </div>
+                                <div v-if="column.type == SearchType.OPERATION">
+                                    <el-button @click="onClickRow(scope.$index, scope.row, column.name)" size="small">{{ column.title }}</el-button>
+                                </div>
                             </template>
                         </el-table-column>
                         <el-table-column fixed="right" label="操作" width="124" v-if="localOptionBtn.opt">
@@ -83,7 +86,7 @@ import TableSortParameters from './TableSortParameters.vue'
 import TableSearch from './TableSearch.vue'
 
 
-
+const emit = defineEmits(["onClickRow"]);
 
 const parents = withDefaults(defineProps<{
     rootUrl: String,
@@ -122,7 +125,7 @@ let url = {
 let localOptionBtn = ref<OptionBtn>({
     search: true, // 开启查询功能
     searchParam: false, // 开启查询功能
-    sort: true, // 开启排序功能
+    sort: false, // 开启排序功能
     add: true, // 添加
     page: true, // 翻页
     opt: true, // 每条数据后端操作搭配optbtn使用
@@ -137,12 +140,7 @@ let localOptionBtn = ref<OptionBtn>({
 
 }),
     // 请求参数
-    param: PageParam = {
-        pageNumber: 1,
-        sizes: [10, 20, 50, 100],
-        pageSize: 10,
-        totalElements: 0
-    },
+    param = ref<PageParam>(parents.page),
     // 表加载
     loading = ref<boolean>(true);
 // 表格数据
@@ -241,31 +239,30 @@ function initTable(): void {
     loading.value = true;
 
     if (parents.rootUrl != '') {
-        param.sortList = sortParameters.value;
-        param.searchList = searchParameters.value;
+        param.value.sortList = sortParameters.value;
+        param.value.searchList = searchParameters.value;
 
-        http.post<any>(url.page, param).then((reponse) => {
+        http.post<any>(url.page, param.value).then((reponse) => {
             if (reponse.data != null && reponse.code == 200) {
                 dataList.value = reponse.data.content;
                 var size = reponse.data.totalElements;
                 if (size > 0 && dataList.value.length == 0) {
-                    param.pageNumber = param.pageNumber - 1;
+                    param.value.pageNumber = param.value.pageNumber - 1;
                     initTable();
                 }
-                param.totalElements = reponse.data.totalElements;
+                param.value.totalElements = size;
+                // param.value.pageNumber = reponse.data.
                 loading.value = false;
             }
         }).catch((err) => {
             // TODO
         });
     } else {
-        debugger
+
         if (parents.datas === undefined) {
 
         } else {
-            let adata: any = parents.datas;
-            dataList.value = adata.content;
-            param.totalElements = adata.totalElements;
+            dataList.value = parents.datas;
             loading.value = false;
         }
 
@@ -282,6 +279,7 @@ function handleShowShearch(): void {
         searchBtnType.value = "";
     }
 }
+
 // 显示 、隐藏 排序条件框
 function handleShowSort(): void {
     showSearch.value = false;
@@ -295,12 +293,12 @@ function handleShowSort(): void {
 }
 // 每页大小
 function handleSizeChange(val: number): void {
-    param.pageSize = val;
+    param.value.pageSize = val;
     initTable();
 }
 // 翻页 
 function handleCurrentChange(val: number): void {
-    param.pageNumber = val;
+    param.value.pageNumber = val;
     initTable();
 }
 // 更新行> 更新页面数据传递
@@ -394,6 +392,15 @@ function showSelectText(opt: SelectOptions, column: string): boolean {
         return true;
     }
     return false;
+}
+
+function onClickRow(index: number, row: any, column: string) {
+    let res = {
+        index: index,
+        row: row,
+        column: column
+    }
+    emit("onClickRow", res);
 }
 
 const activeColumns = computed<Column[]>(() => {

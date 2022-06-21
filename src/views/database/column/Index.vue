@@ -6,12 +6,9 @@
             </template>
         </Table>
         <el-dialog v-model="dialogVisible" title="导入表" width="80%" :before-close="handleClose">
-            <el-select v-model="jdbcSelectValue" placeholder="选择微服务" size="small" @change="toloadTables">
-                <el-option v-for="item in jdbcSelect" :key="item.value" :label="item.label" :value="item.value" />
-            </el-select>
-            <Table v-if="reloadTabs" :columns="loadColumns" :page="page" :optionBtn="localOptionBtn" :datas="localdata" @onClickRow="onClickRow">
+            <Table :columns="loadColumns" :page="page" :optionBtn="localOptionBtn" :datas="localdata" @onClickRow="onClickRow">
             </Table>
-            <el-row v-if="reloadTabs">
+            <el-row>
                 <el-col :span="12" :offset="12">
                     <el-pagination class="pagex" background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page.pageNumber" :page-sizes="page.sizes" :page-size="page.pageSize" :pager-count="5" layout="total, sizes, prev, pager, next, jumper" :total="page.totalElements">
                     </el-pagination>
@@ -34,15 +31,15 @@ import { onBeforeMount, ref } from 'vue';
 import http from '../../../plugins/http';
 
 
-let rootUrl: String = '/serve/sysDbmsTabsTableInfo';
+
+let rootUrl: String = '/serve/sysDbmsTabsColsInfo';
 
 let columns = ref<Array<Column>>()
 let loadColumns = ref<Array<Column>>()
 
 let typeSelect = ref<Array<SelectOptions>>([]);
 let jdbcSelect = ref<Array<SelectOptions>>([]);
-
-
+let tabsSelect = ref<Array<SelectOptions>>([]);
 
 let dialogVisible = ref<boolean>(false);
 
@@ -69,9 +66,9 @@ let page = ref<PageParam>({
 });
 
 onBeforeMount(() => {
-    loadType();
-    loadJdbc();
-
+    // loadType();
+    // loadJdbc();
+    loadTabs();
     init();
 })
 
@@ -82,43 +79,43 @@ function init() {
         align: 'left',
         show: false,
     }, {
-        name: "tabsName",
-        title: "表名",
+        name: "tabsUuid",
+        title: "表",
+        align: 'left',
+        sort: true,
+        search: true,
+        type: SearchType.SELECT,
+        searchDataArray: tabsSelect.value
+    }, {
+        name: "colsName",
+        title: "字段名",
         align: 'left',
         sort: true,
         search: true
     }, {
-        name: "tabsDesc",
-        title: "表的含义",
+        name: "colsDesc",
+        title: "字段含义",
         align: 'center',
+        sort: true,
+        search: true
     }, {
-        name: "tabsRows",
-        title: "数据量",
+        name: "colsLength",
+        title: "字段长度",
         align: 'left',
         type: SearchType.INTEGER,
-        sort: true,
-        // search: true
     }, {
-        name: "typeUuid",
-        title: "类型",
+        name: "colsType",
+        title: "字段类型",
         align: 'left',
         sort: true,
         search: true,
-        type: SearchType.SELECT,
-        searchDataArray: typeSelect.value
     }, {
-        name: "jdbcUuid",
-        title: "数据库",
-        align: 'left',
+        name: "nullable",
+        title: "允许空",
         sort: true,
         search: true,
         type: SearchType.SELECT,
-        searchDataArray: jdbcSelect.value
-    }, {
-        name: "tabsSpace",
-        title: "表空间",
-        align: 'left',
-        sort: true,
+        searchDataArray: [{ value: 0, label: "否" }, { value: 1, label: "是" }]
     }, {
         name: "sort",
         title: "显示顺序",
@@ -137,44 +134,52 @@ function init() {
         align: 'left',
         show: false,
     }, {
-        name: "tabsName",
-        title: "表名",
+        name: "tabsUuid",
+        title: "表",
+        align: 'left',
+        sort: true,
+        search: true,
+        type: SearchType.SELECT,
+        searchDataArray: tabsSelect.value
+    }, {
+        name: "colsName",
+        title: "字段名",
         align: 'left',
         sort: true,
         search: true
     }, {
-        name: "tabsDesc",
-        title: "表的含义",
+        name: "colsDesc",
+        title: "字段含义",
         align: 'center',
+        sort: true,
         search: true
     }, {
-        name: "tabsRows",
-        title: "数据量",
+        name: "colsLength",
+        title: "字段长度",
         align: 'left',
         type: SearchType.INTEGER,
-        sort: true,
     }, {
-        name: "typeUuid",
-        title: "类型",
-        align: 'left',
-        type: SearchType.SELECT,
-        searchDataArray: typeSelect.value
-    }, {
-        name: "jdbcUuid",
-        title: "数据库",
-        align: 'left',
-        type: SearchType.SELECT,
-        searchDataArray: jdbcSelect.value
-    }, {
-        name: "tabsSpace",
-        title: "表空间",
+        name: "colsType",
+        title: "字段类型",
         align: 'left',
         sort: true,
+        search: true,
+    }, {
+        name: "nullable",
+        title: "允许空",
+        sort: true,
+        search: true,
+        type: SearchType.SELECT,
+        searchDataArray: [{ value: 0, label: "否" }, { value: 1, label: "是" }]
     }, {
         name: "sort",
         title: "显示顺序",
         align: 'left',
         sort: true,
+    }, {
+        name: "discription",
+        title: "描述",
+        align: 'left',
     }, {
         name: "daoru",
         title: "导入",
@@ -182,6 +187,7 @@ function init() {
 
     }];
 }
+
 // 加载数据库信息
 function loadJdbc() {
     http.post<any>('/serve/sysDbmsTabsJdbcInfo/findAll', {}).then((response) => {
@@ -218,8 +224,28 @@ function loadType() {
 }
 
 
+// 加载表信息
+function loadTabs() {
+    http.post<any>("/serve/sysDbmsTabsTableInfo/findAll", { jdbcUuid: jdbcSelectValue.value }).then((response) => {
+        if (response.data != null && response.code == 200) {
+            response.data.forEach((element: any) => {
+                let op: SelectOptions = {
+                    value: element.uuid,
+                    label: element.tabsName
+                };
+                tabsSelect.value?.push(op);
+            });
+        }
+    }).catch((err) => {
+        // TODO
+    });
+}
+
+
+
 // 控制弹窗
 function handleImportTable() {
+
     dialogVisible.value = true;
 }
 
@@ -233,14 +259,14 @@ function handLoadTables() {
     dialogVisible.value = false
 }
 
-function toloadTables(val: string) {
-    page.value.info = { jdbcUuid: val };
-    http.post<any>('/serve/sysDbmsTabsTableInfo/findAllByJdbcUuid', page.value).then((response) => {
+function toloadTables() {
+    page.value.info = { tabsUuid: '' };
+    http.post<any>('/serve/sysDbmsTabsColsInfo/findAllByTabsUuid', page.value).then((response) => {
         if (response.data != null && response.code == 200) {
             localdata.value = response.data.content;
             var size = response.data.totalElements;
             page.value.totalElements = size;
-            reloadTabs.value = true;
+
         }
     }).catch((err) => {
         // TODO
@@ -261,6 +287,8 @@ function handleCurrentChange(val: number): void {
     let id = page.value.info == null ? null : page.value.info.jdbcUuid;
     toloadTables(id);
 }
+
+
 // 自定义事件
 function onClickRow(res: { index: number, row: any, column: string }) {
     console.log(res.index);

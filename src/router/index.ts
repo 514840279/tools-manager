@@ -79,6 +79,11 @@ const routes = [
     name: "tables",
     component: () => import('../views/database/tables/Index.vue'),
   }, { 
+    path: '/columns',
+    name: "columns",
+    component: () => import('../views/database/column/Index.vue'),
+  }, { 
+    
     path: '/error',
     name: "error",
     component: Err,
