@@ -48,10 +48,10 @@
                         </el-table-column>
                         <el-table-column fixed="right" label="操作" width="124" v-if="localOptionBtn.opt">
                             <template #default="scope">
-                                <el-button @click="handleUpd(scope.row)" v-if="localOptionBtn.optbtn.upd" type="success" icon="Edit" circle size="small" title="修改"></el-button>
-                                <el-button @click="handleStateToDown(scope.row)" v-if="localOptionBtn.optbtn.state && scope.row.deleteFlag == 0 || scope.row.deleteFlag == null" type="warning" icon="View" circle size="small" title="已启用"></el-button>
-                                <el-button @click="handleStateToUp(scope.row)" v-if="localOptionBtn.optbtn.state && scope.row.deleteFlag == 1" type="info" icon="View" circle size="small" title="已禁用"></el-button>
-                                <el-button @click="handleDelete(scope.row)" v-if="localOptionBtn.optbtn.del" type="danger" icon="Delete" circle size="small" title="删除"></el-button>
+                                <el-button @click="handleUpd(scope.row)" v-if="localOptionBtn.opt && localOptionBtn.optbtn.upd" type="success" icon="Edit" circle size="small" title="修改"></el-button>
+                                <el-button @click="handleStateToDown(scope.row)" v-if="localOptionBtn.opt && localOptionBtn.optbtn.state && scope.row.deleteFlag == 0 || scope.row.deleteFlag == null" type="warning" icon="View" circle size="small" title="已启用"></el-button>
+                                <el-button @click="handleStateToUp(scope.row)" v-if="localOptionBtn.opt && localOptionBtn.optbtn.state && scope.row.deleteFlag == 1" type="info" icon="View" circle size="small" title="已禁用"></el-button>
+                                <el-button @click="handleDelete(scope.row)" v-if="localOptionBtn.opt && localOptionBtn.optbtn.del" type="danger" icon="Delete" circle size="small" title="删除"></el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -75,7 +75,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onBeforeMount, ref, computed } from 'vue';
+import { onBeforeMount, ref, computed, watch } from 'vue';
 import { PageParam, Column, SortColumn, SearchColumn, SearchParamters, OptionBtn, SearchType, SelectOptions } from '../../interface/Table'
 // import axios from 'axios';
 import http from '../../plugins/http';
@@ -108,7 +108,10 @@ const parents = withDefaults(defineProps<{
     optionBtn: () => {
         return {
         }
-    }
+    },
+    datas: () => {
+        return []
+    },
 
 });
 
@@ -411,6 +414,12 @@ const activeColumns = computed<Column[]>(() => {
         }
     });
     return temp;
+})
+
+watch(() => parents.datas, (newValue, oldValue) => {
+    // 因为watch被观察的对象只能是getter/effect函数、ref、active对象或者这些类型是数组
+    // 所以需要将state.count变成getter函数
+    dataList.value = newValue;
 })
 
 </script>

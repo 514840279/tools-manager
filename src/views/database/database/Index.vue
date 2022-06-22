@@ -16,12 +16,6 @@ let rootUrl: String = '/serve/sysDbmsTabsJdbcInfo',
         align: 'left',
         show: false,
     }, {
-        name: "type",
-        title: "类型",
-        align: 'left',
-        sort: true,
-        search: true
-    }, {
         name: "appName",
         title: "微服务名称",
         align: 'center',
@@ -54,6 +48,10 @@ let rootUrl: String = '/serve/sysDbmsTabsJdbcInfo',
         title: "显示顺序",
         align: 'left',
         sort: true,
+    }, {
+        name: "discription",
+        title: "描述",
+        align: 'left',
     }];
 
 

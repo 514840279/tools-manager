@@ -16,7 +16,7 @@ let rootUrl: String = '/serve/sysDbmsTabsIndexInfo',
         show: false,
     }, {
         name: "indexCode",
-        title: "索引类型",
+        title: "索引代码",
         align: 'left',
         sort: true,
         search: true

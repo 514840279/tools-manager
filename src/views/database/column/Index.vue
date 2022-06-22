@@ -6,7 +6,10 @@
             </template>
         </Table>
         <el-dialog v-model="dialogVisible" title="导入表" width="80%" :before-close="handleClose">
-            <Table :columns="loadColumns" :page="page" :optionBtn="localOptionBtn" :datas="localdata" @onClickRow="onClickRow">
+            <el-select v-model="tabsSelectValue" placeholder="选择微服务" size="small" @change="toloadColumns">
+                <el-option v-for="item in tabsSelect" :key="item.value" :label="item.label" :value="item.value" />
+            </el-select>
+            <Table v-loading="!reloadTabs" :columns="loadColumns" :page="page" :optionBtn="localOptionBtn" :datas="localdata" @onClickRow="onClickRow">
             </Table>
             <el-row>
                 <el-col :span="12" :offset="12">
@@ -44,7 +47,7 @@ let tabsSelect = ref<Array<SelectOptions>>([]);
 let dialogVisible = ref<boolean>(false);
 
 let localOptionBtn = ref<OptionBtn>({
-    search: true, // 开启查询功能
+    search: false, // 开启查询功能
     searchParam: false, // 开启查询功能
     sort: false, // 开启排序功能
     add: false, // 添加
@@ -54,6 +57,7 @@ let localOptionBtn = ref<OptionBtn>({
 });
 
 let jdbcSelectValue = ref<string>();
+let tabsSelectValue = ref<string>();
 let localdata = ref<Array<any>>();
 
 let reloadTabs = ref<boolean>(false);
@@ -245,7 +249,6 @@ function loadTabs() {
 
 // 控制弹窗
 function handleImportTable() {
-
     dialogVisible.value = true;
 }
 
@@ -259,33 +262,35 @@ function handLoadTables() {
     dialogVisible.value = false
 }
 
-function toloadTables() {
-    page.value.info = { tabsUuid: '' };
+
+
+function toloadColumns() {
+    page.value.info = { tabsUuid: tabsSelectValue.value };
     http.post<any>('/serve/sysDbmsTabsColsInfo/findAllByTabsUuid', page.value).then((response) => {
         if (response.data != null && response.code == 200) {
-            localdata.value = response.data.content;
-            var size = response.data.totalElements;
-            page.value.totalElements = size;
-
+            localdata.value = response.data;
+            // var size = response.data.totalElements;
+            // page.value.totalElements = size;
+            reloadTabs.value = true;
         }
     }).catch((err) => {
         // TODO
     });
 }
 
+
+
 // 每页大小
 function handleSizeChange(val: number): void {
     reloadTabs.value = false;
     page.value.pageSize = val;
-    let id = page.value.info == null ? null : page.value.info.jdbcUuid;
-    toloadTables(id);
+    toloadColumns();
 }
 // 翻页 
 function handleCurrentChange(val: number): void {
     reloadTabs.value = false;
     page.value.pageNumber = val;
-    let id = page.value.info == null ? null : page.value.info.jdbcUuid;
-    toloadTables(id);
+    toloadColumns();
 }
 
 
@@ -294,12 +299,10 @@ function onClickRow(res: { index: number, row: any, column: string }) {
     console.log(res.index);
     // 处理不同事件
     if (res.column == "daoru") {
-        http.post<any>('/serve/sysDbmsTabsTableInfo/importTable', res.row).then((response) => {
+        http.post<any>('/serve/sysDbmsTabsColsInfo/importColums', res.row).then((response) => {
             if (response.data != null && response.code == 200) {
-                debugger
-                let id = page.value.info == null ? null : page.value.info.jdbcUuid;
                 reloadTabs.value = false;
-                toloadTables(id);
+                toloadColumns();
             }
         }).catch((err) => {
             // TODO

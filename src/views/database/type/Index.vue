@@ -15,6 +15,12 @@ let rootUrl: String = '/serve/sysDbmsTabsTypeInfo',
         align: 'left',
         show: false,
     }, {
+        name: "typeClass",
+        title: "类型代码",
+        align: 'left',
+        sort: true,
+        search: true
+    }, {
         name: "typeName",
         title: "类型名",
         align: 'left',
@@ -25,12 +31,7 @@ let rootUrl: String = '/serve/sysDbmsTabsTypeInfo',
         title: "图标",
         align: 'center',
         type: SearchType.ICON,
-    }, {
-        name: "typeClass",
-        title: "类",
-        align: 'left',
-        sort: true,
-        search: true
+
     }, {
         name: "sort",
         title: "显示顺序",

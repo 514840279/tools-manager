@@ -9,9 +9,9 @@
             <el-select v-model="jdbcSelectValue" placeholder="选择微服务" size="small" @change="toloadTables">
                 <el-option v-for="item in jdbcSelect" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
-            <Table v-if="reloadTabs" :columns="loadColumns" :page="page" :optionBtn="localOptionBtn" :datas="localdata" @onClickRow="onClickRow">
+            <Table v-loading="!reloadTabs" :columns="loadColumns" :page="page" :optionBtn="localOptionBtn" :datas="localdata" @onClickRow="onClickRow">
             </Table>
-            <el-row v-if="reloadTabs">
+            <el-row>
                 <el-col :span="12" :offset="12">
                     <el-pagination class="pagex" background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page.pageNumber" :page-sizes="page.sizes" :page-size="page.pageSize" :pager-count="5" layout="total, sizes, prev, pager, next, jumper" :total="page.totalElements">
                     </el-pagination>
@@ -47,7 +47,7 @@ let jdbcSelect = ref<Array<SelectOptions>>([]);
 let dialogVisible = ref<boolean>(false);
 
 let localOptionBtn = ref<OptionBtn>({
-    search: true, // 开启查询功能
+    search: false, // 开启查询功能
     searchParam: false, // 开启查询功能
     sort: false, // 开启排序功能
     add: false, // 添加
