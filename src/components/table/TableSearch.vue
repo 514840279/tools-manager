@@ -8,7 +8,7 @@
                 <el-input-number class="full" size="small" v-model="parents.searchParameters[index]['data']" :placeholder="item.searchPlaceholder" @change="handleSearch()" :clearable="true" />
             </template>
             <template v-else-if="item.searchType == SearchType.SELECT">
-                <el-select v-model="parents.searchParameters[index]['data']" class="full" :placeholder="item.searchPlaceholder" size="small" @change="handleSearch()" :clearable="true">
+                <el-select v-model="parents.searchParameters[index]['data']" class="full" :placeholder="item.searchPlaceholder" size="small" @change="handleSearch()" :clearable="true" :filterable="true">
                     <el-option v-for="op in item.searchDataArray" :key="op.value" :label="op.label" :value="op.value" />
                 </el-select>
             </template>

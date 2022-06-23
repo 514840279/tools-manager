@@ -1,6 +1,6 @@
 <template>
     <div id="TableSortColumnSelect">
-        <el-select v-model="sortName" size="small" style="width:100%" @change="handleChange">
+        <el-select v-model="sortName" size="small" style="width:100%" @change="handleChange" :filterable="true">
             <el-option v-for="(cl, idx) in sortColumns" :key="idx" :label="cl.sortTitle" :value="cl.sortName">
             </el-option>
         </el-select>

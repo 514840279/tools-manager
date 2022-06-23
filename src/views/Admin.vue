@@ -3,13 +3,24 @@
   <el-container>
     <el-header>
       <el-menu :default-active="headMenu.activeIndex" :class="headMenu.class" :mode="headMenu.mode" @select="handleSelect" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
+        <el-menu-item index="0-2" :style="{ 'width': asideWidth }">
+          <div class="block">
+            <el-avatar :size="38" :src="circleUrl" style="vertical-align: middle;" />
+            <span v-if="!isCollapse"> 后台管理 </span>
+          </div>
+        </el-menu-item>
+        <el-menu-item index="0-1">
+          <el-icon :size="56">
+            <component :is="ita"></component>
+          </el-icon>
+        </el-menu-item>
         <el-menu-item v-for="(menu, index) in headMenu.data" :key="index" :index="menu.index">{{ menu.text }}</el-menu-item>
       </el-menu>
     </el-header>
     <el-container>
-      <el-aside width="200px" class="left">
+      <el-aside :width="asideWidth" class="left">
         <!-- aside -->
-        <el-menu class="el-menu-vertical-demo " :default-openeds="openedsIndex" :default-active="aside.activeIndex">
+        <el-menu class="el-menu-vertical-demo " :collapse="isCollapse" :default-openeds="openedsIndex" :default-active="aside.activeIndex">
           <el-sub-menu v-for="(subme, index) in aside.submenu" :key="index" :index="subme.index">
             <template #title>
               <el-icon>
@@ -57,11 +68,16 @@
 <script setup  lang="ts">
 import Foot from '../components/home/Food.vue';
 
-// import { ref, reactive, toRefs } from 'vue'
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router';
 import { Menu, MenuItem, Aside, Breadcrumb } from '../interface/Menu'
 
+
+
+let asideWidth = ref<string>("200px");
+let isCollapse = ref<boolean>(false);
+let ita = ref<string>("Fold");
+let circleUrl = ref<string>("favicon.ico")
 
 // 头部导航菜单
 const headMenu: Menu = {
@@ -118,7 +134,7 @@ const asides: Array<Aside> = [
     ]
   },
   {
-    activeIndex: '2-1',
+    activeIndex: '2-3-1',
     submenu: [
       {
         index: "2-1",
@@ -253,14 +269,29 @@ function init(): void {
 };
 // head 头部点击事件 切换左侧导航信息 ，更换路由
 function handleSelect(index: String): void {
-  // 切换aside
-  aside.value = asides[Number(index)];
-  var path = '/home' + index;
-  currentList.value = [];
-  currentList.value[0] = { path: path, text: headMenu.data[Number(index)].text };
-  // 更换默认页面
-  router.push(path);
 
+  if (index == "0-2") {
+    handleSelect("0");
+  } else if (index == "0-1") {
+    if (isCollapse.value == false) {
+      isCollapse.value = !isCollapse.value;
+      asideWidth.value = "60px";
+      ita.value = "Menu";
+    } else {
+      isCollapse.value = !isCollapse.value;
+      asideWidth.value = "200px";
+      ita.value = "Fold";
+    }
+  } else {
+    // 切换aside
+    aside.value = asides[Number(index)];
+    var path = '/home' + index;
+    currentList.value = [];
+    currentList.value[0] = { path: path, text: headMenu.data[Number(index)].text };
+
+    // 更换默认页面
+    router.push(path);
+  }
 };
 // aside 左侧点击事件切换面包屑信息
 function handleBreadcrumb(submenu: Menu, data: MenuItem): void {

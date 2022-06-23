@@ -1,6 +1,6 @@
 <template>
     <div id="TableSearchColumnSelect">
-        <el-select v-model="value" size="small" style="width:100%" @change="handleChange">
+        <el-select v-model="value" size="small" style="width:100%" @change="handleChange" :filterable="true">
             <el-option v-for="(cl, idx) in columns" :key="idx" :label="cl.searchTitle" :value="cl.searchName">
             </el-option>
         </el-select>

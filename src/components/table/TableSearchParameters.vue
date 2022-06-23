@@ -11,7 +11,7 @@
                 <TableSearchSymbolSelect :item="item" :index="index" v-model:parameters="parents.searchParameters"></TableSearchSymbolSelect>
             </el-col>
             <el-col :span="6" v-if="item.showdata">
-                <el-select v-if="item.searchType == SearchType.SELECT" v-model="parents.searchParameters[index].data" class="full" :placeholder="item.searchPlaceholder" size="small" clearable="true">
+                <el-select v-if="item.searchType == SearchType.SELECT" v-model="parents.searchParameters[index].data" class="full" :placeholder="item.searchPlaceholder" size="small" :clearable="true" :filterable="true">
                     <el-option v-for="op in item.searchDataArray" :key="op.value" :label="op.label" :value="op.value" />
                 </el-select>
                 <el-input-number v-else-if="item.searchType == SearchType.INTEGER" size="small" v-model="item.data" :placeholder="item.searchPlaceholder" class="full"></el-input-number>
