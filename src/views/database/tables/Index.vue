@@ -6,10 +6,19 @@
             </template>
         </Table>
         <el-dialog v-model="dialogVisible" title="导入表" width="80%" :before-close="handleClose">
-            <el-select v-model="jdbcSelectValue" placeholder="选择微服务" size="small" @change="toloadTables">
-                <el-option v-for="item in jdbcSelect" :key="item.value" :label="item.label" :value="item.value" />
-            </el-select>
             <Table v-loading="!reloadTabs" :columns="loadColumns" :page="page" :optionBtn="localOptionBtn" :datas="localdata" @onClickRow="onClickRow">
+                <template v-slot:headSearch>
+                    <el-row>
+                        <el-col :span="6">
+                            <el-select v-model="info.jdbcUuid" placeholder="选择微服务" size="small" @change="toloadTables">
+                                <el-option v-for="item in jdbcSelect" :key="item.value" :label="item.label" :value="item.value" />
+                            </el-select>
+                        </el-col>
+                        <el-col :span="6">
+                            <el-input v-model="info.tabsName" placeholder="筛选表" clearable @input="toloadTables" />
+                        </el-col>
+                    </el-row>
+                </template>
             </Table>
             <el-row>
                 <el-col :span="12" :offset="12">
@@ -56,7 +65,7 @@ let localOptionBtn = ref<OptionBtn>({
 
 });
 
-let jdbcSelectValue = ref<string>();
+let info = ref<any>({ jdbcUuid: "", tabsName: "" });
 let localdata = ref<Array<any>>();
 
 let reloadTabs = ref<boolean>(false);
@@ -182,6 +191,7 @@ function init() {
 
     }];
 }
+
 // 加载数据库信息
 function loadJdbc() {
     http.post<any>('/serve/sysDbmsTabsJdbcInfo/findAll', {}).then((response) => {
@@ -217,12 +227,11 @@ function loadType() {
     });
 }
 
-
 // 控制弹窗
 function handleImportTable() {
     dialogVisible.value = true;
+    reloadTabs.value = true;
 }
-
 
 // 关闭前处理
 function handleClose() {
@@ -234,7 +243,7 @@ function handLoadTables() {
 }
 
 function toloadTables(val: string) {
-    page.value.info = { jdbcUuid: val };
+    page.value.info = info.value;
     http.post<any>('/serve/sysDbmsTabsTableInfo/findAllByJdbcUuid', page.value).then((response) => {
         if (response.data != null && response.code == 200) {
             localdata.value = response.data.content;
@@ -254,6 +263,7 @@ function handleSizeChange(val: number): void {
     let id = page.value.info == null ? null : page.value.info.jdbcUuid;
     toloadTables(id);
 }
+
 // 翻页 
 function handleCurrentChange(val: number): void {
     reloadTabs.value = false;
@@ -261,6 +271,7 @@ function handleCurrentChange(val: number): void {
     let id = page.value.info == null ? null : page.value.info.jdbcUuid;
     toloadTables(id);
 }
+
 // 自定义事件
 function onClickRow(res: { index: number, row: any, column: string }) {
     console.log(res.index);

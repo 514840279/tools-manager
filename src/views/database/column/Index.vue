@@ -6,10 +6,12 @@
             </template>
         </Table>
         <el-dialog v-model="dialogVisible" title="导入表" width="80%" :before-close="handleClose">
-            <el-select v-model="tabsSelectValue" placeholder="选择微服务" size="small" @change="toloadColumns">
-                <el-option v-for="item in tabsSelect" :key="item.value" :label="item.label" :value="item.value" />
-            </el-select>
             <Table v-loading="!reloadTabs" :columns="loadColumns" :page="page" :optionBtn="localOptionBtn" :datas="localdata" @onClickRow="onClickRow">
+                <template v-slot:headSearch>
+                    <el-select v-model="tabsSelectValue" placeholder="选择微服务" size="small" @change="toloadColumns">
+                        <el-option v-for="item in tabsSelect" :key="item.value" :label="item.label" :value="item.value" />
+                    </el-select>
+                </template>
             </Table>
             <el-row>
                 <el-col :span="12" :offset="12">
@@ -108,8 +110,8 @@ function init() {
         align: 'left',
         type: SearchType.INTEGER,
     }, {
-        name: "colsType",
-        title: "字段类型",
+        name: "dataType",
+        title: "数据类型",
         align: 'left',
         sort: true,
         search: true,
@@ -119,7 +121,7 @@ function init() {
         sort: true,
         search: true,
         type: SearchType.SELECT,
-        searchDataArray: [{ value: 0, label: "否" }, { value: 1, label: "是" }]
+        searchDataArray: [{ value: "N", label: "否" }, { value: "Y", label: "是" }]
     }, {
         name: "sort",
         title: "显示顺序",
@@ -163,8 +165,8 @@ function init() {
         align: 'left',
         type: SearchType.INTEGER,
     }, {
-        name: "colsType",
-        title: "字段类型",
+        name: "dataType",
+        title: "数据类型",
         align: 'left',
         sort: true,
         search: true,
@@ -174,7 +176,7 @@ function init() {
         sort: true,
         search: true,
         type: SearchType.SELECT,
-        searchDataArray: [{ value: 0, label: "否" }, { value: 1, label: "是" }]
+        searchDataArray: [{ value: "N", label: "否" }, { value: "Y", label: "是" }]
     }, {
         name: "sort",
         title: "显示顺序",
@@ -227,7 +229,6 @@ function loadType() {
     });
 }
 
-
 // 加载表信息
 function loadTabs() {
     http.post<any>("/serve/sysDbmsTabsTableInfo/findAll", { jdbcUuid: jdbcSelectValue.value }).then((response) => {
@@ -245,13 +246,11 @@ function loadTabs() {
     });
 }
 
-
-
 // 控制弹窗
 function handleImportTable() {
     dialogVisible.value = true;
+    reloadTabs.value = true
 }
-
 
 // 关闭前处理
 function handleClose() {
@@ -261,8 +260,6 @@ function handleClose() {
 function handLoadTables() {
     dialogVisible.value = false
 }
-
-
 
 function toloadColumns() {
     page.value.info = { tabsUuid: tabsSelectValue.value };
@@ -278,8 +275,6 @@ function toloadColumns() {
     });
 }
 
-
-
 // 每页大小
 function handleSizeChange(val: number): void {
     reloadTabs.value = false;
@@ -292,7 +287,6 @@ function handleCurrentChange(val: number): void {
     page.value.pageNumber = val;
     toloadColumns();
 }
-
 
 // 自定义事件
 function onClickRow(res: { index: number, row: any, column: string }) {

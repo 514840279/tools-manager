@@ -1,5 +1,5 @@
 <template>
-    <div style="margin-top:20px;">
+    <div>
         <transition name="el-zoom-in-top">
             <div :class="show == 'page' ? 'transition-box' : null" v-show="show == 'page'">
                 <el-row class="arow">
@@ -10,6 +10,7 @@
                 <el-row class="brow">
                     <el-col :span="18">
                         <TableSearch v-if="localOptionBtn.search" :searchColumns="searchColumns" v-model:searchParameters="searchParameters" @searchTable="initTable"></TableSearch>
+                        <slot name="headSearch"></slot>
                     </el-col>
                     <el-col :span="6">
                         <div style="text-align: right; margin-right: 10px;">
@@ -89,7 +90,7 @@ import TableSearch from './TableSearch.vue'
 const emit = defineEmits(["onClickRow"]);
 
 const parents = withDefaults(defineProps<{
-    rootUrl: String,
+    rootUrl?: String,
     columns: Array<Column>,
     page?: PageParam,
     optionBtn?: OptionBtn,
@@ -266,8 +267,8 @@ function initTable(): void {
 
         } else {
             dataList.value = parents.datas;
-            loading.value = false;
         }
+        loading.value = false;
 
     }
 }

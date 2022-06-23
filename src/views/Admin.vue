@@ -5,7 +5,7 @@
       <el-menu :default-active="headMenu.activeIndex" :class="headMenu.class" :mode="headMenu.mode" @select="handleSelect" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
         <el-menu-item index="0-2" :style="{ 'width': asideWidth }">
           <div class="block">
-            <el-avatar :size="38" :src="circleUrl" style="vertical-align: middle;" />
+            <el-avatar :size="28" :src="circleUrl" style="vertical-align: middle;" />
             <span v-if="!isCollapse"> 后台管理 </span>
           </div>
         </el-menu-item>
