@@ -64,24 +64,23 @@ const routes = [
   }, {
     path: '/databasetype',
     name: "databasetype",
-    component: () => import('../views/database/type/Index.vue'),
-  
+    component: () => import('../views/dbmanager/dbm/type/Index.vue'),
   }, {
     path: '/index',
     name: "index",
-    component: () => import('../views/database/index/Index.vue'),
+    component: () => import('../views/dbmanager/dbm/index/Index.vue'),
   }, { 
     path: '/database',
     name: "database",
-    component: () => import('../views/database/database/Index.vue'),
+    component: () => import('../views/dbmanager/dbm/database/Index.vue'),
   }, { 
     path: '/tables',
     name: "tables",
-    component: () => import('../views/database/tables/Index.vue'),
+    component: () => import('../views/dbmanager/dbm/tables/Index.vue'),
   }, { 
     path: '/columns',
     name: "columns",
-    component: () => import('../views/database/column/Index.vue'),
+    component: () => import('../views/dbmanager/dbm/column/Index.vue'),
   }, { 
     
     path: '/error',

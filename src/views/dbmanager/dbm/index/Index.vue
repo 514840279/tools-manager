@@ -5,32 +5,31 @@
 </template>
 
 <script setup lang="ts">
-import Table from '../../../components/table/Table.vue'
-import { Column, SearchType } from '../../../interface/Table'
+import Table from '../../../../components/table/Table.vue'
+import { Column } from '../../../../interface/Table'
 
-let rootUrl: String = '/serve/sysDbmsTabsTypeInfo',
+let rootUrl: String = '/serve/sysDbmsTabsIndexInfo',
     columns: Array<Column> = [{
         name: "uuid",
         title: "uuid",
         align: 'left',
         show: false,
     }, {
-        name: "typeClass",
-        title: "类型代码",
+        name: "indexCode",
+        title: "索引代码",
         align: 'left',
         sort: true,
         search: true
     }, {
-        name: "typeName",
-        title: "类型名",
-        align: 'left',
-        sort: true,
-        search: true
-    }, {
-        name: "typeIcon",
-        title: "图标",
+        name: "indexName",
+        title: "索引描述",
         align: 'center',
-        type: SearchType.ICON,
+        search: true
+    }, {
+        name: "indexPlaceholder",
+        title: "组件提醒信息",
+        align: 'left',
+        search: true
 
     }, {
         name: "sort",
