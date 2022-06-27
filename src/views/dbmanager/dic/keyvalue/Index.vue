@@ -6,9 +6,9 @@
 
 <script setup lang="ts">
 import Table from '../../../../components/table/Table.vue'
-import { Column } from '../../../../interface/Table'
+import { SearchType, Column } from '../../../../interface/Table'
 
-let rootUrl: String = '/serve/sysDbmsTabsJdbcInfo',
+let rootUrl: String = '/serve/sysDicKeyList',
 
     columns: Array<Column> = [{
         name: "uuid",
@@ -16,33 +16,26 @@ let rootUrl: String = '/serve/sysDbmsTabsJdbcInfo',
         align: 'left',
         show: false,
     }, {
-        name: "appName",
-        title: "微服务名称",
+        name: "parentsUuid",
+        title: "字典名",
         align: 'center',
+        type: SearchType.SELECT ,
+        searchDataArray:[],
+        sort: true,
         search: true
     }, {
-        name: "platform",
-        title: "数据库平台",
-        align: 'left',
-        search: true
-    }, {
-        name: "databaseName",
-        title: "数据库名称",
+        name: "keyword",
+        title: "字典key",
         align: 'left',
         sort: true,
         search: true
     }, {
-        name: "ip",
-        title: "数据库ip",
+        name: "keyValue",
+        title: "字典值",
         align: 'left',
         sort: true,
-        show: false,
-    }, {
-        name: "port",
-        title: "数据库端口",
-        align: 'left',
-        sort: true,
-        show: false,
+        search: true
+    
     }, {
         name: "sort",
         title: "显示顺序",
