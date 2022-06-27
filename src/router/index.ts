@@ -82,6 +82,18 @@ const routes = [
     name: "columns",
     component: () => import('../views/dbmanager/dbm/column/Index.vue'),
   }, { 
+    path: '/generate',
+    name: "generate",
+    component: () => import('../views/dbmanager/code/generate/Index.vue'),
+  }, { 
+    path: '/dicName',
+    name: "dicName",
+    component: () => import('../views/dbmanager/dic/name/Index.vue'),
+  }, { 
+    path: '/dicValue',
+    name: "dicValue",
+    component: () => import('../views/dbmanager/dic/keyvalue/Index.vue'),
+  }, { 
     
     path: '/error',
     name: "error",

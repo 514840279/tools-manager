@@ -162,8 +162,17 @@ const asides: Array<Aside> = [
         text: "代码管理",
         icon: "Message",
         data: [
-          { index: "2-3-1", text: "项目管理", link: "/user" },
-          { index: "2-3-2", text: "代码生成配置", link: "/table" },
+          // { index: "2-3-1", text: "项目管理", link: "/user" },
+          { index: "2-3-1", text: "代码生成配置", link: "/generate" },
+        ]
+      },
+       {
+        index: "2-4",
+        text: "字典管理",
+        icon: "Message",
+        data: [
+          { index: "2-4-1", text: "字典名称", link: "/dicName" },
+          { index: "2-2-1", text: "字典值", link: "/dicValue" },
         ]
       },
     ]
