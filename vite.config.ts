@@ -4,6 +4,21 @@ import vue from '@vitejs/plugin-vue'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [vue()],
+
+  build: {
+    minify: 'terser',
+    // 进行压缩计算
+    brotliSize: false,
+    // outDir: env.VITE_APP_BASE,
+    sourcemap: false,
+    // 生产环境移除console
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true,
+      },
+    },
+  },
   server: {
     port: 4000,
     open: true,

@@ -2,7 +2,8 @@
 <template>
   <el-container>
     <el-header>
-      <el-menu :default-active="headMenu.activeIndex" :class="headMenu.class" :mode="headMenu.mode" @select="handleSelect" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
+      <el-menu :default-active="headMenu.activeIndex" :class="headMenu.class" :mode="headMenu.mode"
+        @select="handleSelect" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
         <el-menu-item index="0-2" :style="{ 'width': asideWidth }">
           <div class="block">
             <el-avatar :size="28" :src="circleUrl" style="vertical-align: middle;" />
@@ -14,13 +15,15 @@
             <component :is="ita"></component>
           </el-icon>
         </el-menu-item>
-        <el-menu-item v-for="(menu, index) in headMenu.data" :key="index" :index="menu.index">{{ menu.text }}</el-menu-item>
+        <el-menu-item v-for="(menu, index) in headMenu.data" :key="index" :index="menu.index">{{ menu.text }}
+        </el-menu-item>
       </el-menu>
     </el-header>
     <el-container>
       <el-aside :width="asideWidth" class="left">
         <!-- aside -->
-        <el-menu class="el-menu-vertical-demo " :collapse="isCollapse" :default-openeds="openedsIndex" :default-active="aside.activeIndex">
+        <el-menu class="el-menu-vertical-demo " :collapse="isCollapse" :default-openeds="openedsIndex"
+          :default-active="aside.activeIndex">
           <el-sub-menu v-for="(subme, index) in aside.submenu" :key="index" :index="subme.index">
             <template #title>
               <el-icon>
@@ -50,7 +53,9 @@
             <template #header>
               <!-- 面包屑 -->
               <el-breadcrumb v-if="currentList.length > 0" separator="/">
-                <el-breadcrumb-item v-for="(item, i) in currentList" :key="i" :index="i" :to="{ path: item.path }">{{ item.text }}</el-breadcrumb-item>
+                <el-breadcrumb-item v-for="(item, i) in currentList" :key="i" :index="i" :to="{ path: item.path }">
+                  {{ item.text }}
+                </el-breadcrumb-item>
               </el-breadcrumb>
             </template>
             <!-- 路由出口 -->
@@ -71,8 +76,6 @@ import Foot from '../components/home/Food.vue';
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router';
 import { Menu, MenuItem, Aside, Breadcrumb } from '../interface/Menu'
-
-
 
 let asideWidth = ref<string>("200px");
 let isCollapse = ref<boolean>(false);
@@ -166,7 +169,7 @@ const asides: Array<Aside> = [
           { index: "2-3-1", text: "代码生成配置", link: "/generate" },
         ]
       },
-       {
+      {
         index: "2-4",
         text: "字典管理",
         icon: "Message",

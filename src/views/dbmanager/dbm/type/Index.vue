@@ -30,7 +30,7 @@ let rootUrl: String = '/serve/sysDbmsTabsTypeInfo',
         name: "typeIcon",
         title: "图标",
         align: 'center',
-        type: SearchType.ICON,
+        searchType: SearchType.ICON,
 
     }, {
         name: "sort",

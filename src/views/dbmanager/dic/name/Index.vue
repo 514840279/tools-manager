@@ -6,7 +6,7 @@
 
 <script setup lang="ts">
 import Table from '../../../../components/table/Table.vue'
-import { Column } from '../../../../interface/Table'
+import { Column,SearchType } from '../../../../interface/Table'
 
 let rootUrl: String = '/serve/sysDicName',
 
@@ -25,6 +25,14 @@ let rootUrl: String = '/serve/sysDicName',
         name: "code",
         title: "名称代码",
         align: 'left',
+        sort: true,
+        search: true
+    }, {
+        name: "buttonType",
+        title: "控件类型",
+        align: 'left',
+        searchType: SearchType.SELECT ,
+        searchDataArray: [{value: SearchType.SELECT,label:SearchType.SELECT},{value: SearchType.REDIO,label:SearchType.REDIO},{value: SearchType.CHECKBOX,label:SearchType.CHECKBOX},],
         sort: true,
         search: true
     }, {

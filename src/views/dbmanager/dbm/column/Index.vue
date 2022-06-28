@@ -11,7 +11,7 @@
                     <el-select v-model="tabsSelectValue" placeholder="选择微服务" size="small" @change="toloadColumns">
                         <el-option v-for="item in tabsSelect" :key="item.value" :label="item.label" :value="item.value" />
                     </el-select>
-                </template>
+                </template> 
             </Table>
             <el-row>
                 <el-col :span="12" :offset="12">
@@ -90,7 +90,7 @@ function init() {
         align: 'left',
         sort: true,
         search: true,
-        type: SearchType.SELECT,
+        searchType: SearchType.SELECT,
         searchDataArray: tabsSelect.value
     }, {
         name: "colsName",
@@ -114,13 +114,13 @@ function init() {
         name: "colsLength",
         title: "字段长度",
         align: 'left',
-        type: SearchType.INTEGER,
+        searchType: SearchType.INTEGER,
     }, {
         name: "nullable",
         title: "允许空",
         sort: true,
         search: true,
-        type: SearchType.SELECT,
+        searchType: SearchType.SELECT,
         searchDataArray: [{ value: "N", label: "否" }, { value: "Y", label: "是" }]
     }, {
         name: "sort",

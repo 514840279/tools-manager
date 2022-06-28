@@ -16,7 +16,8 @@ export interface Column{
     resizable?: boolean,
     align?:string,
     show?: boolean,
-    type?:string,
+    type?: string,
+    searchType?:string,
     sort?: boolean,
     sortOrder?: string,
     searchPlaceholder?: string,
@@ -45,8 +46,15 @@ export interface SearchColumn{
 
 }
 
+export enum ColumnType{
+    SELECTION = 'selection',
+    INDEX ='index ',
+    EXPAND = 'expand'
+}
+
 // 控制字段类型的类型
 export enum SearchType{
+ 
     TEXT = 'text',
     INTEGER = 'integer',
     INTEGER_RANGE = 'integerrange',

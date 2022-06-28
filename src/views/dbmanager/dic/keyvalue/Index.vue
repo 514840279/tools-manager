@@ -6,21 +6,33 @@
 
 <script setup lang="ts">
 import Table from '../../../../components/table/Table.vue'
-import { SearchType, Column } from '../../../../interface/Table'
+import { SearchType, Column,SelectOptions } from '../../../../interface/Table'
+import {ref,onBeforeMount} from 'vue'
+import http from '../../../../plugins/http'
 
 let rootUrl: String = '/serve/sysDicKeyList',
+    columns= ref< Array<Column>>([])
+    ,nameSelect = ref<Array<SelectOptions>>([]) ;
 
-    columns: Array<Column> = [{
+onBeforeMount(() => {
+
+    loadNames();
+
+    init();
+})
+
+function init() {
+    columns.value =  [{
         name: "uuid",
         title: "uuid",
-        align: 'left',
+        align: 'left', 
         show: false,
     }, {
-        name: "parentsUuid",
+        name: "nameCode",
         title: "字典名",
         align: 'center',
-        type: SearchType.SELECT ,
-        searchDataArray:[],
+        searchType: SearchType.SELECT ,
+        searchDataArray: nameSelect.value,
         sort: true,
         search: true
     }, {
@@ -46,7 +58,25 @@ let rootUrl: String = '/serve/sysDicKeyList',
         title: "描述",
         align: 'left',
     }];
+}
 
+// 加载数据库信息
+function loadNames() {
+    http.post<any>('/serve/sysDicName/findAll', {}).then((response) => {
+        if (response.data != null && response.code == 200) {
+            response.data.forEach((element: any) => {
+                let op: SelectOptions = {
+                    value: element.code,
+                    label: element.name
+                };
+                nameSelect.value?.push(op);
+            });
+
+        }
+    }).catch((err) => {
+        // TODO
+    });
+}
 
 </script>
 

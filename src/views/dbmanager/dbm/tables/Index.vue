@@ -104,7 +104,7 @@ function init() {
         name: "tabsRows",
         title: "数据量",
         align: 'left',
-        type: SearchType.INTEGER,
+        searchType: SearchType.INTEGER,
         sort: true,
         // search: true
     }, {
@@ -113,7 +113,7 @@ function init() {
         align: 'left',
         sort: true,
         search: true,
-        type: SearchType.SELECT,
+        searchType: SearchType.SELECT,
         searchDataArray: typeSelect.value
     }, {
         name: "jdbcUuid",
@@ -121,7 +121,7 @@ function init() {
         align: 'left',
         sort: true,
         search: true,
-        type: SearchType.SELECT,
+        searchType: SearchType.SELECT,
         searchDataArray: jdbcSelect.value
     }, {
         name: "tabsSpace",
@@ -160,19 +160,19 @@ function init() {
         name: "tabsRows",
         title: "数据量",
         align: 'left',
-        type: SearchType.INTEGER,
+        searchType: SearchType.INTEGER,
         sort: true,
     }, {
         name: "typeUuid",
         title: "类型",
         align: 'left',
-        type: SearchType.SELECT,
+        searchType: SearchType.SELECT,
         searchDataArray: typeSelect.value
     }, {
         name: "jdbcUuid",
         title: "数据库",
         align: 'left',
-        type: SearchType.SELECT,
+        searchType: SearchType.SELECT,
         searchDataArray: jdbcSelect.value
     }, {
         name: "tabsSpace",
@@ -187,7 +187,7 @@ function init() {
     }, {
         name: "daoru",
         title: "导入",
-        type: SearchType.OPERATION,
+        searchType: SearchType.OPERATION,
 
     }];
 }
