@@ -1,12 +1,10 @@
-
 <template>
   <el-container>
     <el-header>
-      <el-menu :default-active="headMenu.activeIndex" :class="headMenu.class" :mode="headMenu.mode"
-        @select="handleSelect" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
-        <el-menu-item index="0-2" :style="{ 'width': asideWidth }">
+      <el-menu :default-active="headMenu.activeIndex" :class="headMenu.class" :mode="headMenu.mode" @select="handleSelect" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
+        <el-menu-item index="0-2" :style="{ width: asideWidth }">
           <div class="block">
-            <el-avatar :size="28" :src="circleUrl" style="vertical-align: middle;" />
+            <el-avatar :size="28" :src="circleUrl" style="vertical-align: middle" />
             <span v-if="!isCollapse"> 后台管理 </span>
           </div>
         </el-menu-item>
@@ -15,15 +13,13 @@
             <component :is="ita"></component>
           </el-icon>
         </el-menu-item>
-        <el-menu-item v-for="(menu, index) in headMenu.data" :key="index" :index="menu.index">{{ menu.text }}
-        </el-menu-item>
+        <el-menu-item v-for="(menu, index) in headMenu.data" :key="index" :index="menu.index">{{ menu.text }} </el-menu-item>
       </el-menu>
     </el-header>
     <el-container>
       <el-aside :width="asideWidth" class="left">
         <!-- aside -->
-        <el-menu class="el-menu-vertical-demo " :collapse="isCollapse" :default-openeds="openedsIndex"
-          :default-active="aside.activeIndex">
+        <el-menu class="el-menu-vertical-demo" :collapse="isCollapse" :default-openeds="openedsIndex" :default-active="aside.activeIndex">
           <el-sub-menu v-for="(subme, index) in aside.submenu" :key="index" :index="subme.index">
             <template #title>
               <el-icon>
@@ -70,21 +66,21 @@
     </el-container>
   </el-container>
 </template>
-<script setup  lang="ts">
-import Foot from '../components/home/Food.vue';
+<script setup lang="ts">
+import Foot from "../components/home/Food.vue";
 
-import { onMounted, ref } from 'vue'
-import { useRouter } from 'vue-router';
-import { Menu, MenuItem, Aside, Breadcrumb } from '../interface/Menu'
+import { onMounted, ref } from "vue";
+import { useRouter } from "vue-router";
+import { Menu, MenuItem, Aside, Breadcrumb } from "../interface/Menu";
 
 let asideWidth = ref<string>("200px");
 let isCollapse = ref<boolean>(false);
 let ita = ref<string>("Fold");
-let circleUrl = ref<string>("favicon.ico")
+let circleUrl = ref<string>("favicon.ico");
 
 // 头部导航菜单
 const headMenu: Menu = {
-  activeIndex: '2', // 默认页面 index
+  activeIndex: "2", // 默认页面 index
   class: "el-menu-demo",
   text: "導航",
   mode: "horizontal",
@@ -97,30 +93,27 @@ const headMenu: Menu = {
     { index: "5", text: "分析管理" },
     { index: "6", text: "爬虫管理" },
     { index: "7", text: "消息中心" },
-  ]
+  ],
 };
 // 替换的菜单
 let aside = ref<Aside>({});
 // 默认展开menu
-const openedsIndex: Array<String> = ["0-1", "1-1", "2-1", "3-1", "4-1", "5-1", "6-1", "7-1"];
+const openedsIndex: Array<String> = ["0-1", "1-1", "2-3", "3-1", "4-1", "5-1", "6-1", "7-1"];
 // 菜单集
 const asides: Array<Aside> = [
   {
-    activeIndex: '0-1',
+    activeIndex: "0-1",
     submenu: [
       {
         index: "0-1",
         text: "首页",
         icon: "Message",
-        data: [
-          { index: "0-1-1", text: "消息中心", icon: "Message", link: "" },
-
-        ]
+        data: [{ index: "0-1-1", text: "消息中心", icon: "Message", link: "" }],
       },
-    ]
+    ],
   },
   {
-    activeIndex: '1-1',
+    activeIndex: "1-1",
     submenu: [
       {
         index: "1-1",
@@ -132,12 +125,12 @@ const asides: Array<Aside> = [
           { index: "1-1-3", text: "项目管理", link: "" },
           { index: "1-1-4", text: "菜单管理", link: "" },
           { index: "1-1-5", text: "消息中心", link: "" },
-        ]
+        ],
       },
-    ]
+    ],
   },
   {
-    activeIndex: '2-4-1',
+    activeIndex: "2-3-1",
     submenu: [
       {
         index: "2-1",
@@ -149,7 +142,7 @@ const asides: Array<Aside> = [
           { index: "2-1-1", text: "数据库", link: "/database" },
           { index: "2-1-3", text: "表管理", link: "/tables" },
           { index: "2-1-5", text: "字段管理", link: "/columns" },
-        ]
+        ],
       },
       {
         index: "2-2",
@@ -158,7 +151,7 @@ const asides: Array<Aside> = [
         data: [
           { index: "2-2-1", text: "简单复制", link: "/user" },
           { index: "2-2-2", text: "复杂清洗", link: "/table" },
-        ]
+        ],
       },
       {
         index: "2-3",
@@ -167,7 +160,7 @@ const asides: Array<Aside> = [
         data: [
           // { index: "2-3-1", text: "项目管理", link: "/user" },
           { index: "2-3-1", text: "代码生成配置", link: "/generate" },
-        ]
+        ],
       },
       {
         index: "2-4",
@@ -176,12 +169,12 @@ const asides: Array<Aside> = [
         data: [
           { index: "2-4-1", text: "字典名称", link: "/dicName" },
           { index: "2-2-1", text: "字典值", link: "/dicValue" },
-        ]
+        ],
       },
-    ]
+    ],
   },
   {
-    activeIndex: '3-1',
+    activeIndex: "3-1",
     openedsIndex: [],
     submenu: [
       {
@@ -194,12 +187,12 @@ const asides: Array<Aside> = [
           { index: "3-1-3", text: "查询", link: "/table" },
           { index: "3-1-4", text: "查询日志", link: "/table" },
           { index: "3-1-5", text: "日志分析", link: "/table" },
-        ]
-      }
-    ]
+        ],
+      },
+    ],
   },
   {
-    activeIndex: '4-1',
+    activeIndex: "4-1",
     submenu: [
       {
         index: "4-1",
@@ -211,12 +204,12 @@ const asides: Array<Aside> = [
           { index: "4-1-3", text: "查询", link: "/table" },
           { index: "4-1-4", text: "查询日志", link: "/table" },
           { index: "4-1-5", text: "日志分析", link: "/table" },
-        ]
-      }
-    ]
+        ],
+      },
+    ],
   },
   {
-    activeIndex: '5-1',
+    activeIndex: "5-1",
     submenu: [
       {
         index: "5-1",
@@ -225,12 +218,12 @@ const asides: Array<Aside> = [
         data: [
           { index: "5-1-1", text: "模板管理", link: "" },
           { index: "5-1-2", text: "图形搭配", link: "" },
-        ]
-      }
-    ]
+        ],
+      },
+    ],
   },
   {
-    activeIndex: '6-1',
+    activeIndex: "6-1",
     submenu: [
       {
         index: "6-1",
@@ -240,12 +233,12 @@ const asides: Array<Aside> = [
           { index: "6-1-1", text: "机器信息", link: "" },
           { index: "6-1-2", text: "爬虫项目信息", link: "" },
           { index: "6-1-3", text: "爬虫项目管理", link: "" },
-        ]
-      }
-    ]
+        ],
+      },
+    ],
   },
   {
-    activeIndex: '7-1',
+    activeIndex: "7-1",
     submenu: [
       {
         index: "7-1",
@@ -255,14 +248,13 @@ const asides: Array<Aside> = [
           { index: "7-1-1", text: "消息中心", link: "" },
           { index: "7-1-2", text: "消息统计分析", link: "" },
           { index: "7-1-2", text: "网站链接", link: "" },
-        ]
-      }
-    ]
-  }
+        ],
+      },
+    ],
+  },
 ];
 // 面包屑
 let currentList = ref<Array<Breadcrumb>>([]);
-
 
 const router = useRouter();
 
@@ -277,11 +269,9 @@ function init(): void {
   if (typeof index == "string") {
     handleSelect(index);
   }
-
-};
+}
 // head 头部点击事件 切换左侧导航信息 ，更换路由
 function handleSelect(index: String): void {
-
   if (index == "0-2") {
     handleSelect("0");
   } else if (index == "0-1") {
@@ -297,27 +287,24 @@ function handleSelect(index: String): void {
   } else {
     // 切换aside
     aside.value = asides[Number(index)];
-    var path = '/home' + index;
+    var path = "/home" + index;
     currentList.value = [];
     currentList.value[0] = { path: path, text: headMenu.data[Number(index)].text };
 
     // 更换默认页面
     router.push(path);
   }
-};
+}
 // aside 左侧点击事件切换面包屑信息
 function handleBreadcrumb(submenu: Menu, data: MenuItem): void {
   currentList.value[1] = { text: submenu.text };
   currentList.value[2] = { text: data.text };
   var path = data.link;
-  if (typeof path == 'string') {
+  if (typeof path == "string") {
     // 更换默认页面
     router.push(path);
   }
 }
-
-
-
 </script>
 
 <style>

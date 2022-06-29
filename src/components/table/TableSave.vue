@@ -8,7 +8,7 @@
         </el-select>
         <el-input-number v-else-if="item.searchType == SearchType.INTEGER" v-model="row[item.name]"></el-input-number>
         <el-radio-group v-else-if="item.searchType == SearchType.REDIO" v-model="row[item.name]">
-          <el-radio :key="op.value" :label="op.value" v-for="op in item.searchDataArray">{{op.label}}</el-radio>
+          <el-radio :key="op.value" :label="op.value" v-for="op in item.searchDataArray">{{ op.label }}</el-radio>
         </el-radio-group>
         <el-input v-else v-model="row[item.name]"></el-input>
       </el-form-item>
@@ -20,42 +20,59 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { onBeforeMount, ref } from 'vue'
-import { Column, SearchType } from '../../interface/Table'
-import Icon from '../select/icon/Index.vue'
+import { onBeforeMount, ref, watch } from "vue";
+import { Column, SearchType, SearchParamters } from "../../interface/Table";
+import Icon from "../select/icon/Index.vue";
 
 const parents = withDefaults(
   defineProps<{
-    info?: any
-    columns: Array<Column>
-    labelPosition?: String
+    info?: any;
+    columns: Array<Column>;
+    labelPosition?: String;
   }>(),
   {
     info: () => {},
     columns: () => [],
-    labelPosition: () => 'top',
+    labelPosition: () => "top",
   }
-)
+);
 
-const emit = defineEmits(['onSave', 'update:info', 'onCancel'])
+const emit = defineEmits(["onSave", "update:info", "onCancel", "searchTable"]);
 
-let row = ref<any>({})
+let localSearchParameters = ref<Array<SearchParamters>>([]);
+
+let row = ref<any>({});
+let localColumns = ref<Array<Column>>();
 
 onBeforeMount(() => {
-  row.value = parents.info
-})
+  localColumns.value = parents.columns;
+  row.value = parents.info;
+});
 
 function onSave() {
-  emit('update:info', row.value)
-  emit('onSave')
+  emit("update:info", row.value);
+  emit("onSave");
 }
 function onCancel() {
-  emit('onCancel')
+  emit("onCancel");
 }
 
 function selectIcon(param: any) {
-  row.value[param.columnName] = param.icon
+  row.value[param.columnName] = param.icon;
 }
+
+// 查询筛选
+function handleSearch() {
+  // TODO 多个筛选框互相影响时处理
+  emit("searchTable", localSearchParameters.value);
+}
+
+watch(
+  () => parents.columns,
+  (newValue, oldValue) => {
+    localColumns.value = newValue;
+  }
+);
 </script>
 <style scoped>
 #Table {
