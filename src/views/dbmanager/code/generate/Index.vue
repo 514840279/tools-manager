@@ -43,6 +43,11 @@ const redio = [
   { value: "N", label: "否" },
 ];
 
+const ormList = [
+  { value: "JPA", label: "JPA" },
+  { value: "mybatis", label: "mybatis" },
+];
+
 onBeforeMount(() => {
   loadType();
   loadJdbc();
@@ -66,7 +71,20 @@ function init() {
       searchType: SearchType.SELECT,
       searchDataArray: tableSelect.value,
     },
-
+    {
+      name: "generateOrm",
+      title: "微服务的orm框架",
+      sort: true,
+      search: true,
+      searchType: SearchType.REDIO,
+      searchDataArray: ormList,
+    },
+    {
+      name: "generateLombok",
+      title: "使用lombok注解",
+      searchType: SearchType.REDIO,
+      searchDataArray: redio,
+    },
     {
       name: "classPath",
       title: "包路径",
@@ -237,12 +255,10 @@ function handleExport() {
     list: multipleSelected.value,
     username: "",
   };
-  debugger;
   http
     .post("/serve/sysDbmsGenerateCodeInfo/generate", param)
     .then((reponse: any) => {
       if (reponse.data != null && reponse.code == 200) {
-        debugger;
         toDownload(reponse.data);
       }
     })

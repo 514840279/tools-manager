@@ -37,7 +37,7 @@
                     <component :is="scope.row[column.name]"></component>
                   </el-icon>
                 </div>
-                <div v-if="column.searchType == SearchType.SELECT || column.type == SearchType.REDIO">
+                <div v-if="column.searchType == SearchType.SELECT || column.searchType == SearchType.REDIO">
                   <template v-for="(opt, i) in column.searchDataArray" :key="i">
                     <span v-if="showSelectText(opt, scope.row[column.name])">{{ opt.label }}</span>
                   </template>

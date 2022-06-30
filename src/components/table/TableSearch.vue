@@ -7,7 +7,7 @@
       <template v-if="item.searchType == SearchType.INTEGER">
         <el-input-number class="full" size="small" v-model="localSearchParameters[index]['data']" :placeholder="item.searchPlaceholder" @change="handleSearch()" :clearable="true" />
       </template>
-      <template v-else-if="item.searchType == SearchType.SELECT">
+      <template v-else-if="item.searchType == SearchType.SELECT || item.searchType == SearchType.REDIO">
         <el-select v-model="localSearchParameters[index]['data']" class="full" :placeholder="item.searchPlaceholder" size="small" @change="handleSearch()" :clearable="true" :filterable="true">
           <el-option v-for="op in item.searchDataArray" :key="op.value" :label="op.label" :value="op.value" />
         </el-select>
