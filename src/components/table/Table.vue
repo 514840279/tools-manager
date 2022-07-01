@@ -154,7 +154,7 @@ let dataList = ref<Array<any>>([]),
   // 默认展示页面信息
   show = ref<string>("page"),
   // 绑定显示隐藏columns名称
-  showColumns = ref<Array<Column>>(),
+  showColumns = ref<Array<Column>>([]),
   // 搜索columns名称 类型有type= text integer integerrange date datetime  daterange select redio checkbox
   /*{
       name= name,                                 
@@ -366,7 +366,7 @@ function resetTable(): void {
   // param = parents.page;
   sortParameters.value = [];
   searchParameters.value = [];
-  searchColumns.forEach((column, index) => {
+  searchColumns.value.forEach((column, index) => {
     if (index < 5) {
       searchParameters.value.push({
         operator: "and",

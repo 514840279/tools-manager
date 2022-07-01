@@ -1,10 +1,22 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
+const path = require('path');
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [vue()],
-
+  // 别名配置
+  alias: {
+    // 键必须以斜线开始和结束
+    '@': path.resolve(__dirname, './src'),
+    "@assets": path.resolve(__dirname, "./src/assets"),
+    "@common": path.resolve(__dirname, "./src/common"),
+    "@utils": path.resolve(__dirname, "./src/utils"),
+    "@components": path.resolve(__dirname, "./src/components"),
+    "@views": path.resolve(__dirname, "./src/views"),
+    "@styles": path.resolve(__dirname, "./src/styles"),
+    "@plugins": path.resolve(__dirname, "./src/plugins")
+  },
   build: {
     minify: 'terser',
     // 进行压缩计算

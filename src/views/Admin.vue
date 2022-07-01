@@ -18,30 +18,32 @@
     </el-header>
     <el-container>
       <el-aside :width="asideWidth" class="left">
-        <!-- aside -->
-        <el-menu class="el-menu-vertical-demo" :collapse="isCollapse" :default-openeds="openedsIndex" :default-active="aside.activeIndex">
-          <el-sub-menu v-for="(subme, index) in aside.submenu" :key="index" :index="subme.index">
-            <template #title>
-              <el-icon>
-                <component :is="subme.icon"></component>
-              </el-icon>
-              <span>{{ subme.text }}</span>
-            </template>
-            <!-- group menu -->
-            <el-menu-item-group v-for="(group, ind) in subme.group" :key="ind" :title="group.title">
-              <el-menu-item v-for="(data, i) in group.data" :key="i" :index="data.index">
-                <span>{{ data.text }}</span>
+        <el-scrollbar :height="height">
+          <!-- aside -->
+          <el-menu class="el-menu-vertical-demo" :collapse="isCollapse" :default-openeds="openedsIndex" :default-active="aside.activeIndex">
+            <el-sub-menu v-for="(subme, index) in aside.submenu" :key="index" :index="subme.index">
+              <template #title>
+                <el-icon>
+                  <component :is="subme.icon"></component>
+                </el-icon>
+                <span>{{ subme.text }}</span>
+              </template>
+              <!-- group menu -->
+              <el-menu-item-group v-for="(group, ind) in subme.group" :key="ind" :title="group.title">
+                <el-menu-item v-for="(data, i) in group.data" :key="i" :index="data.index">
+                  <span>{{ data.text }}</span>
+                </el-menu-item>
+              </el-menu-item-group>
+              <!-- submenu -->
+              <el-menu-item v-for="(data, i) in subme.data" :key="i" :index="data.index">
+                <el-icon>
+                  <component :is="data.icon"></component>
+                </el-icon>
+                <span @click="handleBreadcrumb(subme, data)">{{ data.text }}</span>
               </el-menu-item>
-            </el-menu-item-group>
-            <!-- submenu -->
-            <el-menu-item v-for="(data, i) in subme.data" :key="i" :index="data.index">
-              <el-icon>
-                <component :is="data.icon"></component>
-              </el-icon>
-              <span @click="handleBreadcrumb(subme, data)">{{ data.text }}</span>
-            </el-menu-item>
-          </el-sub-menu>
-        </el-menu>
+            </el-sub-menu>
+          </el-menu>
+        </el-scrollbar>
       </el-aside>
       <el-container>
         <el-main>
@@ -68,12 +70,11 @@
 </template>
 <script setup lang="ts">
 import Foot from "../components/home/Food.vue";
-
-import { mainStore } from "../store/index";
-
-import { onMounted, ref } from "vue";
+import { onBeforeMount, onMounted, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import { Menu, MenuItem, Aside, Breadcrumb } from "../interface/Menu";
+
+// import { mainStore } from "../store/index";
 // 使普通数据变响应式的函数
 // import { storeToRefs } from "pinia";
 // // 实例化仓库
@@ -263,8 +264,13 @@ const asides: Array<Aside> = [
 ];
 // 面包屑
 let currentList = ref<Array<Breadcrumb>>([]);
+let height = ref<string>("680px");
 
 const router = useRouter();
+onBeforeMount(() => {
+  const h = document.documentElement.clientHeight;
+  height.value = h - 59 + "px";
+});
 
 onMounted(() => {
   // TODO 根据不同权限 headMenu，asides 应该设置不同的数据，

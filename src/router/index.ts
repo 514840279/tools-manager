@@ -64,35 +64,35 @@ const routes = [
   }, {
     path: '/databasetype',
     name: "databasetype",
-    component: () => import('../views/dbmanager/dbm/type/Index.vue'),
+    component: () => import('../views/manager/dbm/type/Index.vue'),
   }, {
     path: '/index',
     name: "index",
-    component: () => import('../views/dbmanager/dbm/index/Index.vue'),
+    component: () => import('../views/manager/dbm/index/Index.vue'),
   }, { 
     path: '/database',
     name: "database",
-    component: () => import('../views/dbmanager/dbm/database/Index.vue'),
+    component: () => import('../views/manager/dbm/database/Index.vue'),
   }, { 
     path: '/tables',
     name: "tables",
-    component: () => import('../views/dbmanager/dbm/tables/Index.vue'),
+    component: () => import('../views/manager/dbm/tables/Index.vue'),
   }, { 
     path: '/columns',
     name: "columns",
-    component: () => import('../views/dbmanager/dbm/column/Index.vue'),
+    component: () => import('../views/manager/dbm/column/Index.vue'),
   }, { 
     path: '/generate',
     name: "generate",
-    component: () => import('../views/dbmanager/code/generate/Index.vue'),
+    component: () => import('../views/manager/code/generate/Index.vue'),
   }, { 
     path: '/dicName',
     name: "dicName",
-    component: () => import('../views/dbmanager/dic/name/Index.vue'),
+    component: () => import('../views/manager/dic/name/Index.vue'),
   }, { 
     path: '/dicValue',
     name: "dicValue",
-    component: () => import('../views/dbmanager/dic/keyvalue/Index.vue'),
+    component: () => import('../views/manager/dic/keyvalue/Index.vue'),
   }, { 
     
     path: '/error',
