@@ -13,7 +13,7 @@ import locale from 'element-plus/lib/locale/lang/zh-cn'
 import App from './App.vue'
 
 
- 
+const pinia = createPinia()
 const app = createApp(App)
 
 for (const name in ElementPlusIcons){
@@ -23,6 +23,6 @@ for (const name in ElementPlusIcons){
 app.use(ElementPlus, { size: 'small', zIndex: 3000, locale });
 app.use(VueAxios, axios);
 app.use(router);
-app.use(createPinia())
+app.use(pinia)
 
 app.mount('#app');

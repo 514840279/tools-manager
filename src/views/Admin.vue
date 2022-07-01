@@ -69,9 +69,17 @@
 <script setup lang="ts">
 import Foot from "../components/home/Food.vue";
 
+import { mainStore } from "../store/index";
+
 import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import { Menu, MenuItem, Aside, Breadcrumb } from "../interface/Menu";
+// 使普通数据变响应式的函数
+// import { storeToRefs } from "pinia";
+// // 实例化仓库
+// const store = mainStore();
+// // 解构并使数据具有响应式
+// const { currentIndex } = storeToRefs(store);
 
 let asideWidth = ref<string>("200px");
 let isCollapse = ref<boolean>(false);
@@ -266,12 +274,13 @@ onMounted(() => {
 // 初始化展示信息
 function init(): void {
   let index = headMenu.activeIndex;
+
   if (typeof index == "string") {
     handleSelect(index);
   }
 }
 // head 头部点击事件 切换左侧导航信息 ，更换路由
-function handleSelect(index: String): void {
+function handleSelect(index: string): void {
   if (index == "0-2") {
     handleSelect("0");
   } else if (index == "0-1") {
