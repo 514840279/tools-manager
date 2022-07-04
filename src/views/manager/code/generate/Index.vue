@@ -23,10 +23,10 @@
 </template>
 
 <script setup lang="ts">
-import Table from "../../../../components/table/Table.vue";
-import { Column, SearchType, SelectOptions, ColumnType, SearchParamters } from "../../../../interface/Table";
+import Table from "@components/table/Table.vue";
+import { Column, SearchType, SelectOptions, ColumnType } from "@interface/Table";
 import { onBeforeMount, ref } from "vue";
-import http from "../../../../plugins/http";
+import http from "@plugins/http";
 
 let typeSelect = ref<Array<SelectOptions>>([]);
 let jdbcSelect = ref<Array<SelectOptions>>([]);

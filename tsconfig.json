@@ -18,14 +18,15 @@
     "types": ["@dcloudio/types","node"],
     "paths": {
       "@/*": ["src/*"],
-      "@/assets/*": ["src/assets/*"],
-      "@/components/*": ["./src/components/*"],
-      "@/views/*": ["./src/views/*"],     
-      "@/plugins/*": ["src/plugins/*"],   
-      // '@': path.resolve(__dirname, './src'),
-      // "@common": path.resolve(__dirname, "./src/common"),
-      // "@utils": path.resolve(__dirname, "./src/utils"),
-      // "@styles": path.resolve(__dirname, "./src/styles"),
+      "@assets/*": ["src/assets/*"],
+      "@components/*": ["./src/components/*"],
+      "@interface/*": ["src/interface/*"],   
+      "@plugins/*": ["src/plugins/*"],   
+      "@common/*": ["src/common/*"],   
+      "@utils/*": ["src/utils/*"],   
+      "@styles/*": ["src/styles/*"],   
+      "@store/*": ["src/store/*"],   
+      "@views/*": ["./src/views/*"],     
     }
 
   },

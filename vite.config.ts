@@ -6,16 +6,20 @@ const path = require('path');
 export default defineConfig({
   plugins: [vue()],
   // 别名配置
-  alias: {
-    // 键必须以斜线开始和结束
-    '@': path.resolve(__dirname, './src'),
-    "@assets": path.resolve(__dirname, "./src/assets"),
-    "@common": path.resolve(__dirname, "./src/common"),
-    "@utils": path.resolve(__dirname, "./src/utils"),
-    "@components": path.resolve(__dirname, "./src/components"),
-    "@views": path.resolve(__dirname, "./src/views"),
-    "@styles": path.resolve(__dirname, "./src/styles"),
-    "@plugins": path.resolve(__dirname, "./src/plugins")
+  resolve: {
+    alias: {
+      // 键必须以斜线开始和结束
+      '@': path.resolve(__dirname, './src'),
+      "@assets": path.resolve(__dirname, "./src/assets"),
+      "@common": path.resolve(__dirname, "./src/common"),
+      "@interface": path.resolve(__dirname, "./src/interface"),
+      "@plugins": path.resolve(__dirname, "./src/plugins"),
+      "@utils": path.resolve(__dirname, "./src/utils"),
+      "@components": path.resolve(__dirname, "./src/components"),
+      "@styles": path.resolve(__dirname, "./src/styles"),
+      "@store": path.resolve(__dirname, "./src/store"),
+      "@views": path.resolve(__dirname, "./src/views"),
+    },
   },
   build: {
     minify: 'terser',
