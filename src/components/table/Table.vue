@@ -251,6 +251,7 @@ function initTable(): void {
       .post<any>(url.page, param.value)
       .then((reponse) => {
         if (reponse.data != null && reponse.code == 200) {
+          // 此处结合 jpa的page返回为content ，mybatis应为 records
           dataList.value = reponse.data.content;
           var size = reponse.data.totalElements;
           if (size > 0 && dataList.value.length == 0) {

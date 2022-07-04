@@ -94,6 +94,14 @@ const routes = [
     name: "dicValue",
     component: () => import('../views/manager/dic/keyvalue/Index.vue'),
   }, { 
+    path: '/sysMenuInfo',
+    name: 'sysMenuInfo',
+    component: () => import('../views/manager/softm/sysmenuinfo/Index.vue'),
+  }, { 
+    path: '/tabsmergeinfo',
+    name: 'tabsmergeinfo',
+    component: () => import('../views/manager/dbm/tabsmergeinfo/Index.vue'),
+  }, { 
     
     path: '/error',
     name: "error",

@@ -5,10 +5,10 @@
 </template>
 
 <script setup lang="ts">
-import Table from "../../../../components/table/Table.vue";
-import { Column } from "../../../../interface/Table";
+import Table from "@components/table/Table.vue";
+import { Column } from "@interface/Table";
 // 修改请求地址
-let rootUrl: String = "/serve/sysMenuInfo,
+let rootUrl: String = "/serve/sysMenuInfo",
   columns: Array<Column> = [
     {
       name: "systemId",
@@ -19,24 +19,12 @@ let rootUrl: String = "/serve/sysMenuInfo,
       title: "PARENTS_ID",
     },
     {
-      name: "createUser",
-      title: "CREATE_USER",
-    },
-    {
       name: "sort",
       title: "SORT",
     },
     {
       name: "homePage",
       title: "HOME_PAGE",
-    },
-    {
-      name: "updateTime",
-      title: "UPDATE_TIME",
-    },
-    {
-      name: "createTime",
-      title: "CREATE_TIME",
     },
     {
       name: "icon",
@@ -49,6 +37,7 @@ let rootUrl: String = "/serve/sysMenuInfo,
     {
       name: "uuid",
       title: "UUID",
+      show: false,
     },
     {
       name: "type",
@@ -63,16 +52,8 @@ let rootUrl: String = "/serve/sysMenuInfo,
       title: "CHECKED",
     },
     {
-      name: "deleteFlag",
-      title: "DELETE_FLAG",
-    },
-    {
       name: "discription",
       title: "DISCRIPTION",
-    },
-    {
-      name: "updateUser",
-      title: "UPDATE_USER",
     },
     {
       name: "uri",

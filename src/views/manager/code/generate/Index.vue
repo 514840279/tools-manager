@@ -108,14 +108,6 @@ function init() {
       show: false,
     },
     {
-      name: "generateDetail",
-      title: "生成详情页面",
-      align: "left",
-      searchType: SearchType.REDIO,
-      searchDataArray: redio,
-      show: false,
-    },
-    {
       name: "generateController",
       title: "生成控制层",
       align: "left",

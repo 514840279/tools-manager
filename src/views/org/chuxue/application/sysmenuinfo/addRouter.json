@@ -1,5 +1,0 @@
-  }, { 
-    path: '/sysMenuInfo',
-    name: 'sysMenuInfo',
-    component: () => import('../views/org/chuxue/application/Index.vue'),
-

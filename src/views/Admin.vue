@@ -132,7 +132,7 @@ const asides: Array<Aside> = [
           { index: "1-1-1", text: "用户管理", link: "" },
           { index: "1-1-2", text: "权限管理", link: "" },
           { index: "1-1-3", text: "项目管理", link: "" },
-          { index: "1-1-4", text: "菜单管理", link: "" },
+          { index: "1-1-4", text: "菜单管理", link: "/sysMenuInfo" },
           { index: "1-1-5", text: "消息中心", link: "" },
         ],
       },
@@ -158,7 +158,7 @@ const asides: Array<Aside> = [
         text: "数据迁移",
         icon: "Message",
         data: [
-          { index: "2-2-1", text: "简单复制", link: "/user" },
+          { index: "2-2-1", text: "简单复制", link: "/tabsmergeinfo" },
           { index: "2-2-2", text: "复杂清洗", link: "/table" },
         ],
       },
