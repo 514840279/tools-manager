@@ -87,6 +87,9 @@ class ServiceRequest {
   patch<T>(url:string,data?:any,config?: AxiosRequestConfig): Promise<T> {
     return this.request<T>({ ...config,url:url, data:data, method: 'PATCH' })
   }
+  download<T>(url:string,data?:any,config?: AxiosRequestConfig): Promise<T> {
+    return this.request<T>({ ...config,url:url, data:data, method: 'POST',responseType: "blob" })
+  }
 }
 const  http:ServiceRequest = new ServiceRequest({
   timeout: 150000 // 可适当调整

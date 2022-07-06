@@ -262,9 +262,24 @@ function handleExport() {
 // 下載代碼
 function toDownload(path: string) {
   http
-    .get("/serve/sysDbmsGenerateCodeInfo/downloadCode" + path)
+    .download("/serve/sysDbmsGenerateCodeInfo/downloadCode", path)
     .then((reponse: any) => {
-      // TODO download
+      //定义文件内容，类型必须为Blob 否则createObjectURL会报错
+      let blob = new Blob([reponse], { type: "application/zip" });
+      let urlObject = window.URL || window.webkitURL || window;
+      let href = urlObject.createObjectURL(blob); //创建下载的链接
+
+      //生成<a></a>DOM元素
+      let el = document.createElement("a");
+      el.style.display = "none";
+      //链接赋值
+      el.href = href;
+      el.setAttribute("download", path + ".zip");
+      // el.download = path + ".zip";
+      //必须点击否则不会下载
+      el.click();
+      //移除链接释放资源
+      urlObject.revokeObjectURL(href);
     })
     .catch((err) => {
       // TODO
