@@ -8,7 +8,23 @@
       </template>
       <div v-for="(item, key) in localTableList" :key="key">
         <el-row v-if="item[0] == type.value">
-          <el-col v-for="(table, ind) of item[1]" :key="ind" :span="6" class="text item"> {{ table.tabsName }} </el-col>
+          <el-col v-for="(table, ind) of item[1]" :key="ind" :span="6" class="text-item">
+            <el-popover placement="bottom" :width="250" trigger="hover">
+              <template #reference>
+                <div class="table-item" @click="searchTable(table)">{{ table.tabsDesc == null || table.tabsDesc == "" ? table.tabsName : table.tabsDesc }}</div>
+              </template>
+              <template #default>
+                <el-descriptions :title="table.tabsDesc == null || table.tabsDesc == '' ? table.tabsName : table.tabsDesc" :column="1">
+                  <el-descriptions-item label="表名：">{{ table.tabsName }}</el-descriptions-item>
+                  <el-descriptions-item label="表含义：">{{ table.tabsDesc }}</el-descriptions-item>
+                  <el-descriptions-item label="表数据量：">{{ table.tabsRows }}</el-descriptions-item>
+                  <el-descriptions-item label="表空间大小：">{{ table.tabsSpace }}</el-descriptions-item>
+                  <el-descriptions-item label="表排序：">{{ table.sort }}</el-descriptions-item>
+                  <el-descriptions-item label="是否隐藏：">{{ table.deleteFlag == 1 ? "是" : "否" }}</el-descriptions-item>
+                </el-descriptions>
+              </template>
+            </el-popover>
+          </el-col>
         </el-row>
       </div>
     </el-card>
@@ -35,6 +51,10 @@ onBeforeMount(() => {
   console.log(localTableList, localTypeSelect.value, "123456");
 });
 
+function searchTable(table: SysDbmsTabsTableInfo) {
+  alert(table.tabsName);
+}
+
 // 字段數據改變
 watch(
   () => [parents.tablesList, parents.typeSelect],
@@ -54,6 +74,16 @@ watch(
   .box-card {
     margin-top: 15px;
     margin-left: 0px;
+    .table-item {
+      height: 30px;
+      font-size: 18px;
+      border-radius: 5px;
+      padding-left: 5px;
+      align-content: center;
+    }
+    .table-item:hover {
+      background-color: rgb(243, 237, 237);
+    }
   }
 }
 </style>
