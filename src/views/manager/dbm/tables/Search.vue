@@ -10,7 +10,6 @@ import http from "@plugins/http";
 import { SelectOptions } from "@interface/Table";
 import { SysDbmsTabsTableInfo } from "@interface/SysDbms";
 import TypeCard from "./TypeCard.vue";
-import { ElLoading } from "element-plus";
 
 let typeSelect = ref<Array<SelectOptions>>([]);
 let jdbcSelect = ref<Array<SelectOptions>>([]);
