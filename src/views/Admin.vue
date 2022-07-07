@@ -139,7 +139,7 @@ const asides: Array<Aside> = [
     ],
   },
   {
-    activeIndex: "2-3-1",
+    activeIndex: "2-1-6",
     submenu: [
       {
         index: "2-1",
@@ -151,6 +151,7 @@ const asides: Array<Aside> = [
           { index: "2-1-1", text: "数据库", link: "/database" },
           { index: "2-1-3", text: "表管理", link: "/tables" },
           { index: "2-1-5", text: "字段管理", link: "/columns" },
+          { index: "2-1-6", text: "表查询管理", link: "/tabsSearch" },
         ],
       },
       {
@@ -302,12 +303,26 @@ function handleSelect(index: string): void {
   } else {
     // 切换aside
     aside.value = asides[Number(index)];
+
+    let activeIndex = aside.value.activeIndex;
+    let submenus = aside.value.submenu;
     var path = "/home" + index;
+
     currentList.value = [];
     currentList.value[0] = { path: path, text: headMenu.data[Number(index)].text };
-
-    // 更换默认页面
-    router.push(path);
+    // 根据 activeIndex 和 submenu.index 确定默认展示页面 是 home${index} 还是data.link
+    submenus?.forEach((submenu, inex) => {
+      if (submenu.index == activeIndex) {
+        // 更换默认页面
+        router.push(path);
+      } else if (String(activeIndex).indexOf(String(submenu.index)) > -1) {
+        submenu.data.forEach((data) => {
+          if (data.index == activeIndex) {
+            handleBreadcrumb(submenu, data);
+          }
+        });
+      }
+    });
   }
 }
 // aside 左侧点击事件切换面包屑信息

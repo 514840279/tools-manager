@@ -36,10 +36,10 @@
 </template>
 
 <script setup lang="ts">
-import Table from "../../../../components/table/Table.vue";
-import { Column, SearchType, SelectOptions, OptionBtn, PageParam } from "../../../../interface/Table";
+import Table from "@components/table/Table.vue";
+import { Column, SearchType, SelectOptions, OptionBtn, PageParam } from "@interface/Table";
 import { onBeforeMount, ref } from "vue";
-import http from "../../../../plugins/http";
+import http from "@plugins/http";
 
 let rootUrl: String = "/serve/sysDbmsTabsTableInfo";
 
@@ -108,7 +108,7 @@ function init() {
       // search: true
     },
     {
-      name: "typeUuid",
+      name: "typeCode",
       title: "类型",
       align: "left",
       sort: true,
@@ -172,7 +172,7 @@ function init() {
       sort: true,
     },
     {
-      name: "typeUuid",
+      name: "typeCode",
       title: "类型",
       align: "left",
       searchType: SearchType.SELECT,
@@ -233,12 +233,13 @@ function loadType() {
       if (response.data != null && response.code == 200) {
         response.data.forEach((element: any) => {
           let op: SelectOptions = {
-            value: element.uuid,
+            value: element.typeCode,
             label: element.typeName,
           };
           typeSelect.value?.push(op);
         });
       }
+      typeSelect.value?.push({ value: "OTHERS", label: "其他", default: true });
     })
     .catch((err) => {
       // TODO
@@ -262,6 +263,7 @@ function handLoadTables() {
 
 function toloadTables(val: string) {
   page.value.info = info.value;
+  page.value.totalElements = 0;
   http
     .post<any>("/serve/sysDbmsTabsTableInfo/findAllByJdbcUuid", page.value)
     .then((response) => {

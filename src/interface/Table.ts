@@ -99,6 +99,9 @@ export interface OptionBtn{
     page?: boolean, // 翻页
     opt?: boolean, // 每条数据后端操作搭配optbtn使用
     optbtn?: Optbtn
+    reset?: boolean, // 删除条件，
+    refresh?: boolean, // 刷新数据，即重新查询一次
+    showColumn?: boolean, // 动态列表
 }
 interface Optbtn{
     info?: boolean, // 详细 暂时无用
@@ -111,4 +114,5 @@ interface Optbtn{
 export interface SelectOptions{
     value: string|number,
     label: string,
+    default?:boolean
 } 

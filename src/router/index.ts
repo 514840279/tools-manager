@@ -78,6 +78,10 @@ const routes = [
     name: "tables",
     component: () => import('../views/manager/dbm/tables/Index.vue'),
   }, { 
+    path: '/tabsSearch',
+    name: 'tabsSearch',
+    component: () => import('../views/manager/dbm/tables/Search.vue'),
+  }, { 
     path: '/columns',
     name: "columns",
     component: () => import('../views/manager/dbm/column/Index.vue'),
@@ -96,13 +100,13 @@ const routes = [
   }, { 
     path: '/sysMenuInfo',
     name: 'sysMenuInfo',
-    component: () => import('../views/manager/softm/sysmenuinfo/Index.vue'),
+    component: () => import('../views/manager/softm/SysMenuInfo/Index.vue'),
   }, { 
     path: '/tabsmergeinfo',
     name: 'tabsmergeinfo',
-    component: () => import('../views/manager/dbm/tabsmergeinfo/Index.vue'),
+    component: () => import('../views/manager/dbm/SysDbmsTabsMergeInfo/Index.vue'),
+
   }, { 
-    
     path: '/error',
     name: "error",
     component: Err,

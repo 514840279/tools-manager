@@ -13,11 +13,6 @@
           </el-select>
         </template>
       </Table>
-      <el-row>
-        <el-col :span="12" :offset="12">
-          <el-pagination class="pagex" background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page.pageNumber" :page-sizes="page.sizes" :page-size="page.pageSize" :pager-count="5" layout="total, sizes, prev, pager, next, jumper" :total="page.totalElements"> </el-pagination>
-        </el-col>
-      </el-row>
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="dialogVisible = false">取消</el-button>
@@ -51,6 +46,7 @@ let localOptionBtn = ref<OptionBtn>({
   sort: false, // 开启排序功能
   add: false, // 添加
   page: false, // 翻页
+  showColumn: false,
   opt: false, // 每条数据后端操作搭配optbtn使用
 });
 
@@ -153,44 +149,34 @@ function init() {
       name: "tabsUuid",
       title: "表",
       align: "left",
-      sort: true,
-      search: true,
-      type: SearchType.SELECT,
+      searchType: SearchType.SELECT,
       searchDataArray: tabsSelect.value,
     },
     {
       name: "colsName",
       title: "字段名",
       align: "left",
-      sort: true,
-      search: true,
     },
     {
       name: "colsDesc",
       title: "字段含义",
       align: "center",
-      sort: true,
-      search: true,
     },
     {
       name: "colsLength",
       title: "字段长度",
       align: "left",
-      type: SearchType.INTEGER,
+      searchType: SearchType.INTEGER,
     },
     {
       name: "dataType",
       title: "数据类型",
       align: "left",
-      sort: true,
-      search: true,
     },
     {
       name: "nullable",
       title: "允许空",
-      sort: true,
-      search: true,
-      type: SearchType.SELECT,
+      searchType: SearchType.SELECT,
       searchDataArray: [
         { value: "N", label: "否" },
         { value: "Y", label: "是" },
@@ -210,7 +196,7 @@ function init() {
     {
       name: "daoru",
       title: "导入",
-      type: SearchType.OPERATION,
+      searchType: SearchType.OPERATION,
     },
   ];
 }
@@ -243,7 +229,7 @@ function loadType() {
       if (response.data != null && response.code == 200) {
         response.data.forEach((element: any) => {
           let op: SelectOptions = {
-            value: element.uuid,
+            value: element.typeCode,
             label: element.typeName,
           };
           typeSelect.value?.push(op);
@@ -292,13 +278,14 @@ function handLoadTables() {
 
 function toloadColumns() {
   page.value.info = { tabsUuid: tabsSelectValue.value };
+  // page.value.totalElements = 0;
   http
     .post<any>("/serve/sysDbmsTabsColsInfo/findAllByTabsUuid", page.value)
     .then((response) => {
       if (response.data != null && response.code == 200) {
         localdata.value = response.data;
         // var size = response.data.totalElements;
-        // page.value.totalElements = size;
+        // page.value.totalElements = response.data.length;
         reloadTabs.value = true;
       }
     })

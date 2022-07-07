@@ -17,12 +17,12 @@
               <slot name="rightBtn"></slot>
               <el-button title="查询" v-if="localOptionBtn.searchParam" @click="handleShowShearch()" :type="searchBtnType" icon="Search" circle size="small"></el-button>
               <el-button title="排序" v-if="localOptionBtn.sort" @click="handleShowSort()" :type="sortBtnType" icon="Sort" circle size="small"></el-button>
-              <el-button title="重置" @click="resetTable()" icon="Setting" circle size="small"></el-button>
+              <el-button title="重置" v-if="localOptionBtn.reset" @click="resetTable()" icon="Setting" circle size="small"></el-button>
               <el-button title="添加" v-if="localOptionBtn.add" @click="handleAdd()" type="success" icon="CirclePlusFilled" circle size="small"></el-button>
-              <el-button title="刷新" @click="initTable()" icon="Refresh" circle size="small"></el-button>
+              <el-button title="刷新" v-if="localOptionBtn.refresh" @click="initTable()" icon="Refresh" circle size="small"></el-button>
               <!-- <el-button title="打印" @click="printTable()" icon="Printer" circle size="small"  ></el-button> -->
               <!-- <el-button title="导出" icon="Download" circle size="small"  ></el-button> -->
-              <TableColumnSelect v-model:columns="showColumns" circle size="small"></TableColumnSelect>
+              <TableColumnSelect v-if="localOptionBtn.showColumn" v-model:columns="showColumns" circle size="small"></TableColumnSelect>
             </div>
           </el-col>
         </el-row>
@@ -59,7 +59,7 @@
           <div v-if="localOptionBtn.page" class="apagination">
             <el-row>
               <el-col :span="12" :offset="12">
-                <el-pagination class="pagex" background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="param.pageNumber" :page-sizes="page.sizes" :page-size="param.pageSize" :pager-count="5" layout="total, sizes, prev, pager, next, jumper" :total="param.totalElements"> </el-pagination>
+                <el-pagination class="pagex" background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="param.pageNumber" :page-sizes="param.sizes" :page-size="param.pageSize" :pager-count="5" layout="total, sizes, prev, pager, next, jumper" :total="param.totalElements"> </el-pagination>
               </el-col>
             </el-row>
           </div>
@@ -130,7 +130,10 @@ let localOptionBtn = ref<OptionBtn>({
     search: true, // 开启查询功能
     searchParam: false, // 开启查询功能
     sort: false, // 开启排序功能
+    reset: false, // 删除条件，
     add: true, // 添加
+    refresh: true, // 刷新数据，即重新查询一次
+    showColumn: true, // 动态列表
     page: true, // 翻页
     opt: true, // 每条数据后端操作搭配optbtn使用
     optbtn: {
@@ -444,10 +447,10 @@ const handleSelectionChange = (val: any[]) => {
 // 监听传入的数据改变表数据改变
 // 字段數據改變
 watch(
-  () => [parents.datas, parents.columns],
+  () => [parents.datas, parents.columns, parents.page],
   (newValue, oldValue) => {
-    console.log(newValue, oldValue);
-    if (newValue[0] != null && newValue[0].length > 0) {
+    console.log(newValue, oldValue && newValue[0].length > 0);
+    if (newValue[0] != null) {
       // 因为watch被观察的对象只能是getter/effect函数、ref、active对象或者这些类型是数组
       // 所以需要将state.count变成getter函数
       dataList.value = newValue[0];
@@ -457,6 +460,8 @@ watch(
       init();
       // befor
       initTable();
+    } else if (newValue[2] != null) {
+      param.value = newValue[2];
     }
   }
 );

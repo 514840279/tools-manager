@@ -197,7 +197,7 @@ function loadType() {
       if (response.data != null && response.code == 200) {
         response.data.forEach((element: any) => {
           let op: SelectOptions = {
-            value: element.uuid,
+            value: element.typeCode,
             label: element.typeName,
           };
           typeSelect.value?.push(op);
