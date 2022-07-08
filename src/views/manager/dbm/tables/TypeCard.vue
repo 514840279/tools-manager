@@ -11,7 +11,7 @@
           <el-col v-for="(table, ind) of item[1]" :key="ind" :span="6" class="text-item">
             <el-popover placement="bottom" :width="250" trigger="hover">
               <template #reference>
-                <div class="table-item" @click="searchTable(table)">{{ table.tabsDesc == null || table.tabsDesc == "" ? table.tabsName : table.tabsDesc }}</div>
+                <el-link target="_blank" type="primary" class="table-item" @click="searchTable(table)">{{ table.tabsDesc == null || table.tabsDesc == "" ? table.tabsName : table.tabsDesc }}</el-link>
               </template>
               <template #default>
                 <el-descriptions :title="table.tabsDesc == null || table.tabsDesc == '' ? table.tabsName : table.tabsDesc" :column="1">
@@ -35,6 +35,15 @@
 import { SelectOptions } from "@interface/Table";
 import { SysDbmsTabsTableInfo } from "@interface/SysDbms";
 import { onBeforeMount, ref, watch } from "vue";
+import { useRouter } from "vue-router";
+import { searchTableStore } from "@store/search";
+
+// 使普通数据变响应式的函数
+import { storeToRefs } from "pinia";
+// 实例化仓库
+const store = searchTableStore();
+// 解构并使数据具有响应式
+const { currentTable } = storeToRefs(store);
 
 const parents = defineProps<{
   typeSelect: Array<SelectOptions>;
@@ -44,6 +53,7 @@ const parents = defineProps<{
 
 let localTypeSelect = ref<Array<SelectOptions> | undefined>([]);
 let localTableList = ref<Map<string, Array<SysDbmsTabsTableInfo>>>();
+const router = useRouter();
 
 onBeforeMount(() => {
   localTableList.value = parents.tablesList;
@@ -52,7 +62,13 @@ onBeforeMount(() => {
 });
 
 function searchTable(table: SysDbmsTabsTableInfo) {
-  alert(table.tabsName);
+  currentTable.value = table;
+  // alert(table.tabsName);
+
+  // const { href } = router.resolve("/searchData");
+  // window.open(href, "_blank");
+
+  router.push({ path: "/searchData" });
 }
 
 // 字段數據改變
@@ -64,7 +80,6 @@ watch(
     } else if (newValue[1] != null) {
       localTypeSelect.value = newValue[1];
     }
-    console.log(localTableList, localTypeSelect.value, "123456");
   }
 );
 </script>

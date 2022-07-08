@@ -70,7 +70,7 @@
 </template>
 <script setup lang="ts">
 import Foot from "../components/home/Food.vue";
-import { onBeforeMount, onMounted, ref, watch } from "vue";
+import { onBeforeMount, onMounted, ref, toRaw } from "vue";
 import { useRouter } from "vue-router";
 import { Menu, MenuItem, Aside, Breadcrumb } from "../interface/Menu";
 
@@ -152,6 +152,7 @@ const asides: Array<Aside> = [
           { index: "2-1-3", text: "表管理", link: "/tables" },
           { index: "2-1-5", text: "字段管理", link: "/columns" },
           { index: "2-1-6", text: "表查询管理", link: "/tabsSearch" },
+          { index: "2-1-7", text: "表数据查询", link: "/searchData" },
         ],
       },
       {
@@ -267,14 +268,14 @@ const asides: Array<Aside> = [
 let currentList = ref<Array<Breadcrumb>>([]);
 let height = ref<string>("680px");
 
-const router = useRouter();
+let router = useRouter();
 onBeforeMount(() => {
   const h = document.documentElement.clientHeight;
   height.value = h - 59 + "px";
 });
 
 onMounted(() => {
-  // TODO 根据不同权限 headMenu，asides 应该设置不同的数据，
+  //  根据不同权限 headMenu，asides 应该设置不同的数据，
   init();
 });
 
@@ -286,6 +287,7 @@ function init(): void {
     handleSelect(index);
   }
 }
+
 // head 头部点击事件 切换左侧导航信息 ，更换路由
 function handleSelect(index: string): void {
   if (index == "0-2") {
