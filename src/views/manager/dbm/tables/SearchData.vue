@@ -1,6 +1,6 @@
 <template>
   <div id="SearchData">aaaaa</div>
-  <Table :columns="columns" :page="page" :optionBtn="localOptionBtn" :datas="localdata">
+  <Table v-if="showData" :columns="columns" :page="page" :optionBtn="localOptionBtn" :datas="localdata">
     <!-- <template v-slot:headSearch>
       <el-row>
         <el-col :span="6">
@@ -23,13 +23,15 @@
 
 <script setup lang="ts">
 import { searchTableStore } from "@store/search";
-import { Column, SearchType, SelectOptions, OptionBtn, PageParam } from "@interface/Table";
-import { SysDbmsTabsTableInfo } from "@interface/SysDbms";
+import { Column, OptionBtn, PageParam } from "@interface/Table";
+import { SysDbmsTabsTableInfo, SysDbmsTabsCols } from "@interface/SysDbms";
+import Table from "@components/table/Table.vue";
 import http from "@plugins/http";
 
 // 使普通数据变响应式的函数
 import { storeToRefs } from "pinia";
 import { onMounted, ref } from "vue";
+
 // 实例化仓库
 const store = searchTableStore();
 // 解构并使数据具有响应式
@@ -53,6 +55,9 @@ let page = ref<PageParam>({
 });
 
 let columns = ref<Array<Column>>([]);
+let columnsResult = ref<Array<SysDbmsTabsCols>>([]);
+
+let showData = ref<boolean>(false);
 
 onMounted(() => {
   if (currentTable.value.uuid != null) {
@@ -61,11 +66,46 @@ onMounted(() => {
 });
 
 function init(table: SysDbmsTabsTableInfo) {
+  let param = {
+    info: { tabsUuid: table.uuid },
+    sortList: [{ sortIndex: 1, sortName: "sort", sortOrder: "asc" }],
+  };
   http
-    .post<any>("/serve/sysDbmsTabsJdbcInfo/findAll", { tabsUuid: table.uuid })
+    .post<any>("/serve/sysDbmsTabsColsInfo/findAllBySort", param)
     .then((response) => {
       if (response.data != null && response.code == 200) {
-        columns.value = response.data;
+        columnsResult.value = response.data;
+        response.data.forEach((el: SysDbmsTabsCols) => {
+          let column: Column = {
+            name: el.colsName,
+            title: el.colsDesc == null || el.colsDesc == "" ? el.colsName : el.colsDesc,
+            width: el.colsWidth,
+            // resizable: el.,
+            search: el.userIndex != null ? true : false,
+          };
+          columns.value.push(column);
+        });
+        searchData(table, response.data);
+
+        // showData.value = true;
+      }
+    })
+    .catch((err) => {
+      // TODO
+    });
+}
+
+function searchData(table: SysDbmsTabsTableInfo, cols: Array<SysDbmsTabsCols>) {
+  let param = {
+    info: table,
+    cols: cols,
+  };
+  http
+    .post<any>("/serve/sysDbmsTabsColsInfo/searchData", param)
+    .then((response) => {
+      if (response.data != null && response.code == 200) {
+        localdata.value = response.data;
+        showData.value = true;
       }
     })
     .catch((err) => {
