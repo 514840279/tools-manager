@@ -1,5 +1,4 @@
 <template>
-  <div id="SearchData">aaaaa</div>
   <Table v-if="showData" :columns="columns" :page="page" :optionBtn="localOptionBtn" :datas="localdata">
     <!-- <template v-slot:headSearch>
       <el-row>
@@ -16,7 +15,7 @@
   </Table>
   <el-row>
     <el-col :span="12" :offset="12">
-      <!-- <el-pagination class="pagex" background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page.pageNumber" :page-sizes="page.sizes" :page-size="page.pageSize" :pager-count="5" layout="total, sizes, prev, pager, next, jumper" :total="page.totalElements"> </el-pagination> -->
+      <el-pagination class="pagex" background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page.pageNumber" :page-sizes="page.sizes" :page-size="page.pageSize" :pager-count="5" layout="total, sizes, prev, pager, next, jumper" :total="page.totalElements" :hide-on-single-page="true"> </el-pagination>
     </el-col>
   </el-row>
 </template>
@@ -32,6 +31,10 @@ import http from "@plugins/http";
 import { storeToRefs } from "pinia";
 import { onMounted, ref } from "vue";
 
+interface TabsPageParams extends PageParam {
+  cols?: Array<SysDbmsTabsCols>;
+}
+
 // 实例化仓库
 const store = searchTableStore();
 // 解构并使数据具有响应式
@@ -44,30 +47,35 @@ let localOptionBtn = ref<OptionBtn>({
   sort: false, // 开启排序功能
   add: false, // 添加
   page: false, // 翻页
+  refresh: false,
   opt: false, // 每条数据后端操作搭配optbtn使用
 });
 
-let page = ref<PageParam>({
+let page = ref<TabsPageParams>({
   pageNumber: 1,
   sizes: [10, 20, 50, 100],
   pageSize: 10,
   totalElements: 0,
 });
-
+// 表格字段信息
 let columns = ref<Array<Column>>([]);
-let columnsResult = ref<Array<SysDbmsTabsCols>>([]);
-
+// 控制显示
 let showData = ref<boolean>(false);
+// 表信息
+let tableData = ref<SysDbmsTabsTableInfo>();
+// 字段信息
+let columnsResult = ref<Array<SysDbmsTabsCols>>([]);
 
 onMounted(() => {
   if (currentTable.value.uuid != null) {
-    init(currentTable.value);
+    tableData.value = currentTable.value;
+    init();
   }
 });
 
-function init(table: SysDbmsTabsTableInfo) {
+function init() {
   let param = {
-    info: { tabsUuid: table.uuid },
+    info: { tabsUuid: tableData.value?.uuid },
     sortList: [{ sortIndex: 1, sortName: "sort", sortOrder: "asc" }],
   };
   http
@@ -85,7 +93,7 @@ function init(table: SysDbmsTabsTableInfo) {
           };
           columns.value.push(column);
         });
-        searchData(table, response.data);
+        searchData();
 
         // showData.value = true;
       }
@@ -95,22 +103,32 @@ function init(table: SysDbmsTabsTableInfo) {
     });
 }
 
-function searchData(table: SysDbmsTabsTableInfo, cols: Array<SysDbmsTabsCols>) {
-  let param = {
-    info: table,
-    cols: cols,
-  };
+function searchData() {
+  page.value.info = tableData.value;
+  page.value.cols = columnsResult.value;
   http
-    .post<any>("/serve/sysDbmsTabsColsInfo/searchData", param)
+    .post<any>("/serve/sysDbmsTabsColsInfo/searchData", page.value)
     .then((response) => {
       if (response.data != null && response.code == 200) {
-        localdata.value = response.data;
+        localdata.value = response.data.content;
+        page.value.totalElements = response.data.totalElements;
         showData.value = true;
       }
     })
     .catch((err) => {
       // TODO
     });
+}
+
+// 每页大小
+function handleSizeChange(val: number): void {
+  page.value.pageSize = val;
+  searchData();
+}
+// 翻页
+function handleCurrentChange(val: number): void {
+  page.value.pageNumber = val;
+  searchData();
 }
 </script>
 
