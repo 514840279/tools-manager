@@ -70,9 +70,9 @@
 </template>
 <script setup lang="ts">
 import Foot from "@components/home/Food.vue";
-import { onBeforeMount, onMounted, ref, toRaw } from "vue";
+import { onBeforeMount, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
-import { Menu, MenuItem, Aside, Breadcrumb } from "@interface/Menu";
+import { Menu, MenuItem, Aside } from "@interface/Menu";
 
 import { mainStore } from "@store/main";
 // 使普通数据变响应式的函数
@@ -139,7 +139,7 @@ let asides = ref<Array<Aside>>([
     ],
   },
   {
-    activeIndex: "2-1-6",
+    activeIndex: "2-1",
     submenu: [
       {
         index: "2-1",
@@ -317,7 +317,7 @@ function handleSelect(index: string): void {
     // 切换aside
     aside.value = asides.value[Number(index)];
     let activeIndex = aside.value.activeIndex;
-    currentIndex.value = String(activeIndex);
+
     let submenus = aside.value.submenu;
 
     // default set
@@ -331,10 +331,11 @@ function handleSelect(index: string): void {
     // 根据 activeIndex 和 submenu.index 确定默认展示页面 是 home${index} 还是data.link
     submenus?.forEach((submenu, inex) => {
       if (submenu.index == activeIndex) {
+        currentIndex.value = String(activeIndex);
         // 更换默认页面
         router.push(path);
       } else if (String(activeIndex).indexOf(String(submenu.index)) > -1) {
-        submenu.data.forEach((data) => {
+        submenu.data?.forEach((data) => {
           if (data.index == activeIndex) {
             handleBreadcrumb(submenu, data);
           }
@@ -345,9 +346,10 @@ function handleSelect(index: string): void {
 }
 
 // aside 左侧点击事件切换面包屑信息
-function handleBreadcrumb(submenu: Menu, data: MenuItem): void {
+function handleBreadcrumb(submenu: Menu | MenuItem, data: MenuItem): void {
   currentList.value[1] = { text: submenu.text };
   currentList.value[2] = { text: data.text };
+  currentIndex.value = String(data.index);
   var path = data.link;
   currentPath.value = String(path);
   if (typeof path == "string") {
@@ -371,10 +373,6 @@ body {
 
 .memu-card {
   padding: 0px;
-
-  .el-card__body {
-    padding: 0px;
-  }
 }
 
 .left {

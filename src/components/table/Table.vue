@@ -76,9 +76,9 @@
 
 <script lang="ts" setup>
 import { onBeforeMount, ref, computed, watch } from "vue";
-import { PageParam, Column, SortColumn, SearchColumn, SearchParamters, OptionBtn, SearchType, SelectOptions } from "../../interface/Table";
+import { PageParam, Column, SortColumn, SearchColumn, SearchParamters, OptionBtn, SearchType, SelectOptions } from "@interface/Table";
 // import axios from 'axios';
-import http from "../../plugins/http";
+import http from "@plugins/http";
 import TableSave from "./TableSave.vue";
 import TableColumnSelect from "./TableColumnSelect.vue";
 import TableSearchParameters from "./TableSearchParameters.vue";

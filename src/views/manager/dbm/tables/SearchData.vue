@@ -166,7 +166,9 @@ function init() {
               title: el.colsDesc == null || el.colsDesc == "" ? el.colsName : el.colsDesc,
               width: el.colsWidth,
               // resizable: el.,
-              search: el.userIndex != null ? true : false,
+              show: (el.deleteFlag == null || el.deleteFlag == 0) && (el.colsSwitchable == null || el.colsSwitchable) ? true : false,
+              search: el.indexCode != null ? true : false,
+              align: el.colsAlign == null ? "left" : el.colsAlign,
             };
             columns.value.push(column);
           });

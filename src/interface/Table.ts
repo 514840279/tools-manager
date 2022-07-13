@@ -26,6 +26,7 @@ export interface Column{
     searchDataDefault?: string,
     searchDataArray?:Array<SelectOptions>,
     search?: boolean
+    disable?: boolean,
 }
 
 // 字段排序条件 数据格式
@@ -83,13 +84,6 @@ export interface SearchParamters{
     searchType: string
 }
 
-// 控件条件
-export interface TableProps{
-    rootUrl:string,
-    columns: Array<Column>,
-    page?: PageParam,
-    optionBtn?:Object
-}
 
 // 控件各个按钮组件的控制显示隐藏
 export interface OptionBtn{
@@ -113,7 +107,7 @@ interface Optbtn{
 
 // 下拉列表信息数据格式 value返回值，label显示
 export interface SelectOptions{
-    value: string|number,
+    value: string|number|boolean,
     label: string,
     default?:boolean
 } 

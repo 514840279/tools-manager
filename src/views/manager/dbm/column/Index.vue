@@ -1,12 +1,12 @@
 <template>
   <div>
-    <Table :columns="columns" :rootUrl="rootUrl">
+    <Table :columns="columns" :rootUrl="rootUrl" :optionBtn="localOptionBtn">
       <template v-slot:rightBtn>
         <el-button title="导入" @click="handleImportTable()" type="primary" icon="BottomLeft" circle size="small"></el-button>
       </template>
     </Table>
     <el-dialog v-model="dialogVisible" title="导入表" width="80%" :before-close="handleClose">
-      <Table v-loading="!reloadTabs" :columns="loadColumns" :page="page" :optionBtn="localOptionBtn" :datas="localdata" @onClickRow="onClickRow">
+      <Table v-loading="!reloadTabs" :columns="loadColumns" :page="page" :optionBtn="localLoadOptionBtn" :datas="localdata" @onClickRow="onClickRow">
         <template v-slot:headSearch>
           <el-select v-model="tabsSelectValue" placeholder="选择表" size="small" @change="toloadColumns">
             <el-option v-for="item in tabsSelect" :key="item.value" :label="item.label" :value="item.value" />
@@ -37,10 +37,20 @@ let loadColumns = ref<Array<Column>>();
 let typeSelect = ref<Array<SelectOptions>>([]);
 let jdbcSelect = ref<Array<SelectOptions>>([]);
 let tabsSelect = ref<Array<SelectOptions>>([]);
+let indexSelect = ref<Array<SelectOptions>>([]);
 
 let dialogVisible = ref<boolean>(false);
 
 let localOptionBtn = ref<OptionBtn>({
+  search: true, // 开启查询功能
+  searchParam: false, // 开启查询功能
+  sort: false, // 开启排序功能
+  add: false, // 添加
+  page: true, // 翻页
+  opt: true, // 每条数据后端操作搭配optbtn使用
+});
+
+let localLoadOptionBtn = ref<OptionBtn>({
   search: false, // 开启查询功能
   searchParam: false, // 开启查询功能
   sort: false, // 开启排序功能
@@ -66,6 +76,7 @@ let page = ref<PageParam<any>>({
 onBeforeMount(() => {
   // loadType();
   // loadJdbc();
+  loadIndex();
   loadTabs();
   init();
 });
@@ -77,6 +88,7 @@ function init() {
       title: "uuid",
       align: "left",
       show: false,
+      disable: true,
     },
     {
       name: "tabsUuid",
@@ -86,6 +98,7 @@ function init() {
       search: true,
       searchType: SearchType.SELECT,
       searchDataArray: tabsSelect.value,
+      disable: true,
     },
     {
       name: "colsName",
@@ -93,6 +106,7 @@ function init() {
       align: "left",
       sort: true,
       search: true,
+      disable: true,
     },
     {
       name: "colsDesc",
@@ -102,11 +116,34 @@ function init() {
       search: true,
     },
     {
+      name: "indexCode",
+      title: "查询列配置",
+      align: "left",
+      search: true,
+      searchType: SearchType.SELECT,
+      searchDataArray: indexSelect.value,
+    },
+    {
+      name: "userIcon",
+      title: "图标",
+      align: "center",
+      width: 40,
+      searchType: SearchType.ICON,
+    },
+    {
+      name: "colsSwitchable",
+      title: "列表显示",
+      align: "left",
+      searchType: SearchType.REDIO,
+      searchDataArray: [
+        { value: false, label: "否" },
+        { value: true, label: "是" },
+      ],
+    },
+    {
       name: "dataType",
       title: "数据类型",
       align: "left",
-      sort: true,
-      search: true,
     },
     {
       name: "colsLength",
@@ -115,16 +152,39 @@ function init() {
       searchType: SearchType.INTEGER,
     },
     {
+      name: "colsWidth",
+      title: "列表宽度",
+      align: "left",
+    },
+    {
       name: "nullable",
       title: "允许空",
-      sort: true,
-      search: true,
-      searchType: SearchType.SELECT,
+      searchType: SearchType.REDIO,
       searchDataArray: [
         { value: "N", label: "否" },
         { value: "Y", label: "是" },
       ],
     },
+    {
+      name: "colsAlign",
+      title: "横对齐",
+      searchType: SearchType.REDIO,
+      searchDataArray: [
+        { value: "left", label: "左" },
+        { value: "center", label: "中" },
+        { value: "right", label: "右" },
+      ],
+    },
+    // {
+    //   name: "colsValign",
+    //   title: "纵对齐",
+    //   searchType: SearchType.REDIO,
+    //   searchDataArray: [
+    //     { value: "top", label: "上" },
+    //     { value: "middle", label: "中" },
+    //     { value: "bottom", label: "下" },
+    //   ],
+    // },
     {
       name: "sort",
       title: "显示顺序",
@@ -253,6 +313,26 @@ function loadTabs() {
             label: element.tabsName,
           };
           tabsSelect.value?.push(op);
+        });
+      }
+    })
+    .catch((err) => {
+      // TODO
+    });
+}
+
+// 加载数据库信息
+function loadIndex() {
+  http
+    .post<any>("/serve/sysDbmsTabsIndexInfo/findAll", {})
+    .then((response) => {
+      if (response.data != null && response.code == 200) {
+        response.data.forEach((element: any) => {
+          let op: SelectOptions = {
+            value: element.indexCode,
+            label: element.indexName,
+          };
+          indexSelect.value?.push(op);
         });
       }
     })

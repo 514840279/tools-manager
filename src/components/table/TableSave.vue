@@ -3,14 +3,14 @@
     <el-form :label-position="parents.labelPosition" :model="row" label-width="120px" ref="form">
       <el-form-item :key="index" :label="item.title" v-for="(item, index) in parents.columns">
         <Icon :columnName="item.name" :icon="row[item.name]" @onSelect="selectIcon" type="info" v-if="item.searchType == SearchType.ICON"></Icon>
-        <el-select :placeholder="item.name" size="small" v-else-if="item.searchType == SearchType.SELECT" v-model="row[item.name]">
+        <el-select :placeholder="item.name" size="small" v-else-if="item.searchType == SearchType.SELECT" v-model="row[item.name]" :disabled="item.disable">
           <el-option :key="op.value" :label="op.label" :value="op.value" v-for="op in item.searchDataArray" />
         </el-select>
-        <el-input-number v-else-if="item.searchType == SearchType.INTEGER" v-model="row[item.name]"></el-input-number>
-        <el-radio-group v-else-if="item.searchType == SearchType.REDIO" v-model="row[item.name]">
+        <el-input-number v-else-if="item.searchType == SearchType.INTEGER" v-model="row[item.name]" :disabled="item.disable"></el-input-number>
+        <el-radio-group v-else-if="item.searchType == SearchType.REDIO" v-model="row[item.name]" :disabled="item.disable">
           <el-radio :key="op.value" :label="op.value" v-for="op in item.searchDataArray">{{ op.label }}</el-radio>
         </el-radio-group>
-        <el-input v-else v-model="row[item.name]"></el-input>
+        <el-input v-else v-model="row[item.name]" :disabled="item.disable"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button @click="onSave" type="primary">保存</el-button>
