@@ -4,6 +4,8 @@ import 'element-plus/dist/index.css'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import { createPinia } from 'pinia'
+// 持久化存储pinia
+import piniaPluginPersist from 'pinia-plugin-persist'
 import {router} from './router'
 // 如果您正在使用CDN引入，请删除下面一行。
 import * as ElementPlusIcons from '@element-plus/icons'
@@ -14,6 +16,8 @@ import App from './App.vue'
 
 
 const pinia = createPinia()
+pinia.use(piniaPluginPersist)
+
 const app = createApp(App)
 
 for (const name in ElementPlusIcons){

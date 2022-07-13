@@ -69,18 +69,18 @@
   </el-container>
 </template>
 <script setup lang="ts">
-import Foot from "../components/home/Food.vue";
+import Foot from "@components/home/Food.vue";
 import { onBeforeMount, onMounted, ref, toRaw } from "vue";
 import { useRouter } from "vue-router";
-import { Menu, MenuItem, Aside, Breadcrumb } from "../interface/Menu";
+import { Menu, MenuItem, Aside, Breadcrumb } from "@interface/Menu";
 
-// import { mainStore } from "../store/index";
+import { mainStore } from "@store/main";
 // 使普通数据变响应式的函数
-// import { storeToRefs } from "pinia";
-// // 实例化仓库
-// const store = mainStore();
-// // 解构并使数据具有响应式
-// const { currentIndex } = storeToRefs(store);
+import { storeToRefs } from "pinia";
+// 实例化仓库
+const store = mainStore();
+// 解构并使数据具有响应式
+const { headindex, currentIndex, currentPath, currentList } = storeToRefs(store);
 
 let asideWidth = ref<string>("200px");
 let isCollapse = ref<boolean>(false);
@@ -88,7 +88,7 @@ let ita = ref<string>("Fold");
 let circleUrl = ref<string>("favicon.ico");
 
 // 头部导航菜单
-const headMenu: Menu = {
+let headMenu = ref<Menu>({
   activeIndex: "2", // 默认页面 index
   class: "el-menu-demo",
   text: "導航",
@@ -103,13 +103,13 @@ const headMenu: Menu = {
     { index: "6", text: "爬虫管理" },
     { index: "7", text: "消息中心" },
   ],
-};
+});
 // 替换的菜单
 let aside = ref<Aside>({});
 // 默认展开menu
 const openedsIndex: Array<String> = ["0-1", "1-1", "2-3", "3-1", "4-1", "5-1", "6-1", "7-1"];
 // 菜单集
-const asides: Array<Aside> = [
+let asides = ref<Array<Aside>>([
   {
     activeIndex: "0-1",
     submenu: [
@@ -148,8 +148,8 @@ const asides: Array<Aside> = [
         data: [
           { index: "2-1-2", text: "数据类型", link: "/databasetype" },
           { index: "2-1-4", text: "索引类型", link: "/index" },
-          { index: "2-1-1", text: "数据库", link: "/database" },
-          { index: "2-1-3", text: "表管理", link: "/tables" },
+          { index: "2-1-1", text: "数据微服务", link: "/database" },
+          { index: "2-1-3", text: "表管配置理", link: "/tables" },
           { index: "2-1-5", text: "字段管理", link: "/columns" },
           { index: "2-1-6", text: "表查询管理", link: "/tabsSearch" },
           { index: "2-1-7", text: "表数据查询", link: "/searchData" },
@@ -263,9 +263,7 @@ const asides: Array<Aside> = [
       },
     ],
   },
-];
-// 面包屑
-let currentList = ref<Array<Breadcrumb>>([]);
+]);
 let height = ref<string>("680px");
 
 let router = useRouter();
@@ -281,15 +279,28 @@ onMounted(() => {
 
 // 初始化展示信息
 function init(): void {
-  let index = headMenu.activeIndex;
+  let index = null;
+  // pinia 用户使用记录到本地
+  if (currentPath.value != "") {
+    headMenu.value.activeIndex = headindex.value;
+    aside.value = asides.value[Number(headindex.value)];
+    aside.value.activeIndex = currentIndex.value;
+    // 更换默认页面
+    router.push(currentPath.value);
+  } else {
+    // TODO user set
 
-  if (typeof index == "string") {
-    handleSelect(index);
+    // default set
+    index = headMenu.value.activeIndex;
+    if (typeof index == "string") {
+      handleSelect(index);
+    }
   }
 }
 
 // head 头部点击事件 切换左侧导航信息 ，更换路由
 function handleSelect(index: string): void {
+  headindex.value = String(index);
   if (index == "0-2") {
     handleSelect("0");
   } else if (index == "0-1") {
@@ -304,14 +315,19 @@ function handleSelect(index: string): void {
     }
   } else {
     // 切换aside
-    aside.value = asides[Number(index)];
-
+    aside.value = asides.value[Number(index)];
     let activeIndex = aside.value.activeIndex;
+    currentIndex.value = String(activeIndex);
     let submenus = aside.value.submenu;
-    var path = "/home" + index;
+
+    // default set
+    let path = "/home" + index;
 
     currentList.value = [];
-    currentList.value[0] = { path: path, text: headMenu.data[Number(index)].text };
+    currentList.value[0] = { path: path, text: headMenu.value.data[Number(index)].text };
+
+    currentPath.value = path;
+
     // 根据 activeIndex 和 submenu.index 确定默认展示页面 是 home${index} 还是data.link
     submenus?.forEach((submenu, inex) => {
       if (submenu.index == activeIndex) {
@@ -327,11 +343,13 @@ function handleSelect(index: string): void {
     });
   }
 }
+
 // aside 左侧点击事件切换面包屑信息
 function handleBreadcrumb(submenu: Menu, data: MenuItem): void {
   currentList.value[1] = { text: submenu.text };
   currentList.value[2] = { text: data.text };
   var path = data.link;
+  currentPath.value = String(path);
   if (typeof path == "string") {
     // 更换默认页面
     router.push(path);

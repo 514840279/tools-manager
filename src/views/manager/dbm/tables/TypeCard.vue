@@ -58,7 +58,6 @@ const router = useRouter();
 onBeforeMount(() => {
   localTableList.value = parents.tablesList;
   localTypeSelect.value = parents.typeSelect;
-  console.log(localTableList, localTypeSelect.value, "123456");
 });
 
 function searchTable(table: SysDbmsTabsTableInfo) {

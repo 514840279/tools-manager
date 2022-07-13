@@ -91,7 +91,7 @@ const parents = withDefaults(
   defineProps<{
     rootUrl?: String;
     columns: Array<Column>;
-    page?: PageParam;
+    page?: PageParam<any>;
     optionBtn?: OptionBtn;
     datas?: Array<any>;
   }>(),
@@ -147,7 +147,7 @@ let localOptionBtn = ref<OptionBtn>({
     ...parents.optionBtn,
   }),
   // 请求参数
-  param = ref<PageParam>(parents.page),
+  param = ref<PageParam<any>>(parents.page),
   // 表加载
   loading = ref<boolean>(true);
 // 表格数据
@@ -449,7 +449,7 @@ const handleSelectionChange = (val: any[]) => {
 watch(
   () => [parents.datas, parents.columns, parents.page],
   (newValue, oldValue) => {
-    console.log(newValue, oldValue && newValue[0].length > 0);
+    console.log(newValue, oldValue, newValue[0], newValue[0].length > 0);
     if (newValue[0] != null) {
       // 因为watch被观察的对象只能是getter/effect函数、ref、active对象或者这些类型是数组
       // 所以需要将state.count变成getter函数

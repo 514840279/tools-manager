@@ -1,10 +1,11 @@
 // 表格分页信息
-export interface PageParam{
+export interface PageParam<T>{
     pageNumber: number,
     sizes: Array<number>,
     pageSize: number,
     totalElements: number,
-    info?: Object,
+    info?: T,
+    list?:Array<T>,
     sortList?: Array<SortColumn>,
     searchList?: Array<SearchParamters>
 }

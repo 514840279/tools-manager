@@ -10,7 +10,7 @@
         <template v-slot:headSearch>
           <el-row>
             <el-col :span="6">
-              <el-select v-model="info.jdbcUuid" placeholder="选择微服务" size="small" @change="toloadTables">
+              <el-select v-model="info.jdbcUuid" placeholder="选择微服务" size="small" @change="toloadTables" :clearable="true" :filterable="true">
                 <el-option v-for="item in jdbcSelect" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
             </el-col>
@@ -65,7 +65,7 @@ let localdata = ref<Array<any>>();
 
 let reloadTabs = ref<boolean>(false);
 
-let page = ref<PageParam>({
+let page = ref<PageParam<any>>({
   pageNumber: 1,
   sizes: [10, 20, 50, 100],
   pageSize: 10,
@@ -239,7 +239,6 @@ function loadType() {
           typeSelect.value?.push(op);
         });
       }
-      typeSelect.value?.push({ value: "OTHERS", label: "其他", default: true });
     })
     .catch((err) => {
       // TODO

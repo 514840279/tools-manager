@@ -14,7 +14,7 @@ export interface SysDbmsTabsTableInfo{
   typeCode?: string,
   updateTime?: Date,
   updateUser?: string,
-  uuid: string,
+  uuid?: string,
 }
 
 export interface SysDbmsTabsCols{

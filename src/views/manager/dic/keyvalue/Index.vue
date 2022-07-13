@@ -5,10 +5,10 @@
 </template>
 
 <script setup lang="ts">
-import Table from "../../../../components/table/Table.vue";
-import { SearchType, Column, SelectOptions } from "../../../../interface/Table";
+import Table from "@components/table/Table.vue";
+import { SearchType, Column, SelectOptions } from "@interface/Table";
 import { ref, onBeforeMount } from "vue";
-import http from "../../../../plugins/http";
+import http from "@plugins/http";
 
 let rootUrl: String = "/serve/sysDicKeyList",
   columns = ref<Array<Column>>([]),

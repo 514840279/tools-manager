@@ -5,8 +5,8 @@
 </template>
 
 <script setup lang="ts">
-import Table from "../../../../components/table/Table.vue";
-import { Column } from "../../../../interface/Table";
+import Table from "@components/table/Table.vue";
+import { Column } from "@interface/Table";
 
 let rootUrl: String = "/serve/sysDbmsTabsIndexInfo",
   columns: Array<Column> = [

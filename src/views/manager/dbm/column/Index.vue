@@ -8,7 +8,7 @@
     <el-dialog v-model="dialogVisible" title="导入表" width="80%" :before-close="handleClose">
       <Table v-loading="!reloadTabs" :columns="loadColumns" :page="page" :optionBtn="localOptionBtn" :datas="localdata" @onClickRow="onClickRow">
         <template v-slot:headSearch>
-          <el-select v-model="tabsSelectValue" placeholder="选择微服务" size="small" @change="toloadColumns">
+          <el-select v-model="tabsSelectValue" placeholder="选择表" size="small" @change="toloadColumns">
             <el-option v-for="item in tabsSelect" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </template>
@@ -24,10 +24,10 @@
 </template>
 
 <script setup lang="ts">
-import Table from "../../../../components/table/Table.vue";
-import { Column, SearchType, SelectOptions, OptionBtn, PageParam } from "../../../../interface/Table";
+import Table from "@components/table/Table.vue";
+import { Column, SearchType, SelectOptions, OptionBtn, PageParam } from "@interface/Table";
 import { onBeforeMount, ref } from "vue";
-import http from "../../../../plugins/http";
+import http from "@plugins/http";
 
 let rootUrl: String = "/serve/sysDbmsTabsColsInfo";
 
@@ -56,7 +56,7 @@ let localdata = ref<Array<any>>();
 
 let reloadTabs = ref<boolean>(false);
 
-let page = ref<PageParam>({
+let page = ref<PageParam<any>>({
   pageNumber: 1,
   sizes: [10, 20, 50, 100],
   pageSize: 10,
