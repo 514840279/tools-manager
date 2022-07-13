@@ -109,7 +109,10 @@ const routes = [
     path: '/tabsmergeinfo',
     name: 'tabsmergeinfo',
     component: () => import('../views/manager/dbm/SysDbmsTabsMergeInfo/Index.vue'),
-
+  }, { 
+    path: '/searchIndex',
+    name: 'searchIndex',
+    component: () => import('../views/manager/dbm/index/SearchIndex.vue'),
   }, { 
     path: '/error',
     name: "error",

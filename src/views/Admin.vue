@@ -153,6 +153,7 @@ let asides = ref<Array<Aside>>([
           { index: "2-1-5", text: "字段管理", link: "/columns" },
           { index: "2-1-6", text: "表查询管理", link: "/tabsSearch" },
           { index: "2-1-7", text: "表数据查询", link: "/searchData" },
+          { index: "2-1-8", text: "类型查询管理", link: "/searchIndex" },
         ],
       },
       {
