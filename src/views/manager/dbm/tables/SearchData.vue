@@ -33,11 +33,8 @@ import http from "@plugins/http";
 
 // 使普通数据变响应式的函数
 import { storeToRefs } from "pinia";
-import { onBeforeMount, onMounted, ref } from "vue";
-
-interface TabsPageParams extends PageParam<SysDbmsTabsTableInfo> {
-  cols?: Array<SysDbmsTabsCols>;
-}
+import { onBeforeMount, ref } from "vue";
+import { TabsPageParams } from "@/interface/SearchIndex";
 
 // 实例化仓库
 const store = searchTableStore();

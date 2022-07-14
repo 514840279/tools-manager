@@ -114,6 +114,10 @@ const routes = [
     name: 'searchIndex',
     component: () => import('../views/manager/dbm/index/SearchIndex.vue'),
   }, { 
+    path: '/searchIndexData',
+    name: 'searchIndexData',
+    component: () => import('../views/manager/dbm/index/SearchIndexData.vue'),
+  }, { 
     path: '/error',
     name: "error",
     component: Err,

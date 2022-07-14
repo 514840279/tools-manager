@@ -71,16 +71,13 @@ function searchTable(table: SysDbmsTabsTableInfo) {
 }
 
 // 字段數據改變
-watch(
-  () => [parents.tablesList, parents.typeSelect],
-  (newValue, oldValue) => {
-    if (newValue[0] != null) {
-      localTableList.value = newValue[0];
-    } else if (newValue[1] != null) {
-      localTypeSelect.value = newValue[1];
-    }
+watch([parents.tablesList, parents.typeSelect], ([tablesList, typeSelect], [otablesList, otypeSelect]) => {
+  if (tablesList != null) {
+    localTableList.value = tablesList;
+  } else if (typeSelect != null) {
+    localTypeSelect.value = typeSelect;
   }
-);
+});
 </script>
 
 <style scoped lang="scss">

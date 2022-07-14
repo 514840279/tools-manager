@@ -13,7 +13,7 @@
         </el-select>
       </template>
     </el-col>
-    <el-col :span="2">
+    <el-col :span="4">
       <el-button title="确定" @click="handleSearch()" type="success" icon="Check" circle size="small"></el-button>
       <el-button title="重置" @click="handleReset()" icon="CloseBold" circle size="small"></el-button>
     </el-col>

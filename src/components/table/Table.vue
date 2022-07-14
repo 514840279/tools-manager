@@ -75,7 +75,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onBeforeMount, ref, computed, watch } from "vue";
+import { onBeforeMount, ref, computed, watch, watchEffect } from "vue";
 import { PageParam, Column, SortColumn, SearchColumn, SearchParamters, OptionBtn, SearchType, SelectOptions } from "@interface/Table";
 // import axios from 'axios';
 import http from "@plugins/http";
@@ -94,6 +94,7 @@ const parents = withDefaults(
     page?: PageParam<any>;
     optionBtn?: OptionBtn;
     datas?: Array<any>;
+    parameters?: Array<SearchParamters>;
   }>(),
   {
     rootUrl: () => "",
@@ -111,6 +112,9 @@ const parents = withDefaults(
       return {};
     },
     datas: () => {
+      return [];
+    },
+    parameters: () => {
       return [];
     },
   }
@@ -369,7 +373,12 @@ function resetTable(): void {
   // showSort.value = false;
   // param = parents.page;
   sortParameters.value = [];
-  searchParameters.value = [];
+
+  if (parents.parameters != null && parents.parameters?.length > 0) {
+    searchParameters.value = parents.parameters;
+  } else {
+    searchParameters.value = [];
+  }
   searchColumns.value.forEach((column, index) => {
     if (index < 5) {
       searchParameters.value.push({
@@ -396,6 +405,11 @@ function printTable(): void {
 // 表查询
 function searchTable(param: Array<SearchParamters>) {
   searchParameters.value = param;
+  if (parents.parameters != null && parents.parameters.length > 0) {
+    parents.parameters.forEach((element) => {
+      searchParameters.value.push(element);
+    });
+  }
   initTable();
 }
 
@@ -403,6 +417,11 @@ function searchTable(param: Array<SearchParamters>) {
 function toSearchTable(value: Array<SearchParamters>) {
   loading.value = true;
   searchParameters.value = value;
+  if (parents.parameters != null && parents.parameters.length > 0) {
+    parents.parameters.forEach((element) => {
+      searchParameters.value.push(element);
+    });
+  }
   emit("beforSearchTable", searchParameters.value);
   initTable();
 }
@@ -446,25 +465,44 @@ const handleSelectionChange = (val: any[]) => {
 
 // 监听传入的数据改变表数据改变
 // 字段數據改變
-watch(
-  () => [parents.datas, parents.columns, parents.page],
-  (newValue, oldValue) => {
-    console.log(newValue, oldValue, newValue[0], newValue[0].length > 0);
-    if (newValue[0] != null) {
-      // 因为watch被观察的对象只能是getter/effect函数、ref、active对象或者这些类型是数组
-      // 所以需要将state.count变成getter函数
-      dataList.value = newValue[0];
-    } else if (newValue[1] != null && newValue[1].length > 0) {
-      columns.value = parents.columns;
-      // innt
-      init();
-      // befor
-      initTable();
-    } else if (newValue[2] != null) {
-      param.value = newValue[2];
-    }
+
+// <[Array<any>, Array<Column>, PageParam<any>, Array<SearchParamters>], false>
+watch([parents.columns, parents.page], ([ncolums, npage], [ocolums, opage]) => {
+  if (ncolums != null && ncolums.length > 0) {
+    columns.value = parents.columns;
+    // innt
+    init();
+    // befor
+    initTable();
   }
-);
+  if (npage != null) {
+    param.value = npage;
+  }
+});
+
+watchEffect(() => {
+  // if (parents.page != null) {
+  //   param.value = parents.page;
+  // }
+  // console.log(parents.parameters);
+  if (parents.datas != null && parents.datas.length > 0) {
+    dataList.value = parents.datas;
+  }
+
+  // if (parents.columns != null && parents.columns.length > 0) {
+  //   columns.value = parents.columns;
+  //   // innt
+  //   init();
+  //   // befor
+  //   initTable();
+  // }
+
+  if (parents.parameters != null && parents.parameters.length > 0) {
+    searchParameters.value = parents.parameters;
+    // befor
+    initTable();
+  }
+});
 </script>
 
 <style lang="scss" scoped>
@@ -473,7 +511,7 @@ watch(
 }
 
 .brow {
-  margin-top: 8px;
+  // margin-top: 8px;
 }
 
 .apagination {

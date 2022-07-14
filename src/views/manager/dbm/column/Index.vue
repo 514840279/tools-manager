@@ -1,43 +1,58 @@
 <template>
-  <div>
-    <Table :columns="columns" :rootUrl="rootUrl" :optionBtn="localOptionBtn">
-      <template v-slot:rightBtn>
-        <el-button title="导入" @click="handleImportTable()" type="primary" icon="BottomLeft" circle size="small"></el-button>
-      </template>
-    </Table>
-    <el-dialog v-model="dialogVisible" title="导入表" width="80%" :before-close="handleClose">
-      <Table v-loading="!reloadTabs" :columns="loadColumns" :page="page" :optionBtn="localLoadOptionBtn" :datas="localdata" @onClickRow="onClickRow">
-        <template v-slot:headSearch>
-          <el-select v-model="tabsSelectValue" placeholder="选择表" size="small" @change="toloadColumns">
-            <el-option v-for="item in tabsSelect" :key="item.value" :label="item.label" :value="item.value" />
-          </el-select>
+  <el-row>
+    <el-col :span="6">
+      <TableSelect :data="tabsSelect" title="选择表" @on-select="clickTable"></TableSelect>
+      <el-button type="primary" @click="clickTable(item)">Primary</el-button>
+    </el-col>
+    <el-col :span="18">
+      <Table :parameters="tablProp.parameters" :columns="tablProp.columns" :rootUrl="tablProp.rootUrl" :optionBtn="localOptionBtn" style="margin-left: 15px">
+        <template v-slot:rightBtn>
+          <el-button title="导入" @click="handleImportTable()" type="primary" icon="BottomLeft" circle size="small"></el-button>
         </template>
       </Table>
-      <template #footer>
-        <span class="dialog-footer">
-          <el-button @click="dialogVisible = false">取消</el-button>
-          <el-button type="primary" @click="handLoadTables">确认</el-button>
-        </span>
+    </el-col>
+  </el-row>
+  <el-dialog v-model="dialogVisible" title="导入表" width="80%" :before-close="handleClose">
+    <Table v-loading="!reloadTabs" :columns="loadColumns" :page="page" :optionBtn="localLoadOptionBtn" :datas="localdata" @onClickRow="onClickRow">
+      <template v-slot:headSearch>
+        <el-select v-model="tabsSelectValue" placeholder="选择表" size="small" @change="toloadColumns">
+          <el-option v-for="item in tabsSelect" :key="item.value" :label="item.label" :value="item.value" />
+        </el-select>
       </template>
-    </el-dialog>
-  </div>
+    </Table>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="dialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="handLoadTables">确认</el-button>
+      </span>
+    </template>
+  </el-dialog>
 </template>
 
 <script setup lang="ts">
 import Table from "@components/table/Table.vue";
-import { Column, SearchType, SelectOptions, OptionBtn, PageParam } from "@interface/Table";
-import { onBeforeMount, ref } from "vue";
+import { Column, SearchType, SearchParamters, SelectOptions, OptionBtn, PageParam, TableProps } from "@interface/Table";
+import { onBeforeMount, onMounted, ref } from "vue";
 import http from "@plugins/http";
+import TableSelect from "@components/select/TableSelect.vue";
 
-let rootUrl: String = "/serve/sysDbmsTabsColsInfo";
+interface LocalSearchTableParamters {
+  searchParameters?: Array<SearchParamters>;
+}
 
-let columns = ref<Array<Column>>();
+// let columns = ref<Array<Column>>();
 let loadColumns = ref<Array<Column>>();
+// let LocalSearchTableParamters = ref<LocalSearchTableParamters>({ searchParameters: [] });
+let tablProp = ref<TableProps<any>>({
+  rootUrl: "/serve/sysDbmsTabsColsInfo",
+  columns: [],
+});
 
 let typeSelect = ref<Array<SelectOptions>>([]);
 let jdbcSelect = ref<Array<SelectOptions>>([]);
 let tabsSelect = ref<Array<SelectOptions>>([]);
 let indexSelect = ref<Array<SelectOptions>>([]);
+let item = { label: "`application`.`base_business_wrong`", value: "e0cff126-f2cb-11ec-925f-180373f20ac0" };
 
 let dialogVisible = ref<boolean>(false);
 
@@ -66,6 +81,8 @@ let localdata = ref<Array<any>>();
 
 let reloadTabs = ref<boolean>(false);
 
+let showSelectTabs = ref<boolean>(false);
+
 let page = ref<PageParam<any>>({
   pageNumber: 1,
   sizes: [10, 20, 50, 100],
@@ -81,23 +98,15 @@ onBeforeMount(() => {
   init();
 });
 
+onMounted(() => {});
+
 function init() {
-  columns.value = [
+  tablProp.value.columns = [
     {
       name: "uuid",
       title: "uuid",
       align: "left",
       show: false,
-      disable: true,
-    },
-    {
-      name: "tabsUuid",
-      title: "表",
-      align: "left",
-      sort: true,
-      search: true,
-      searchType: SearchType.SELECT,
-      searchDataArray: tabsSelect.value,
       disable: true,
     },
     {
@@ -314,6 +323,8 @@ function loadTabs() {
           };
           tabsSelect.value?.push(op);
         });
+
+        showSelectTabs.value = true;
       }
     })
     .catch((err) => {
@@ -404,6 +415,21 @@ function onClickRow(res: { index: number; row: any; column: string }) {
         // TODO
       });
   }
+}
+
+// 绑定点击表名事件
+function clickTable(item: SelectOptions) {
+  tablProp.value.parameters = [
+    {
+      operator: "and",
+      column: "tabsUuid",
+      title: item.label,
+      symbol: "eq",
+      searchType: SearchType.TEXT,
+      data: item.value,
+      showdata: true,
+    },
+  ];
 }
 </script>
 

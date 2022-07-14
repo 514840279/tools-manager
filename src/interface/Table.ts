@@ -77,13 +77,22 @@ export interface SearchParamters{
     column: string,
     title: string,
     symbol: string,
-    data?: string|number|undefined,
+    data?: string|number|boolean|undefined,
     searchPlaceholder?: string,
-    showdata: boolean,
+    showdata?: boolean,
     searchDataArray?: Array<SelectOptions>,
-    searchType: string
+    searchType?: string
 }
 
+// 控件条件
+export interface TableProps<T>{
+    rootUrl?:string,
+    columns: Array<Column>,
+    page?: PageParam<T>,
+    optionBtn?:Object,
+    datas?: Array<any>;
+    parameters?: Array<SearchParamters>;
+}
 
 // 控件各个按钮组件的控制显示隐藏
 export interface OptionBtn{
