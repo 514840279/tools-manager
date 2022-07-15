@@ -80,16 +80,13 @@ import { storeToRefs } from "pinia";
 // 实例化仓库
 const store = mainStore();
 // 解构并使数据具有响应式
-const { headindex, currentIndex, currentPath, currentList } = storeToRefs(store);
+const { headindex, currentIndex, currentPath, currentList, asideWidth, isCollapse, ita } = storeToRefs(store);
 
-let asideWidth = ref<string>("200px");
-let isCollapse = ref<boolean>(false);
-let ita = ref<string>("Fold");
 let circleUrl = ref<string>("favicon.ico");
 
 // 头部导航菜单
 let headMenu = ref<Menu>({
-  activeIndex: "2", // 默认页面 index
+  activeIndex: "0", // 默认页面 index
   class: "el-menu-demo",
   text: "導航",
   mode: "horizontal",
@@ -107,7 +104,7 @@ let headMenu = ref<Menu>({
 // 替换的菜单
 let aside = ref<Aside>({});
 // 默认展开menu
-const openedsIndex: Array<String> = ["0-1", "1-1", "2-3", "3-1", "4-1", "5-1", "6-1", "7-1"];
+const openedsIndex: Array<String> = ["0-1", "1-1", "2-1", "3-1", "4-1", "5-1", "6-1", "7-1"];
 // 菜单集
 let asides = ref<Array<Aside>>([
   {
@@ -115,9 +112,14 @@ let asides = ref<Array<Aside>>([
     submenu: [
       {
         index: "0-1",
-        text: "首页",
+        text: "菜单",
         icon: "Message",
-        data: [{ index: "0-1-1", text: "消息中心", icon: "Message", link: "" }],
+        data: [
+          { index: "0-1-1", text: "功能", icon: "Message", link: "" },
+          { index: "0-1-2", text: "数据统计", icon: "Message", link: "" },
+          { index: "0-1-3", text: "产品设计介绍", icon: "Message", link: "" },
+          { index: "0-1-4", text: "其他介绍", icon: "Message", link: "" },
+        ],
       },
     ],
   },
@@ -302,20 +304,20 @@ function init(): void {
 
 // head 头部点击事件 切换左侧导航信息 ，更换路由
 function handleSelect(index: string): void {
-  headindex.value = String(index);
   if (index == "0-2") {
     handleSelect("0");
   } else if (index == "0-1") {
-    if (isCollapse.value == false) {
-      isCollapse.value = !isCollapse.value;
-      asideWidth.value = "60px";
-      ita.value = "Menu";
-    } else {
+    if (!isCollapse.value == false) {
       isCollapse.value = !isCollapse.value;
       asideWidth.value = "200px";
       ita.value = "Fold";
+    } else {
+      isCollapse.value = !isCollapse.value;
+      asideWidth.value = "66px";
+      ita.value = "Menu";
     }
   } else {
+    headindex.value = String(index);
     // 切换aside
     aside.value = asides.value[Number(index)];
     let activeIndex = aside.value.activeIndex;
