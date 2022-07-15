@@ -220,7 +220,6 @@ function handleSearch() {
     .post<any>("/serve/sysDbmsTabsTableInfo/findAll", param.value)
     .then((response) => {
       if (response.data != null && response.code == 200) {
-        debugger;
         response.data.forEach((element: any) => {
           let op: SelectOptions = {
             value: element.uuid,

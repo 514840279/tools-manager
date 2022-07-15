@@ -53,7 +53,7 @@ let localOptionBtn = ref<OptionBtn>({
 // 控制显示
 let showData = ref<boolean>(false);
 
-const emit = defineEmits(["nodata"]);
+const emit = defineEmits(["nodata", "complate"]);
 
 onBeforeMount(() => {
   init();
@@ -126,16 +126,20 @@ function searchData() {
     .then((response) => {
       if (response.data != null && response.code == 200) {
         if (response.data.content == null || response.data.content.length == 0) {
-          emit("nodata");
+          emit("complate", { uuid: parents.table.uuid, deleteFlag: 1, msg: "没有匹配结果" });
         } else {
           localdata.value = response.data.content;
           page.value.totalElements = response.data.totalElements;
           showData.value = true;
+          emit("complate", { uuid: parents.table.uuid, deleteFlag: 2, msg: "" });
         }
+      } else {
+        emit("complate", { uuid: parents.table.uuid, deleteFlag: -2, msg: response.data.msg });
       }
     })
     .catch((err) => {
       // TODO
+      emit("complate", { uuid: parents.table.uuid, deleteFlag: -2, msg: err.message });
     });
 }
 </script>

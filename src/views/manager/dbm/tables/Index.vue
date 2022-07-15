@@ -303,7 +303,6 @@ function onClickRow(res: { index: number; row: any; column: string }) {
       .post<any>("/serve/sysDbmsTabsTableInfo/importTable", res.row)
       .then((response) => {
         if (response.data != null && response.code == 200) {
-          debugger;
           let id = page.value.info == null ? null : page.value.info.jdbcUuid;
           reloadTabs.value = false;
           toloadTables(id);

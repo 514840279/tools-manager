@@ -33,7 +33,6 @@ const emit = defineEmits(["onSelect"]);
 
 onBeforeMount(() => {
   localData.value = parents.data;
-  debugger;
 });
 function clickOption(item: SelectOptions) {
   selectData.value = item;

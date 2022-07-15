@@ -21,16 +21,16 @@
       </el-card>
       <!-- 查询表 -->
       <div v-for="(table, index) in tables" :key="index">
-        <el-card class="box-card" v-if="table.deleteFlag == 0">
+        <el-card class="box-card" v-show="table.deleteFlag == 2">
           <template #header>
             <div class="card-header">
               <span>{{ table.tabsDesc ? table.tabsDesc : table.tabsName }}</span>
-              <el-button class="button" text style="float: right">更多</el-button>
+              <el-button class="button" text style="float: right" @click="searchTable(table)">更多</el-button>
             </div>
           </template>
           <div>
             <!-- table -->
-            <SearchTableData :indexSelect="indexSelect" :table="table" @nodata="table.deleteFlag = 1"></SearchTableData>
+            <SearchTableData :indexSelect="indexSelect" :table="table" @complate="complate"></SearchTableData>
           </div>
         </el-card>
       </div>
@@ -50,10 +50,19 @@ import SearchTableData from "./SearchTableData.vue";
 import { searchIndexStore } from "@store/index";
 // 使普通数据变响应式的函数
 import { storeToRefs } from "pinia";
+import { router } from "@/router";
+import { searchTableStore } from "@store/search";
 // 实例化仓库
 const store = searchIndexStore();
+
 // 解构并使数据具有响应式
 const { indexParameters, startSearch } = storeToRefs(store);
+
+// 实例化仓库
+const searchStore = searchTableStore();
+// 解构并使数据具有响应式
+const { currentTable } = storeToRefs(searchStore);
+
 let fill = ref(true);
 
 let indexSelect = ref<Array<SearchIndexParameters>>([]);
@@ -64,6 +73,7 @@ let progressParam = ref({
 });
 
 let tables = ref<Array<SysDbmsTabsTableInfo>>([]);
+let complateSize = ref<number>(0);
 
 onBeforeMount(() => {
   loadIndex();
@@ -140,6 +150,28 @@ function initTables() {
       // TODO
       startSearch.value = false;
     });
+}
+
+// 调用结果
+function complate(el: { uuid: string; deleteFlag: number; msg: string }) {
+  tables.value.forEach((t) => {
+    if (t.uuid == el.uuid) {
+      t.deleteFlag = el.deleteFlag;
+      t.discription = el.msg;
+    }
+  });
+  complateSize.value = complateSize.value + 1;
+  progressParam.value.percentage = Math.round(complateSize.value / tables.value.length) * 100;
+  if (progressParam.value.percentage == 100) {
+    progressParam.value.indeterminate = false;
+    startSearch.value = false;
+  }
+}
+
+// 跳转到表查询页面
+function searchTable(table: SysDbmsTabsTableInfo) {
+  currentTable.value = table;
+  router.push({ path: "/searchData" });
 }
 </script>
 
