@@ -1,11 +1,10 @@
 <template>
   <el-row>
     <el-col :span="6">
-      <TableSelect :data="tabsSelect" title="选择表" @on-select="clickTable"></TableSelect>
-      <el-button type="primary" @click="clickTable(item)">Primary</el-button>
+      <TableSelect v-if="tabsSelect.length > 0" :data="tabsSelect" title="选择表" @on-select="clickTable"></TableSelect>
     </el-col>
     <el-col :span="18">
-      <Table :parameters="tablProp.parameters" :columns="tablProp.columns" :rootUrl="tablProp.rootUrl" :optionBtn="localOptionBtn" style="margin-left: 15px">
+      <Table :columns="tablProp.columns" :rootUrl="tablProp.rootUrl" :optionBtn="localOptionBtn" :searchParameters="tablProp.searchParameters" :sortParameters="tablProp.sortParameters" style="margin-left: 15px">
         <template v-slot:rightBtn>
           <el-button title="导入" @click="handleImportTable()" type="primary" icon="BottomLeft" circle size="small"></el-button>
         </template>
@@ -31,14 +30,10 @@
 
 <script setup lang="ts">
 import Table from "@components/table/Table.vue";
-import { Column, SearchType, SearchParamters, SelectOptions, OptionBtn, PageParam, TableProps } from "@interface/Table";
+import { Column, SearchType, SelectOptions, OptionBtn, PageParam, TableProps } from "@interface/Table";
 import { onBeforeMount, onMounted, ref } from "vue";
 import http from "@plugins/http";
 import TableSelect from "@components/select/TableSelect.vue";
-
-interface LocalSearchTableParamters {
-  searchParameters?: Array<SearchParamters>;
-}
 
 // let columns = ref<Array<Column>>();
 let loadColumns = ref<Array<Column>>();
@@ -46,13 +41,14 @@ let loadColumns = ref<Array<Column>>();
 let tablProp = ref<TableProps<any>>({
   rootUrl: "/serve/sysDbmsTabsColsInfo",
   columns: [],
+  searchParameters: [],
+  sortParameters: [{ sortIndex: 2, sortName: "sort", sortOrder: "asc" }],
 });
 
 let typeSelect = ref<Array<SelectOptions>>([]);
 let jdbcSelect = ref<Array<SelectOptions>>([]);
 let tabsSelect = ref<Array<SelectOptions>>([]);
 let indexSelect = ref<Array<SelectOptions>>([]);
-let item = { label: "`application`.`base_business_wrong`", value: "e0cff126-f2cb-11ec-925f-180373f20ac0" };
 
 let dialogVisible = ref<boolean>(false);
 
@@ -419,17 +415,19 @@ function onClickRow(res: { index: number; row: any; column: string }) {
 
 // 绑定点击表名事件
 function clickTable(item: SelectOptions) {
-  tablProp.value.parameters = [
-    {
-      operator: "and",
-      column: "tabsUuid",
-      title: item.label,
-      symbol: "eq",
-      searchType: SearchType.TEXT,
-      data: item.value,
-      showdata: true,
-    },
-  ];
+  if (item) {
+    tablProp.value.searchParameters = [
+      {
+        operator: "and",
+        column: "tabsUuid",
+        title: item.label,
+        symbol: "eq",
+        searchType: SearchType.TEXT,
+        data: item.value,
+        showdata: true,
+      },
+    ];
+  }
 }
 </script>
 

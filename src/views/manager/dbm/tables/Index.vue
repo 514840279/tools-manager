@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Table :columns="columns" :rootUrl="rootUrl">
+    <Table :columns="tableProp.columns" :rootUrl="tableProp.rootUrl" :sortParameters="tableProp.sortParameters">
       <template v-slot:rightBtn>
         <el-button title="导入" @click="handleImportTable()" type="primary" icon="BottomLeft" circle size="small"></el-button>
       </template>
@@ -37,13 +37,22 @@
 
 <script setup lang="ts">
 import Table from "@components/table/Table.vue";
-import { Column, SearchType, SelectOptions, OptionBtn, PageParam } from "@interface/Table";
+import { Column, SearchType, SelectOptions, OptionBtn, PageParam, TableProps } from "@interface/Table";
 import { onBeforeMount, ref } from "vue";
 import http from "@plugins/http";
 
-let rootUrl: String = "/serve/sysDbmsTabsTableInfo";
+let tableProp = ref<TableProps<any>>({
+  columns: [],
+  rootUrl: "/serve/sysDbmsTabsTableInfo",
+  sortParameters: [
+    { sortIndex: 1, sortName: "jdbcUuid", sortOrder: "desc" },
+    { sortIndex: 2, sortName: "sort", sortOrder: "asc" },
+    { sortIndex: 3, sortName: "tabsRows", sortOrder: "desc" },
+  ],
+});
+// let rootUrl: String = "/serve/sysDbmsTabsTableInfo";
 
-let columns = ref<Array<Column>>();
+// let columns = ref<Array<Column>>();
 let loadColumns = ref<Array<Column>>();
 
 let typeSelect = ref<Array<SelectOptions>>([]);
@@ -80,7 +89,7 @@ onBeforeMount(() => {
 });
 
 function init() {
-  columns.value = [
+  tableProp.value.columns = [
     {
       name: "uuid",
       title: "uuid",
@@ -91,7 +100,6 @@ function init() {
       name: "tabsName",
       title: "表名",
       align: "left",
-      sort: true,
       search: true,
     },
     {
@@ -104,14 +112,13 @@ function init() {
       title: "数据量",
       align: "left",
       searchType: SearchType.INTEGER,
-      sort: true,
       // search: true
+      sort: true,
     },
     {
       name: "typeCode",
       title: "类型",
       align: "left",
-      sort: true,
       search: true,
       searchType: SearchType.SELECT,
       searchDataArray: typeSelect.value,
@@ -129,7 +136,6 @@ function init() {
       name: "tabsSpace",
       title: "表空间",
       align: "left",
-      sort: true,
     },
     {
       name: "sort",

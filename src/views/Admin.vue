@@ -104,7 +104,7 @@ let headMenu = ref<Menu>({
 // 替换的菜单
 let aside = ref<Aside>({});
 // 默认展开menu
-const openedsIndex: Array<String> = ["0-1", "1-1", "2-1", "3-1", "4-1", "5-1", "6-1", "7-1"];
+const openedsIndex: Array<String> = ["0-1", "1-1", "2-5", "3-1", "4-1", "5-1", "6-1", "7-1"];
 // 菜单集
 let asides = ref<Array<Aside>>([
   {
@@ -141,7 +141,7 @@ let asides = ref<Array<Aside>>([
     ],
   },
   {
-    activeIndex: "2-1",
+    activeIndex: "2-5",
     submenu: [
       {
         index: "2-1",
@@ -186,6 +186,16 @@ let asides = ref<Array<Aside>>([
           { index: "2-2-1", text: "字典值", link: "/dicValue" },
         ],
       },
+      {
+        index: "2-5",
+        text: "应用查询配置",
+        icon: "Message",
+        data: [
+          { index: "2-5-1", text: "应用名", link: "/appl" },
+          { index: "2-5-2", text: "类型配置", link: "/applType" },
+          { index: "2-5-3", text: "类型表配置", link: "/applTypeTabs" },
+        ],
+      },
     ],
   },
   {
@@ -197,8 +207,6 @@ let asides = ref<Array<Aside>>([
         text: "人员查询",
         icon: "Message",
         data: [
-          { index: "3-1-1", text: "查询条件配置", link: "/user" },
-          { index: "3-1-2", text: "查询类型配置", link: "/table" },
           { index: "3-1-3", text: "查询", link: "/table" },
           { index: "3-1-4", text: "查询日志", link: "/table" },
           { index: "3-1-5", text: "日志分析", link: "/table" },
@@ -214,8 +222,6 @@ let asides = ref<Array<Aside>>([
         text: "企业查询",
         icon: "Message",
         data: [
-          { index: "4-1-1", text: "查询条件配置", link: "/user" },
-          { index: "4-1-2", text: "查询类型配置", link: "/table" },
           { index: "4-1-3", text: "查询", link: "/table" },
           { index: "4-1-4", text: "查询日志", link: "/table" },
           { index: "4-1-5", text: "日志分析", link: "/table" },

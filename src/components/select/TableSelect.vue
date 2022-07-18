@@ -33,7 +33,9 @@ const emit = defineEmits(["onSelect"]);
 
 onBeforeMount(() => {
   localData.value = parents.data;
+  clickOption(localData.value[0]);
 });
+
 function clickOption(item: SelectOptions) {
   selectData.value = item;
   emit("onSelect", item);
@@ -42,14 +44,18 @@ function clickOption(item: SelectOptions) {
 
 <style lang="scss" scoped>
 #table-select {
+  :hover {
+    cursor: pointer;
+  }
   .scrollbar-demo-item {
     display: flex;
     align-items: center;
     justify-content: left;
     height: 30px;
-    margin: 10px;
+    // margin: 10px;
     text-align: left;
-    border-radius: 4px;
+    // border-radius: 4px;
+    border: solid 1px;
     background: var(--el-color-primary-light-9);
     color: var(--el-color-primary);
   }
@@ -58,7 +64,7 @@ function clickOption(item: SelectOptions) {
     align-items: center;
     justify-content: left;
     height: 30px;
-    margin: 10px;
+    // margin: 10px;
     text-align: left;
     border-radius: 4px;
     background: var(--el-color-primary-light-9) rgb(142, 194, 196);

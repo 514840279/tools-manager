@@ -165,6 +165,8 @@ function complate(el: { uuid: string; deleteFlag: number; msg: string }) {
   if (progressParam.value.percentage == 100) {
     progressParam.value.indeterminate = false;
     startSearch.value = false;
+    complateSize.value = 0;
+    progressParam.value.percentage = 0;
   }
 }
 

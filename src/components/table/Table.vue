@@ -94,7 +94,8 @@ const parents = withDefaults(
     page?: PageParam<any>;
     optionBtn?: OptionBtn;
     datas?: Array<any>;
-    parameters?: Array<SearchParamters>;
+    searchParameters?: Array<SearchParamters>;
+    sortParameters?: Array<SortColumn>;
   }>(),
   {
     rootUrl: () => "",
@@ -114,7 +115,10 @@ const parents = withDefaults(
     datas: () => {
       return [];
     },
-    parameters: () => {
+    searchParameters: () => {
+      return [];
+    },
+    sortParameters: () => {
       return [];
     },
   }
@@ -164,7 +168,7 @@ let dataList = ref<Array<any>>([]),
   showColumns = ref<Array<Column>>([]),
   // 搜索columns名称 类型有type= text integer integerrange date datetime  daterange select redio checkbox
   /*{
-      name= name,                                 
+      name= name,
       search=true,
       search-type= text/integer/integerrange/icon/color
       // search-type= date/datetime/daterange
@@ -182,7 +186,7 @@ let dataList = ref<Array<any>>([]),
       name=name,
       sort= true, // 允许选择排序
       sort-index= 1 // 默认排序优先序
-      sort-order：'asc'/desc 
+      sort-order：'asc'/desc
   } */
   sortColumns = ref<Array<SortColumn>>([]),
   sortParameters = ref<Array<SortColumn>>([]),
@@ -194,14 +198,14 @@ onBeforeMount(() => {
   columns.value = parents.columns;
   // innt
   init();
-  // befor
-  initTable();
 });
 
 // 初始化参数
 function init(): void {
   sortColumns.value = [];
+  sortParameters.value = [];
   searchColumns.value = [];
+  searchParameters.value = [];
 
   showColumns.value = parents.columns;
   // 查询条件
@@ -209,33 +213,75 @@ function init(): void {
     item.searchType = item.searchType == null ? SearchType.TEXT : item.searchType;
     // 排序查询条件
     if (item.sort != null) {
-      // 默认值是 “asc”
-      let sortOrder = item.sortOrder == null ? "asc" : item.sortOrder;
-      // 添加可排序字段
-      sortColumns.value.push({
-        sortIndex: index,
-        sortName: item.name,
-        sortTitle: item.title,
-        sortOrder: sortOrder,
+      let flag = true;
+      // 传递过来的数据
+      parents.sortParameters.forEach((el) => {
+        if (item.name == el.sortName) {
+          sortColumns.value.push(el);
+          sortParameters.value.push(el);
+          flag = false;
+        }
       });
+      // 默认的数据
+      if (flag) {
+        // 默认值是 “asc”
+        let sortOrder = item.sortOrder == null ? "asc" : item.sortOrder;
+        // 添加可排序字段
+        sortColumns.value.push({
+          sortIndex: index,
+          sortName: item.name,
+          sortTitle: item.title,
+          sortOrder: sortOrder,
+        });
+      }
     }
 
     // 准备查询条件
     if (item.search != null) {
-      // 添加可选条件
-      searchColumns.value.push({
-        searchName: item.name,
-        searchTitle: item.title,
-        searchType: item.searchType,
-        searchDataFormatter: item.searchDataFormatter,
-        searchDataDefault: item.searchDataDefault,
-        searchDataArray: item.searchDataArray,
-        searchPlaceholder: item.searchPlaceholder == null ? "请输入" + item.title : item.searchPlaceholder,
+      let flag = true;
+      // 传递过来的参数
+      parents.searchParameters?.forEach((el) => {
+        if (item.name == el.column) {
+          searchColumns.value.push({
+            searchName: el.column,
+            searchTitle: el.title,
+            searchType: el.searchType,
+            searchDataArray: el.searchDataArray,
+            searchPlaceholder: el.searchPlaceholder,
+          });
+
+          searchParameters.value.push({
+            operator: "and",
+            column: el.column,
+            title: el.title,
+            symbol: "eq",
+            data: undefined,
+            searchPlaceholder: el.searchPlaceholder,
+            showdata: true,
+            searchDataArray: el.searchDataArray,
+            searchType: el.searchType,
+          });
+          flag = false;
+        }
       });
+      // 默认值
+      if (flag) {
+        // 添加可选条件
+        searchColumns.value.push({
+          searchName: item.name,
+          searchTitle: item.title,
+          searchType: item.searchType,
+          searchDataFormatter: item.searchDataFormatter,
+          searchDataDefault: item.searchDataDefault,
+          searchDataArray: item.searchDataArray,
+          searchPlaceholder: item.searchPlaceholder == null ? "请输入" + item.title : item.searchPlaceholder,
+        });
+      }
     }
     // 默认值设置
     item.show = item.show == null ? true : item.show;
   });
+
   // 查询框可选控制
   if (searchColumns.value.length == 0) {
     localOptionBtn.value.search = false;
@@ -244,6 +290,8 @@ function init(): void {
   if (sortColumns.value.length == 0) {
     localOptionBtn.value.sort = false;
   }
+  // befor
+  initTable();
 }
 // 异步查询表格
 function initTable(): void {
@@ -253,7 +301,6 @@ function initTable(): void {
   if (parents.rootUrl != "") {
     param.value.sortList = sortParameters.value;
     param.value.searchList = searchParameters.value;
-
     http
       .post<any>(url.page, param.value)
       .then((reponse) => {
@@ -372,7 +419,11 @@ function resetTable(): void {
   // showSearch.value = false;
   // showSort.value = false;
   // param = parents.page;
-  sortParameters.value = [];
+  if (parents.sortParameters != null && parents.sortParameters?.length > 0) {
+    sortParameters.value = parents.sortParameters;
+  } else {
+    sortParameters.value = [];
+  }
 
   if (parents.parameters != null && parents.parameters?.length > 0) {
     searchParameters.value = parents.parameters;
@@ -405,11 +456,6 @@ function printTable(): void {
 // 表查询
 function searchTable(param: Array<SearchParamters>) {
   searchParameters.value = param;
-  if (parents.parameters != null && parents.parameters.length > 0) {
-    parents.parameters.forEach((element) => {
-      searchParameters.value.push(element);
-    });
-  }
   initTable();
 }
 
@@ -417,11 +463,6 @@ function searchTable(param: Array<SearchParamters>) {
 function toSearchTable(value: Array<SearchParamters>) {
   loading.value = true;
   searchParameters.value = value;
-  if (parents.parameters != null && parents.parameters.length > 0) {
-    parents.parameters.forEach((element) => {
-      searchParameters.value.push(element);
-    });
-  }
   emit("beforSearchTable", searchParameters.value);
   initTable();
 }
@@ -497,8 +538,8 @@ watchEffect(() => {
   //   initTable();
   // }
 
-  if (parents.parameters != null && parents.parameters.length > 0) {
-    searchParameters.value = parents.parameters;
+  if (parents.searchParameters != null && parents.searchParameters.length > 0) {
+    searchParameters.value = parents.searchParameters;
     // befor
     initTable();
   }

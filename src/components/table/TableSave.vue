@@ -1,7 +1,10 @@
 <template>
   <div id="TableSave">
     <el-form :label-position="parents.labelPosition" :model="row" label-width="120px" ref="form">
-      <el-form-item :key="index" :label="item.title" v-for="(item, index) in parents.columns">
+      <el-form-item :key="index" v-for="(item, index) in parents.columns">
+        <template v-slot:label>
+          {{ item.title }}<span style="color: red; margin-left: 5px">{{ item.subtitle }}</span>
+        </template>
         <Icon :columnName="item.name" :icon="row[item.name]" @onSelect="selectIcon" type="info" v-if="item.searchType == SearchType.ICON"></Icon>
         <el-select :placeholder="item.name" size="small" v-else-if="item.searchType == SearchType.SELECT" v-model="row[item.name]" :disabled="item.disable">
           <el-option :key="op.value" :label="op.label" :value="op.value" v-for="op in item.searchDataArray" />

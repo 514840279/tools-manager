@@ -118,6 +118,18 @@ const routes = [
     name: 'searchIndexData',
     component: () => import('../views/manager/dbm/index/SearchIndexData.vue'),
   }, { 
+    path: '/appl',
+    name: 'appl',
+    component: () => import('../views/manager/appl/appl/Index.vue'),    
+  }, { 
+    path: '/applType',
+    name: 'applType',
+    component: () => import('../views/manager/appl/type/Index.vue'),   
+  }, { 
+    path: '/applTypeTabs',
+    name: 'applTypeTabs',
+    component: () => import('../views/manager/appl/table/Index.vue'),   
+  }, { 
     path: '/error',
     name: "error",
     component: Err,

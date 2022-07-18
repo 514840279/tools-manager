@@ -27,12 +27,13 @@ export interface Column{
     searchDataArray?:Array<SelectOptions>,
     search?: boolean
     disable?: boolean,
+    subtitle?:string
 }
 
 // 字段排序条件 数据格式
 export interface SortColumn{
     sortIndex: number,
-    sortTitle: string,
+    sortTitle?: string,
     sortOrder: string,
     sortName: string,
 }
@@ -40,7 +41,7 @@ export interface SortColumn{
 export interface SearchColumn{
     searchName: string,
     searchTitle: string,
-    searchType: string,
+    searchType?: string,
     searchDataFormatter?: string,
     searchDataDefault?:string,
     searchDataArray?:Array<SelectOptions>,
@@ -91,7 +92,8 @@ export interface TableProps<T>{
     page?: PageParam<T>,
     optionBtn?:Object,
     datas?: Array<any>;
-    parameters?: Array<SearchParamters>;
+    searchParameters?: Array<SearchParamters>;
+    sortParameters?: Array<SortColumn>;
 }
 
 // 控件各个按钮组件的控制显示隐藏
