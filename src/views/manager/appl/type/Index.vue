@@ -1,19 +1,35 @@
 <template>
   <div>
-    <Table :columns="columns" :rootUrl="rootUrl" />
+    <Table :columns="columns" :rootUrl="rootUrl" :sortParameters="sortParameters" />
   </div>
 </template>
 
 <script setup lang="ts">
 import http from "@/plugins/http";
 import Table from "@components/table/Table.vue";
-import { Column, SearchType, SelectOptions } from "@interface/Table";
+import { Column, SearchType, SelectOptions, SortColumn } from "@interface/Table";
 import { onBeforeMount, ref } from "vue";
 
 let applSelect = ref<Array<SelectOptions>>([]);
 
 let rootUrl: String = "/serve/sysApplTypeInfo";
 let columns = ref<Array<Column>>();
+
+let sortParameters = ref<Array<SortColumn>>([
+  {
+    sortIndex: 1,
+    sortTitle: "类型",
+    sortOrder: "desc",
+    sortName: "checkboxType",
+  },
+  {
+    sortIndex: 2,
+    sortTitle: "排序",
+    sortOrder: "asc",
+    sortName: "sort",
+  },
+]);
+
 onBeforeMount(() => {
   loadAppl();
 
@@ -55,6 +71,7 @@ function init() {
       subtitle: "单选类型，在同一个应用中有且仅有一个",
       align: "center",
       search: true,
+      sort: true,
       searchType: SearchType.REDIO,
       searchDataArray: [
         {

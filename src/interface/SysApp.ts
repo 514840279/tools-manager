@@ -1,3 +1,5 @@
+import { SelectOptions } from "./Table";
+
 // `chuxue`.`sys_appl_info` 应用信息  
 export interface SysApplInfo{
   applCode?: string,
@@ -54,7 +56,7 @@ export interface SysApplTypeTabsColumnInfo{
 export interface SysApplTypeTabsInfo{
   tabsUuid: string,
   updateUser?: string,
-  uuid: string,
+  uuid?: string,
   createTime?: Date,
   createUser?: string,
   deleteFlag?: number,
@@ -62,6 +64,21 @@ export interface SysApplTypeTabsInfo{
   sort?: number,
   typeCode: string,
   updateTime?: Date,
+  checkboxType?:string
 }
 
 
+export interface TypeOptions extends SelectOptions{
+  checkboxType:string,
+  uuid: string,
+}
+
+export interface SysApplTypeTabsInfoVo{
+  uuid?: string,
+  sort?: number,
+  typeCode?: string,
+  tabsUuid: string,
+  tabsName:string,
+  tabsDesc?:string,
+  checkboxType?:string,
+}

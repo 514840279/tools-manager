@@ -183,7 +183,7 @@ let asides = ref<Array<Aside>>([
         icon: "Message",
         data: [
           { index: "2-4-1", text: "字典名称", link: "/dicName" },
-          { index: "2-2-1", text: "字典值", link: "/dicValue" },
+          { index: "2-4-2", text: "字典值", link: "/dicValue" },
         ],
       },
       {

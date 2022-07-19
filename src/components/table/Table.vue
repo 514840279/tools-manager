@@ -425,8 +425,8 @@ function resetTable(): void {
     sortParameters.value = [];
   }
 
-  if (parents.parameters != null && parents.parameters?.length > 0) {
-    searchParameters.value = parents.parameters;
+  if (parents.searchParameters != null && parents.searchParameters?.length > 0) {
+    searchParameters.value = parents.searchParameters;
   } else {
     searchParameters.value = [];
   }

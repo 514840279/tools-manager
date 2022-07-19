@@ -69,7 +69,8 @@ export enum SearchType{
     SELECT = 'select',
     REDIO = 'redio',
     CHECKBOX = 'checkbox',
-    OPERATION = 'operation'
+    OPERATION = 'operation',
+    SWITCH ="switch"
 }
 
 // 查询参数数据 数据格式
