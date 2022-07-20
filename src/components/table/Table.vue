@@ -45,6 +45,9 @@
                 <div v-if="column.searchType == SearchType.OPERATION">
                   <el-button @click="onClickRow(scope.$index, scope.row, column.name)" size="small">{{ column.title }} </el-button>
                 </div>
+                <div v-if="column.searchType == SearchType.COLOR">
+                  <span :style="{ color: scope.row[column.name] }">{{ scope.row[column.name] }}</span>
+                </div>
               </template>
             </el-table-column>
             <el-table-column fixed="right" label="操作" width="124" v-if="localOptionBtn.opt">

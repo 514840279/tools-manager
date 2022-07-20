@@ -192,8 +192,9 @@ let asides = ref<Array<Aside>>([
         icon: "Message",
         data: [
           { index: "2-5-1", text: "应用名", link: "/appl" },
-          { index: "2-5-2", text: "类型配置", link: "/applType" },
-          { index: "2-5-3", text: "类型表配置", link: "/applTypeTabs" },
+          { index: "2-5-2", text: "应用数据类型", link: "/applDataType" },
+          { index: "2-5-3", text: "类型配置", link: "/applType" },
+          { index: "2-5-4", text: "类型表关系", link: "/applTypeTabs" },
         ],
       },
     ],

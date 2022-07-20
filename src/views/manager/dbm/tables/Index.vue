@@ -268,7 +268,6 @@ function handLoadTables() {
 
 function toloadTables(val: string) {
   page.value.info = info.value;
-  page.value.totalElements = 0;
   http
     .post<any>("/serve/sysDbmsTabsTableInfo/findAllByJdbcUuid", page.value)
     .then((response) => {
@@ -302,7 +301,6 @@ function handleCurrentChange(val: number): void {
 
 // 自定义事件
 function onClickRow(res: { index: number; row: any; column: string }) {
-  console.log(res.index);
   // 处理不同事件
   if (res.column == "daoru") {
     http
@@ -311,6 +309,7 @@ function onClickRow(res: { index: number; row: any; column: string }) {
         if (response.data != null && response.code == 200) {
           let id = page.value.info == null ? null : page.value.info.jdbcUuid;
           reloadTabs.value = false;
+
           toloadTables(id);
         }
       })

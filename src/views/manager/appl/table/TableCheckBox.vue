@@ -23,6 +23,7 @@
           </el-checkbox-group>
         </el-col>
       </el-row>
+      <ColumnsConfig v-if="parents.selectValue.checkboxType == SearchType.REDIO" :type="localType" :selectRadio="selectRadio" @updateColumn="updateColumn"></ColumnsConfig>
       <el-row>
         <el-col :span="22"></el-col>
         <el-col :span="2"><el-button type="primary" @click="toSave">确定</el-button></el-col>
@@ -32,15 +33,19 @@
 </template>
 
 <script setup lang="ts">
-import { SysApplTypeTabsInfo, SysApplTypeTabsInfoVo, TypeOptions } from "@/interface/SysApp";
+import { SysApplTypeTabsColumnInfoVo, SysApplTypeTabsInfo, SysApplTypeTabsInfoVo, TypeOptions } from "@/interface/SysApp";
 import { SearchType } from "@/interface/Table";
 import http from "@/plugins/http";
 import { onBeforeMount, ref, watch } from "vue";
 import { ElMessage } from "element-plus";
+import ColumnsConfig from "./ColumnsConfig.vue";
+
+let columnsData = ref<Array<SysApplTypeTabsColumnInfoVo>>([]);
 
 const parents = withDefaults(
   defineProps<{
     selectValue: TypeOptions;
+    applCode: string;
   }>(),
   {
     selectValue: () => {
@@ -51,6 +56,7 @@ const parents = withDefaults(
         label: "",
       };
     },
+    applCode: () => "",
   }
 );
 
@@ -71,9 +77,7 @@ function initTables() {
   checkList.value = [];
   tabsChecks.value = [];
   http
-    .post<any>("/serve/sysApplTypeTabsInfo/findAllTablesCheck", {
-      info: { typeCode: localType.value?.value },
-    })
+    .post<any>("/serve/sysApplTypeTabsInfo/findAllTablesCheck", { applCode: parents.applCode, typeCode: localType.value?.value })
     .then((response) => {
       if (response.data != null && response.code == 200) {
         tabsChecks.value = response.data;
@@ -110,6 +114,7 @@ function nameFilter(tabsChecks: Array<SysApplTypeTabsInfoVo>): Array<SysApplType
 // 进行保存表配置信息
 function toSave() {
   if (localType.value?.checkboxType == SearchType.REDIO) {
+    saveColumns();
   } else if (localType.value?.checkboxType == SearchType.CHECKBOX) {
     saveChecks();
   }
@@ -121,7 +126,6 @@ function saveChecks() {
   tabsChecks.value.forEach((tabs) => {
     checkList.value.forEach((checked) => {
       if (tabs.tabsUuid == checked) {
-        debugger;
         param.push({
           uuid: tabs.uuid,
           typeCode: String(localType.value?.value),
@@ -136,7 +140,6 @@ function saveChecks() {
     .post<any>("/serve/sysApplTypeTabsInfo/saveList", { list: param })
     .then((response) => {
       if (response.code == 200) {
-        console.log(param, 4455);
         ElMessage("修改成功");
         initTables();
       }
@@ -145,6 +148,39 @@ function saveChecks() {
       // TODO
       ElMessage.error(err);
     });
+}
+
+// 保存单选配置列
+function saveColumns() {
+  tabsChecks.value.forEach((tabs) => {
+    if (tabs.tabsUuid == selectRadio.value) {
+      let info: SysApplTypeTabsInfo = {
+        uuid: tabs.uuid,
+        typeCode: String(localType.value?.value),
+        tabsUuid: tabs.tabsUuid,
+        checkboxType: SearchType.CHECKBOX,
+      };
+      debugger;
+      http
+        .post<any>("/serve/sysApplTypeTabsInfo/saveColumns", { list: columnsData.value, info: info })
+        .then((response) => {
+          if (response.code == 200) {
+            ElMessage("修改成功");
+            initTables();
+          }
+        })
+        .catch((err) => {
+          // TODO
+          ElMessage.error(err);
+        });
+      return;
+    }
+  });
+}
+
+// 子传父
+function updateColumn(col: Array<SysApplTypeTabsColumnInfoVo>) {
+  columnsData.value = col;
 }
 
 watch(

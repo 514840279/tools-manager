@@ -13,6 +13,7 @@
         <el-radio-group v-else-if="item.searchType == SearchType.REDIO" v-model="row[item.name]" :disabled="item.disable">
           <el-radio :key="op.value" :label="op.value" v-for="op in item.searchDataArray">{{ op.label }}</el-radio>
         </el-radio-group>
+        <el-color-picker v-else-if="item.searchType == SearchType.COLOR" v-model="row[item.name]" />
         <el-input v-else v-model="row[item.name]" :disabled="item.disable"></el-input>
       </el-form-item>
       <el-form-item>

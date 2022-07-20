@@ -1,3 +1,4 @@
+import exp from "constants";
 import { SelectOptions } from "./Table";
 
 // `chuxue`.`sys_appl_info` 应用信息  
@@ -36,6 +37,7 @@ export interface SysApplTypeInfo{
 
 // `chuxue`.`sys_appl_type_tabs_column_info` 应用表字段管理  
 export interface SysApplTypeTabsColumnInfo{
+  colsTypeColor?: string,
   colsType?: string,
   colsUuid: string,
   createTime?: Date,
@@ -50,6 +52,15 @@ export interface SysApplTypeTabsColumnInfo{
   uuid: string,
 }
 
+export interface SysApplTypeTabsColumnInfoVo extends SysApplTypeTabsColumnInfo{
+  colsName?:string,
+  colsDesc?:string,
+}
+
+export enum ColumnType{
+  LABEL = 'label',
+  TITLE = "title",
+}
 
 
 // `chuxue`.`sys_appl_type_tabs_info` 应用表关系管理  
@@ -67,6 +78,21 @@ export interface SysApplTypeTabsInfo{
   checkboxType?:string
 }
 
+// `chuxue`.`sys_appl_data_type_info` 应用数据类型关系表  
+export interface SysApplDataTypeInfo{
+  applCode?: string,
+  createTime?: Date,
+  createUser?: string,
+  deleteFlag?: number,
+  discription?: string,
+  sort?: number,
+  typeCode?: string,
+  updateTime?: Date,
+  updateUser?: string,
+  uuid?: string,
+  checkboxType?:string,
+}
+
 
 export interface TypeOptions extends SelectOptions{
   checkboxType:string,
@@ -76,9 +102,20 @@ export interface TypeOptions extends SelectOptions{
 export interface SysApplTypeTabsInfoVo{
   uuid?: string,
   sort?: number,
+  applCode?:string,
   typeCode?: string,
   tabsUuid: string,
   tabsName:string,
   tabsDesc?:string,
+  checkboxType?:string,
+}
+
+
+export interface SysApplDataTypeInfoVo{
+  uuid?: string,
+  sort?: number,
+  typeCode: string,
+  typeName?:string,
+  applCode?:string,
   checkboxType?:string,
 }

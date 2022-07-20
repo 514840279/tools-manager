@@ -130,6 +130,10 @@ const routes = [
     name: 'applTypeTabs',
     component: () => import('../views/manager/appl/table/Index.vue'),   
   }, { 
+    path: '/applDataType',
+    name: 'applDataType',
+    component: () => import('../views/manager/appl/datatype/Index.vue'),   
+  }, { 
     path: '/error',
     name: "error",
     component: Err,
