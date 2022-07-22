@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 
 import { SearchIndexParameters } from "@interface/SearchIndex";
-import { start } from 'repl';
+
 let parameters :Array<SearchIndexParameters>;
 
 // useStore could be anything like useUser, useCart

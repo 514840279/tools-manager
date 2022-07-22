@@ -12,35 +12,69 @@
         <el-col :span="6"><el-input v-model="input" placeholder="快速查找表" /></el-col>
       </el-row>
       <div style="float: right"></div>
-      <el-row>
-        <el-col :span="24">
-          <el-radio-group v-model="selectRadio" class="ml-4" v-if="parents.selectValue.checkboxType == SearchType.REDIO">
-            <el-radio v-for="(item, index) in nameFilter(tabsChecks)" :key="index" :label="item.tabsUuid">{{ item.tabsDesc == null || item.tabsDesc == "" ? item.tabsName : item.tabsDesc }}</el-radio>
-          </el-radio-group>
+      <el-radio-group v-model="selectRadio" v-if="parents.selectValue.checkboxType == SearchType.REDIO" style="width: 100%">
+        <el-table :data="nameFilter(tabsChecks)" style="width: 100%" ref="singleTableRef" highlight-current-row @current-change="handleCurrentChange">
+          <el-table-column prop="checkboxType" label="单选" width="80">
+            <template #default="scope">
+              <!-- <el-input-number v-model="scope.row.checkboxType" :min="1" :max="10" /> -->
+              <el-radio :label="scope.row.tabsUuid">{{}}</el-radio>
+            </template>
+          </el-table-column>
+          <el-table-column prop="tabsName" label="表名" width="260" />
+          <el-table-column prop="tabsDesc" label="表含义" />
+          <el-table-column prop="sort" label="排序" :align="'center'" :header-align="'center'">
+            <template #default="scope">
+              <el-input-number v-model="scope.row.sort" style="width: 100%" />
+            </template>
+          </el-table-column>
+          <el-table-column label="操作" :align="'center'" :header-align="'center'">
+            <template #default="scope">
+              <el-button type="primary" v-if="scope.row.tabsUuid == selectRadio" @click="showColumn = true">列配置</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-radio-group>
 
-          <el-checkbox-group v-model="checkList" v-if="parents.selectValue.checkboxType == SearchType.CHECKBOX && tabsChecks.length > 0">
-            <el-checkbox v-for="(item, index) in nameFilter(tabsChecks)" :key="index" :label="item.tabsUuid">{{ item.tabsDesc == null || item.tabsDesc == "" ? item.tabsName : item.tabsDesc }}</el-checkbox>
-          </el-checkbox-group>
-        </el-col>
-      </el-row>
-      <ColumnsConfig v-if="parents.selectValue.checkboxType == SearchType.REDIO" :type="localType" :selectRadio="selectRadio" @updateColumn="updateColumn"></ColumnsConfig>
+      <el-checkbox-group v-model="checkList" v-if="parents.selectValue.checkboxType == SearchType.CHECKBOX && tabsChecks.length > 0">
+        <el-table :data="nameFilter(tabsChecks)" style="width: 100%" ref="multipleTableRef" @selection-change="handleSelectionChange">
+          <el-table-column prop="checkboxType" label="单选" width="80">
+            <template #default="scope">
+              <el-checkbox :label="scope.row.tabsUuid">{{}} </el-checkbox>
+            </template>
+          </el-table-column>
+          <el-table-column prop="tabsName" label="表名" width="260" />
+          <el-table-column prop="tabsDesc" label="表含义" />
+          <el-table-column prop="sort" label="排序" :align="'center'" :header-align="'center'">
+            <template #default="scope">
+              <el-input-number v-model="scope.row.sort" style="width: 100%" />
+            </template>
+          </el-table-column>
+          <el-table-column label="操作" :align="'center'" :header-align="'center'">
+            <template #default="scope">
+              <el-button type="primary" @click="checkTabColumn(scope.row)">列配置</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-checkbox-group>
+
       <el-row>
         <el-col :span="22"></el-col>
         <el-col :span="2"><el-button type="primary" @click="toSave">确定</el-button></el-col>
       </el-row>
     </el-card>
+    <el-dialog v-model="showColumn" title="字段管理" width="80%">
+      <ColumnsConfig v-if="selectRadio != '' && showColumn" :type="localType" :selectRadio="selectRadio" @coloseColumns="showColumn = false"></ColumnsConfig>
+    </el-dialog>
   </div>
 </template>
 
 <script setup lang="ts">
-import { SysApplTypeTabsColumnInfoVo, SysApplTypeTabsInfo, SysApplTypeTabsInfoVo, TypeOptions } from "@/interface/SysApp";
+import { SysApplTypeTabsInfo, SysApplTypeTabsInfoVo, TypeOptions } from "@/interface/SysApp";
 import { SearchType } from "@/interface/Table";
 import http from "@/plugins/http";
 import { onBeforeMount, ref, watch } from "vue";
-import { ElMessage } from "element-plus";
+import { ElMessage, ElTable } from "element-plus";
 import ColumnsConfig from "./ColumnsConfig.vue";
-
-let columnsData = ref<Array<SysApplTypeTabsColumnInfoVo>>([]);
 
 const parents = withDefaults(
   defineProps<{
@@ -59,6 +93,16 @@ const parents = withDefaults(
     applCode: () => "",
   }
 );
+const currentRow = ref();
+const singleTableRef = ref<InstanceType<typeof ElTable>>();
+const showColumn = ref(false);
+
+const multipleTableRef = ref<InstanceType<typeof ElTable>>();
+const multipleSelection = ref<SysApplTypeTabsInfoVo[]>([]);
+
+const handleSelectionChange = (val: SysApplTypeTabsInfoVo[]) => {
+  multipleSelection.value = val;
+};
 
 let localType = ref<TypeOptions>();
 let tabsChecks = ref<Array<SysApplTypeTabsInfoVo>>([]);
@@ -70,6 +114,11 @@ onBeforeMount(() => {
   localType.value = parents.selectValue;
   initTables();
 });
+
+const handleCurrentChange = (val: SysApplTypeTabsInfoVo | undefined) => {
+  currentRow.value = val;
+  selectRadio.value = val?.tabsUuid;
+};
 
 // 获取表名称
 function initTables() {
@@ -84,9 +133,11 @@ function initTables() {
         response.data.forEach((element: SysApplTypeTabsInfoVo) => {
           if (localType.value?.checkboxType == SearchType.REDIO && element.checkboxType == SearchType.REDIO && element.typeCode == localType.value.value) {
             selectRadio.value = element.tabsUuid;
+            currentRow.value = element;
           }
           if (localType.value?.checkboxType == SearchType.CHECKBOX && element.checkboxType == SearchType.CHECKBOX && element.typeCode == localType.value.value) {
             checkList.value.push(element.tabsUuid);
+            multipleSelection.value.push(element);
           }
         });
       }
@@ -131,6 +182,7 @@ function saveChecks() {
           typeCode: String(localType.value?.value),
           tabsUuid: tabs.tabsUuid,
           checkboxType: SearchType.CHECKBOX,
+          sort: tabs.sort,
         });
       }
     });
@@ -158,11 +210,12 @@ function saveColumns() {
         uuid: tabs.uuid,
         typeCode: String(localType.value?.value),
         tabsUuid: tabs.tabsUuid,
-        checkboxType: SearchType.CHECKBOX,
+        checkboxType: SearchType.REDIO,
+        sort: tabs.sort,
       };
       debugger;
       http
-        .post<any>("/serve/sysApplTypeTabsInfo/saveColumns", { list: columnsData.value, info: info })
+        .post<any>("/serve/sysApplTypeTabsInfo/saveList", { list: [info] })
         .then((response) => {
           if (response.code == 200) {
             ElMessage("修改成功");
@@ -178,9 +231,13 @@ function saveColumns() {
   });
 }
 
-// 子传父
-function updateColumn(col: Array<SysApplTypeTabsColumnInfoVo>) {
-  columnsData.value = col;
+function checkTabColumn(vo: SysApplTypeTabsInfoVo) {
+  selectRadio.value = vo.tabsUuid;
+  showColumn.value = true;
+}
+// 配置列选项
+function toColumnConf(item: SysApplTypeTabsInfoVo) {
+  selectRadio.value = item.tabsUuid;
 }
 
 watch(

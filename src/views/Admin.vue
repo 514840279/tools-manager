@@ -94,8 +94,6 @@ let headMenu = ref<Menu>({
     { index: "0", text: "首页" },
     { index: "1", text: "权限管理" },
     { index: "2", text: "数据库管理" },
-    { index: "3", text: "人员查询" },
-    { index: "4", text: "企业查询" },
     { index: "5", text: "分析管理" },
     { index: "6", text: "爬虫管理" },
     { index: "7", text: "消息中心" },
@@ -195,37 +193,7 @@ let asides = ref<Array<Aside>>([
           { index: "2-5-2", text: "应用数据类型", link: "/applDataType" },
           { index: "2-5-3", text: "类型配置", link: "/applType" },
           { index: "2-5-4", text: "类型表关系", link: "/applTypeTabs" },
-        ],
-      },
-    ],
-  },
-  {
-    activeIndex: "3-1",
-    openedsIndex: [],
-    submenu: [
-      {
-        index: "3-1",
-        text: "人员查询",
-        icon: "Message",
-        data: [
-          { index: "3-1-3", text: "查询", link: "/table" },
-          { index: "3-1-4", text: "查询日志", link: "/table" },
-          { index: "3-1-5", text: "日志分析", link: "/table" },
-        ],
-      },
-    ],
-  },
-  {
-    activeIndex: "4-1",
-    submenu: [
-      {
-        index: "4-1",
-        text: "企业查询",
-        icon: "Message",
-        data: [
-          { index: "4-1-3", text: "查询", link: "/table" },
-          { index: "4-1-4", text: "查询日志", link: "/table" },
-          { index: "4-1-5", text: "日志分析", link: "/table" },
+          { index: "2-5-5", text: "查询", link: "/applSearch" },
         ],
       },
     ],

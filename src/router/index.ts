@@ -134,6 +134,14 @@ const routes = [
     name: 'applDataType',
     component: () => import('../views/manager/appl/datatype/Index.vue'),   
   }, { 
+    path: '/applSearch',
+    name: 'applSearch',
+    component: () => import('../views/manager/appl/search/Search.vue'),   
+  }, { 
+    path: '/resultList',
+    name: 'resultList',
+    component: () => import('../views/manager/appl/search/ResultList.vue'),   
+  }, { 
     path: '/error',
     name: "error",
     component: Err,

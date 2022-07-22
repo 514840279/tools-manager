@@ -57,9 +57,11 @@ export interface SysApplTypeTabsColumnInfoVo extends SysApplTypeTabsColumnInfo{
   colsDesc?:string,
 }
 
-export enum ColumnType{
-  LABEL = 'label',
-  TITLE = "title",
+
+export enum ColumnType {
+LABEL = 'label',
+TITLE = "title",
+RELEASE = "RELEASE"
 }
 
 
