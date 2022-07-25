@@ -59,7 +59,7 @@ onBeforeMount(() => {
 // 加载数据类型信息
 function loadIndex() {
   http
-    .post<any>("/serve/sysApplInfo/findAll", {})
+    .post<any>("/serve/sysApplInfo/findAllBySort", { sortList: [{ sortIndex: 1, sortName: "sort", sortOrder: "asc" }] })
     .then((response) => {
       if (response.data != null && response.code == 200) {
         response.data.forEach((element: any) => {
@@ -103,8 +103,6 @@ function toSearchAllTable() {
   } else {
     // TODO
     indexParameters.value = [indexSelectValue.value];
-    startSearch.value = true;
-
     router.push({ path: "/resultList" });
   }
 }

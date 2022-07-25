@@ -46,10 +46,18 @@
           <el-table-column prop="tabsDesc" label="表含义" />
           <el-table-column prop="sort" label="排序" :align="'center'" :header-align="'center'">
             <template #default="scope">
-              <el-input-number v-model="scope.row.sort" style="width: 100%" />
+              <el-input-number v-model="scope.row.sort" width="80" />
             </template>
           </el-table-column>
-          <el-table-column label="操作" :align="'center'" :header-align="'center'">
+          <el-table-column prop="tabsRowsType" label="列表行" :align="'center'" :header-align="'center'">
+            <template #default="scope">
+              <el-radio-group v-model="scope.row.tabsRowsType">
+                <el-radio :label="TabsRowsType.MULTI_LINE">多行</el-radio>
+                <el-radio :label="TabsRowsType.SINGLE_LINE">单行</el-radio>
+              </el-radio-group>
+            </template>
+          </el-table-column>
+          <el-table-column label="操作" :align="'center'" :header-align="'center'" width="80">
             <template #default="scope">
               <el-button type="primary" @click="checkTabColumn(scope.row)">列配置</el-button>
             </template>
@@ -69,7 +77,7 @@
 </template>
 
 <script setup lang="ts">
-import { SysApplTypeTabsInfo, SysApplTypeTabsInfoVo, TypeOptions } from "@/interface/SysApp";
+import { SysApplTypeTabsInfo, SysApplTypeTabsInfoVo, TypeOptions, TabsRowsType } from "@/interface/SysApp";
 import { SearchType } from "@/interface/Table";
 import http from "@/plugins/http";
 import { onBeforeMount, ref, watch } from "vue";
@@ -183,6 +191,7 @@ function saveChecks() {
           tabsUuid: tabs.tabsUuid,
           checkboxType: SearchType.CHECKBOX,
           sort: tabs.sort,
+          tabsRowsType: tabs.tabsRowsType,
         });
       }
     });

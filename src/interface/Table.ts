@@ -81,6 +81,7 @@ export interface SearchParamters{
     symbol: string,
     data?: string|number|boolean|undefined,
     searchPlaceholder?: string,
+    subParameters?:Array<SearchParamters>
     showdata?: boolean,
     searchDataArray?: Array<SelectOptions>,
     searchType?: string

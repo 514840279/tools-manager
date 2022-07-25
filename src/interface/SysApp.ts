@@ -50,6 +50,7 @@ export interface SysApplTypeTabsColumnInfo{
   updateTime?: Date,
   updateUser?: string,
   uuid: string,
+  searchCloumn?:string,
 }
 
 export interface SysApplTypeTabsColumnInfoVo extends SysApplTypeTabsColumnInfo{
@@ -78,6 +79,7 @@ export interface SysApplTypeTabsInfo{
   typeCode: string,
   updateTime?: Date,
   checkboxType?:string
+  tabsRowsType?:string
 }
 
 // `chuxue`.`sys_appl_data_type_info` 应用数据类型关系表  
@@ -101,15 +103,9 @@ export interface TypeOptions extends SelectOptions{
   uuid: string,
 }
 
-export interface SysApplTypeTabsInfoVo{
-  uuid?: string,
-  sort?: number,
-  applCode?:string,
-  typeCode?: string,
-  tabsUuid: string,
+export interface SysApplTypeTabsInfoVo extends SysApplTypeTabsInfo{
   tabsName:string,
   tabsDesc?:string,
-  checkboxType?:string,
 }
 
 
@@ -120,4 +116,10 @@ export interface SysApplDataTypeInfoVo{
   typeName?:string,
   applCode?:string,
   checkboxType?:string,
+}
+
+
+export enum TabsRowsType{
+  MULTI_LINE='multi-line',
+  SINGLE_LINE='single-line'
 }

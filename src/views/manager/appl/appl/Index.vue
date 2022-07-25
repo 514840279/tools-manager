@@ -1,12 +1,12 @@
 <template>
   <div>
-    <Table :columns="columns" :rootUrl="rootUrl" />
+    <Table :columns="columns" :rootUrl="rootUrl" :sortParameters="sortParameters" />
   </div>
 </template>
 
 <script setup lang="ts">
 import Table from "@components/table/Table.vue";
-import { Column } from "@interface/Table";
+import { Column, SortColumn } from "@interface/Table";
 
 let rootUrl: String = "/serve/sysApplInfo",
   columns: Array<Column> = [
@@ -39,7 +39,8 @@ let rootUrl: String = "/serve/sysApplInfo",
       title: "描述",
       align: "left",
     },
-  ];
+  ],
+  sortParameters: Array<SortColumn> = [{ sortIndex: 1, sortName: "sort", sortOrder: "asc" }];
 </script>
 
 <style scoped></style>
