@@ -528,7 +528,6 @@ watchEffect(() => {
   // if (parents.page != null) {
   //   param.value = parents.page;
   // }
-  // console.log(parents.parameters);
   if (parents.datas != null && parents.datas.length > 0) {
     dataList.value = parents.datas;
   }

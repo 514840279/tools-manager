@@ -45,17 +45,28 @@ export interface SysApplTypeTabsColumnInfo{
   deleteFlag?: number,
   discription?: string,
   sort?: number,
-  tabsUuid: string,
-  typeCode: string,
+  tabsUuid?: string,
+  typeCode?: string,
   updateTime?: Date,
   updateUser?: string,
   uuid: string,
   searchCloumn?:string,
+  isUnionId?: Boolean,
+	isRelation?: Boolean,
+	show?: Boolean,
+  span?:number,
+  icon?:string,
 }
 
 export interface SysApplTypeTabsColumnInfoVo extends SysApplTypeTabsColumnInfo{
   colsName?:string,
   colsDesc?:string,
+  checkboxType?:string,
+  indexCode?:string,
+  colsSwitchable?:boolean,
+  colsWidth?:number,
+  colsAlign?:string,
+
 }
 
 
@@ -106,6 +117,8 @@ export interface TypeOptions extends SelectOptions{
 export interface SysApplTypeTabsInfoVo extends SysApplTypeTabsInfo{
   tabsName:string,
   tabsDesc?:string,
+  jdbcUuid?:String,
+	tabsRows?:number,
 }
 
 

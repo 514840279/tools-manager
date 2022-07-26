@@ -41,7 +41,7 @@ import { storeToRefs } from "pinia";
 // 实例化仓库
 const store = applStore();
 // 解构并使数据具有响应式
-const { indexParameters, startSearch } = storeToRefs(store);
+const { indexParameters } = storeToRefs(store);
 
 const size = ref(1);
 const fill = ref(true);

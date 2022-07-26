@@ -6,7 +6,9 @@
   <ul v-if="page.totalElements > 0 && showResult" v-infinite-scroll="load" class="infinite-list" style="overflow: auto">
     <el-space :fill="true" wrap style="width: 100%">
       <li v-for="(item, index) in localdata" :key="index">
-        <ResultCard :data="item" :index="index"></ResultCard>
+        <el-card class="box-card">
+          <ResultCard :data="item" :index="index" @on-search-detail="onSearchDetail"></ResultCard>
+        </el-card>
       </li>
     </el-space>
   </ul>
@@ -21,7 +23,7 @@
 
 <script setup lang="ts">
 import { TabsPageParams } from "@/interface/SearchIndex";
-import { SysApplTypeTabsColumnInfoVo } from "@/interface/SysApp";
+import { SysApplTypeTabsColumnInfoVo, SysApplTypeTabsInfoVo } from "@/interface/SysApp";
 import ResultCard from "./ResultCard.vue";
 
 import http from "@/plugins/http";
@@ -29,12 +31,14 @@ import { applStore } from "@store/appl";
 // 使普通数据变响应式的函数
 import { storeToRefs } from "pinia";
 import { onBeforeMount, ref } from "vue";
+import { router } from "@/router";
+import { SearchType } from "@/interface/Table";
 // 实例化仓库
 const store = applStore();
 // 解构并使数据具有响应式
-const { indexParameters, singleTable, singleApplTableColumns, searchCloumn } = storeToRefs(store);
+const { indexParameters, singleTable, singleApplTableColumns, searchCloumn, selectDetail, types, selectDetailRel } = storeToRefs(store);
 
-let page = ref<TabsPageParams>({
+let page = ref<TabsPageParams<SysApplTypeTabsInfoVo>>({
   pageNumber: 1,
   sizes: [8, 16, 24],
   pageSize: 8,
@@ -46,9 +50,22 @@ let localdata = ref<Array<any>>();
 let showResult = ref<boolean>(true);
 
 onBeforeMount(() => {
+  initTypes();
   initSingleTable();
 });
-// TODO
+// 类型查询
+function initTypes() {
+  http
+    .post<any>("/serve/sysApplTypeInfo/findAllBySort", { info: { applCode: indexParameters.value[0].value, checkboxType: SearchType.CHECKBOX }, sortList: [{ sortIndex: 1, sortName: "sort", sortOrder: "asc" }] })
+    .then((response) => {
+      if (response.data != null && response.code == 200) {
+        types.value = response.data;
+      }
+    })
+    .catch((err) => {
+      // TODO
+    });
+}
 // 1 查询唯一表，
 function initSingleTable() {
   http
@@ -68,7 +85,7 @@ function initSingleTable() {
 function initTableColumn() {
   searchCloumn.value = [];
   http
-    .post<any>("/serve/sysApplTypeTabsColumnInfo/findAllTables", { tabsUuid: singleTable.value.uuid })
+    .post<any>("/serve/sysApplTypeTabsColumnInfo/findAllColumns", { tabsUuid: singleTable.value.uuid, typeCode: singleTable.value.typeCode, checkboxType: SearchType.REDIO })
     .then((response) => {
       if (response.data != null && response.code == 200) {
         singleApplTableColumns.value = response.data;
@@ -121,7 +138,6 @@ function initTabledata() {
         } else {
           localdata.value = localdata.value.concat(response.data.content);
         }
-        debugger;
         if (page.value.totalElements == 0) {
           showResult.value = false;
         } else {
@@ -144,6 +160,12 @@ function load() {
 }
 // 4 分析表结构中配置各项数据对应到card中
 // 设置card点击效果跳转detail 并保存点击card的数据
+function onSearchDetail(el: { data: any; rel: any }) {
+  selectDetail.value = el.data;
+  selectDetailRel.value = el.rel;
+  // 传值方式应该是隐藏式的，并且区分不同数据方便多个tab显示
+  router.push({ path: "/resultDetail" });
+}
 </script>
 
 <style scoped>

@@ -52,7 +52,7 @@ let localOptionBtn = ref<OptionBtn>({
   opt: false, // 每条数据后端操作搭配optbtn使用
 });
 
-let page = ref<TabsPageParams>({
+let page = ref<TabsPageParams<SysDbmsTabsTableInfo>>({
   pageNumber: 1,
   sizes: [10, 20, 50, 100],
   pageSize: 10,

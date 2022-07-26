@@ -5,7 +5,7 @@
         <template v-slot:label>
           {{ item.title }}<span style="color: red; margin-left: 5px">{{ item.subtitle }}</span>
         </template>
-        <Icon :columnName="item.name" :icon="row[item.name]" @onSelect="selectIcon" type="info" v-if="item.searchType == SearchType.ICON"></Icon>
+        <Icon v-model:icon="row[item.name]" type="info" v-if="item.searchType == SearchType.ICON"></Icon>
         <el-select :placeholder="item.name" size="small" v-else-if="item.searchType == SearchType.SELECT" v-model="row[item.name]" :disabled="item.disable">
           <el-option :key="op.value" :label="op.label" :value="op.value" v-for="op in item.searchDataArray" />
         </el-select>

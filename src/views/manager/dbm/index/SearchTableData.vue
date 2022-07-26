@@ -31,7 +31,7 @@ let columns = ref<Array<Column>>([]);
 // 字段信息
 let columnsResult = ref<Array<SysDbmsTabsCols>>([]);
 
-let page = ref<TabsPageParams>({
+let page = ref<TabsPageParams<SysDbmsTabsTableInfo>>({
   pageNumber: 1,
   sizes: [5, 10, 15],
   pageSize: 6,

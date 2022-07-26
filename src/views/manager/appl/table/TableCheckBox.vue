@@ -70,8 +70,8 @@
         <el-col :span="2"><el-button type="primary" @click="toSave">确定</el-button></el-col>
       </el-row>
     </el-card>
-    <el-dialog v-model="showColumn" title="字段管理" width="80%">
-      <ColumnsConfig v-if="selectRadio != '' && showColumn" :type="localType" :selectRadio="selectRadio" @coloseColumns="showColumn = false"></ColumnsConfig>
+    <el-dialog v-model="showColumn" title="字段管理" width="95%">
+      <ColumnsConfig v-if="selectRadio != '' && showColumn" :type="localType" :selectRadio="selectRadio" :selectTabsRowsType="selectTabsRowsType" @coloseColumns="showColumn = false"></ColumnsConfig>
     </el-dialog>
   </div>
 </template>
@@ -117,6 +117,7 @@ let tabsChecks = ref<Array<SysApplTypeTabsInfoVo>>([]);
 let selectRadio = ref<string>();
 let checkList = ref<Array<string>>([]);
 let input = ref<string>("");
+let selectTabsRowsType = ref<string>();
 
 onBeforeMount(() => {
   localType.value = parents.selectValue;
@@ -126,6 +127,7 @@ onBeforeMount(() => {
 const handleCurrentChange = (val: SysApplTypeTabsInfoVo | undefined) => {
   currentRow.value = val;
   selectRadio.value = val?.tabsUuid;
+  selectTabsRowsType.value = val?.tabsRowsType;
 };
 
 // 获取表名称
@@ -222,7 +224,6 @@ function saveColumns() {
         checkboxType: SearchType.REDIO,
         sort: tabs.sort,
       };
-      debugger;
       http
         .post<any>("/serve/sysApplTypeTabsInfo/saveList", { list: [info] })
         .then((response) => {
@@ -242,6 +243,7 @@ function saveColumns() {
 
 function checkTabColumn(vo: SysApplTypeTabsInfoVo) {
   selectRadio.value = vo.tabsUuid;
+  selectTabsRowsType.value = vo.tabsRowsType;
   showColumn.value = true;
 }
 // 配置列选项

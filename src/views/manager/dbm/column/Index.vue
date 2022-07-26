@@ -396,7 +396,6 @@ function handleCurrentChange(val: number): void {
 
 // 自定义事件
 function onClickRow(res: { index: number; row: any; column: string }) {
-  console.log(res.index);
   // 处理不同事件
   if (res.column == "daoru") {
     http

@@ -142,6 +142,10 @@ const routes = [
     name: 'resultList',
     component: () => import('../views/manager/appl/search/ResultList.vue'),   
   }, { 
+    path: '/resultDetail',
+    name: 'resultDetail',
+    component: () => import('../views/manager/appl/search/ResultDetail.vue'),   
+  }, { 
     path: '/error',
     name: "error",
     component: Err,

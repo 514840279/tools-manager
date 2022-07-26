@@ -50,7 +50,7 @@ onBeforeMount(() => {
 
 function filter(val: Array<String>) {
   result = list.value.filter((number) => !val.includes(number));
-  // console.log('result',result)
+
   if (result.length >= 1) {
     result.forEach((item, index) => {
       tableList.value.forEach((items, indexs) => {
