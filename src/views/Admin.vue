@@ -94,15 +94,15 @@ let headMenu = ref<Menu>({
     { index: "0", text: "首页" },
     { index: "1", text: "权限管理" },
     { index: "2", text: "数据库管理" },
-    { index: "5", text: "分析管理" },
-    { index: "6", text: "爬虫管理" },
-    { index: "7", text: "消息中心" },
+    { index: "3", text: "分析管理" },
+    { index: "4", text: "爬虫管理" },
+    { index: "5", text: "消息中心" },
   ],
 });
 // 替换的菜单
 let aside = ref<Aside>({});
 // 默认展开menu
-const openedsIndex: Array<String> = ["0-1", "1-1", "2-5", "3-1", "4-1", "5-1", "6-1", "7-1"];
+const openedsIndex: Array<String> = ["0-1", "1-1", "2-5", "3-1", "4-1", "5-1"];
 // 菜单集
 let asides = ref<Array<Aside>>([
   {
@@ -139,7 +139,7 @@ let asides = ref<Array<Aside>>([
     ],
   },
   {
-    activeIndex: "2-5",
+    activeIndex: "2-1",
     submenu: [
       {
         index: "2-1",
@@ -199,45 +199,45 @@ let asides = ref<Array<Aside>>([
     ],
   },
   {
+    activeIndex: "3-1",
+    submenu: [
+      {
+        index: "3-1",
+        text: "分析管理",
+        icon: "Message",
+        data: [
+          { index: "3-1-1", text: "模板管理", link: "" },
+          { index: "3-1-2", text: "图形搭配", link: "" },
+        ],
+      },
+    ],
+  },
+  {
+    activeIndex: "4-1",
+    submenu: [
+      {
+        index: "4-1",
+        text: "爬虫管理",
+        icon: "Message",
+        data: [
+          { index: "4-1-1", text: "机器信息", link: "" },
+          { index: "4-1-2", text: "爬虫项目信息", link: "" },
+          { index: "4-1-3", text: "爬虫项目管理", link: "" },
+        ],
+      },
+    ],
+  },
+  {
     activeIndex: "5-1",
     submenu: [
       {
         index: "5-1",
-        text: "分析管理",
-        icon: "Message",
-        data: [
-          { index: "5-1-1", text: "模板管理", link: "" },
-          { index: "5-1-2", text: "图形搭配", link: "" },
-        ],
-      },
-    ],
-  },
-  {
-    activeIndex: "6-1",
-    submenu: [
-      {
-        index: "6-1",
-        text: "爬虫管理",
-        icon: "Message",
-        data: [
-          { index: "6-1-1", text: "机器信息", link: "" },
-          { index: "6-1-2", text: "爬虫项目信息", link: "" },
-          { index: "6-1-3", text: "爬虫项目管理", link: "" },
-        ],
-      },
-    ],
-  },
-  {
-    activeIndex: "7-1",
-    submenu: [
-      {
-        index: "7-1",
         text: "消息中心",
         icon: "Message",
         data: [
-          { index: "7-1-1", text: "消息中心", link: "" },
-          { index: "7-1-2", text: "消息统计分析", link: "" },
-          { index: "7-1-2", text: "网站链接", link: "" },
+          { index: "5-1-1", text: "消息中心", link: "" },
+          { index: "5-1-2", text: "消息统计分析", link: "" },
+          { index: "5-1-2", text: "网站链接", link: "" },
         ],
       },
     ],

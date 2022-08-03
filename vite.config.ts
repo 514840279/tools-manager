@@ -36,6 +36,7 @@ export default defineConfig({
     },
   },
   server: {
+    host: "0.0.0.0",
     port: 4000,
     open: true,
     // 配置代理
@@ -54,7 +55,7 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/serve/, '/serve'),
       },
     }
-  
+
   },
 
 })

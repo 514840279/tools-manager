@@ -19,17 +19,17 @@ import Err from '../views/Error.vue'
 // 我们后面再讨论嵌套路由。
 const routes = [
   {
-  //   path: '/',
-  //   redirect: '/index'   //重定向
-  // }, {
-  //   path: '/index',
-  //   name: "index",
-  //   component: Index,
-  // }, {
-  //   path: '/admin',
-  //   name: "admin",
-  //   component: Admin,
-  }, {
+    //   path: '/',
+    //   redirect: '/index'   //重定向
+    // }, {
+    //   path: '/index',
+    //   name: "index",
+    //   component: Index,
+    // }, {
+    //   path: '/admin',
+    //   name: "admin",
+    //   component: Admin,
+    // }, {
     path: '/home0',
     name: "home0",
     component: Home0,
@@ -69,87 +69,87 @@ const routes = [
     path: '/index',
     name: "index",
     component: () => import('../views/manager/dbm/index/Index.vue'),
-  }, { 
+  }, {
     path: '/database',
     name: "database",
     component: () => import('../views/manager/dbm/database/Index.vue'),
-  }, { 
+  }, {
     path: '/tables',
     name: "tables",
     component: () => import('../views/manager/dbm/tables/Index.vue'),
-  }, { 
+  }, {
     path: '/tabsSearch',
     name: 'tabsSearch',
     component: () => import('../views/manager/dbm/tables/Search.vue'),
-  }, { 
+  }, {
     path: '/searchData',
     name: 'searchData',
     component: () => import('../views/manager/dbm/tables/SearchData.vue'),
-  }, { 
+  }, {
     path: '/columns',
     name: "columns",
     component: () => import('../views/manager/dbm/column/Index.vue'),
-  }, { 
+  }, {
     path: '/generate',
     name: "generate",
     component: () => import('../views/manager/code/generate/Index.vue'),
-  }, { 
+  }, {
     path: '/dicName',
     name: "dicName",
     component: () => import('../views/manager/dic/name/Index.vue'),
-  }, { 
+  }, {
     path: '/dicValue',
     name: "dicValue",
     component: () => import('../views/manager/dic/keyvalue/Index.vue'),
-  }, { 
+  }, {
     path: '/sysMenuInfo',
     name: 'sysMenuInfo',
     component: () => import('../views/manager/softm/SysMenuInfo/Index.vue'),
-  }, { 
+  }, {
     path: '/tabsmergeinfo',
     name: 'tabsmergeinfo',
     component: () => import('../views/manager/dbm/SysDbmsTabsMergeInfo/Index.vue'),
-  }, { 
+  }, {
     path: '/searchIndex',
     name: 'searchIndex',
     component: () => import('../views/manager/dbm/index/SearchIndex.vue'),
-  }, { 
+  }, {
     path: '/searchIndexData',
     name: 'searchIndexData',
     component: () => import('../views/manager/dbm/index/SearchIndexData.vue'),
-  }, { 
+  }, {
     path: '/appl',
     name: 'appl',
-    component: () => import('../views/manager/appl/appl/Index.vue'),    
-  }, { 
+    component: () => import('../views/manager/appl/appl/Index.vue'),
+  }, {
     path: '/applType',
     name: 'applType',
-    component: () => import('../views/manager/appl/type/Index.vue'),   
-  }, { 
+    component: () => import('../views/manager/appl/type/Index.vue'),
+  }, {
     path: '/applTypeTabs',
     name: 'applTypeTabs',
-    component: () => import('../views/manager/appl/table/Index.vue'),   
-  }, { 
+    component: () => import('../views/manager/appl/table/Index.vue'),
+  }, {
     path: '/applDataType',
     name: 'applDataType',
-    component: () => import('../views/manager/appl/datatype/Index.vue'),   
-  }, { 
+    component: () => import('../views/manager/appl/datatype/Index.vue'),
+  }, {
     path: '/applSearch',
     name: 'applSearch',
-    component: () => import('../views/manager/appl/search/Search.vue'),   
-  }, { 
+    component: () => import('../views/manager/appl/search/Search.vue'),
+  }, {
     path: '/resultList',
     name: 'resultList',
-    component: () => import('../views/manager/appl/search/ResultList.vue'),   
-  }, { 
+    component: () => import('../views/manager/appl/search/ResultList.vue'),
+  }, {
     path: '/resultDetail',
     name: 'resultDetail',
-    component: () => import('../views/manager/appl/search/ResultDetail.vue'),   
-  }, { 
+    component: () => import('../views/manager/appl/search/ResultDetail.vue'),
+  }, {
     path: '/error',
     name: "error",
     component: Err,
-  },{
+  }, {
     path: '/:catchAll(.*)',
     redirect: '/error'   //重定向
   },
