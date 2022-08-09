@@ -16,7 +16,7 @@
 
 <script lang="ts" setup>
 // import { defineComponent } from "vue";
-import { defineEmits, ref, onBeforeMount } from "vue";
+import { ref, onBeforeMount } from "vue";
 
 const parents = withDefaults(
   defineProps<{

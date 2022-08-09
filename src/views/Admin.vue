@@ -151,10 +151,30 @@ let asides = ref<Array<Aside>>([
           { index: "2-1-1", text: "数据微服务", link: "/database" },
           { index: "2-1-3", text: "表管配置理", link: "/tables" },
           { index: "2-1-5", text: "字段管理", link: "/columns" },
-          { index: "2-1-6", text: "表查询", link: "/tabsSearch" },
-          { index: "2-1-7", text: "表数据查询", link: "/searchData" },
-          { index: "2-1-8", text: "类型查询", link: "/searchIndex" },
-          { index: "2-1-9", text: "类型数据查询", link: "/searchIndexData" },
+          { index: "2-1-6", text: "数据维护管理", link: "/columnsindex" },
+        ],
+      },
+      {
+        index: "2-6",
+        text: "数据查询",
+        icon: "Message",
+        data: [
+          { index: "2-6-6", text: "表查询", link: "/tabsSearch" },
+          { index: "2-6-7", text: "表数据查询", link: "/searchData" },
+          { index: "2-6-8", text: "类型查询", link: "/searchIndex" },
+          { index: "2-6-9", text: "类型数据查询", link: "/searchIndexData" },
+        ],
+      },
+      {
+        index: "2-5",
+        text: "应用查询配置",
+        icon: "Message",
+        data: [
+          { index: "2-5-1", text: "应用名", link: "/appl" },
+          { index: "2-5-2", text: "应用数据类型", link: "/applDataType" },
+          { index: "2-5-3", text: "类型配置", link: "/applType" },
+          { index: "2-5-4", text: "类型表关系", link: "/applTypeTabs" },
+          { index: "2-5-5", text: "查询", link: "/applSearch" },
         ],
       },
       {
@@ -171,7 +191,7 @@ let asides = ref<Array<Aside>>([
         text: "代码管理",
         icon: "Message",
         data: [
-          // { index: "2-3-1", text: "项目管理", link: "/user" },
+          { index: "2-3-1", text: "项目管理", link: "/user" },
           { index: "2-3-1", text: "代码生成配置", link: "/generate" },
         ],
       },
@@ -182,18 +202,6 @@ let asides = ref<Array<Aside>>([
         data: [
           { index: "2-4-1", text: "字典名称", link: "/dicName" },
           { index: "2-4-2", text: "字典值", link: "/dicValue" },
-        ],
-      },
-      {
-        index: "2-5",
-        text: "应用查询配置",
-        icon: "Message",
-        data: [
-          { index: "2-5-1", text: "应用名", link: "/appl" },
-          { index: "2-5-2", text: "应用数据类型", link: "/applDataType" },
-          { index: "2-5-3", text: "类型配置", link: "/applType" },
-          { index: "2-5-4", text: "类型表关系", link: "/applTypeTabs" },
-          { index: "2-5-5", text: "查询", link: "/applSearch" },
         ],
       },
     ],
