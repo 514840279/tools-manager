@@ -1,29 +1,41 @@
 <template>
   <div class="bg-box">
-    <el-form ref="loginFormRef" :model="loginForm" status-icon :rules="rules" size="large" label-width="100px" class="loginForm">
-      <h1 class="title">{{ title }}</h1>
-      <el-form-item label="用户名" prop="name">
-        <el-input v-model="loginForm.name" autocomplete="off" />
-      </el-form-item>
-      <el-form-item label="密码" prop="password">
-        <el-input v-model="loginForm.password" type="password" autocomplete="off" />
-      </el-form-item>
-      <el-form-item>
-        <el-button class="sub-btn" type="primary" @click="submitForm()">确定</el-button>
-      </el-form-item>
-    </el-form>
+    <el-card class="box-card">
+      <el-form ref="loginFormRef" :model="loginForm" status-icon :rules="rules" size="large" label-width="80px" class="loginForm">
+        <h1 class="title">{{ title }}</h1>
+        <el-form-item label="用户名" prop="name">
+          <el-input v-model="loginForm.name" autocomplete="off" />
+        </el-form-item>
+        <el-form-item label="密码" prop="password">
+          <el-input v-model="loginForm.password" type="password" autocomplete="off" />
+        </el-form-item>
+        <el-form-item>
+          <el-button class="sub-btn" type="primary" @click="submitForm()">确定</el-button>
+        </el-form-item>
+      </el-form>
+    </el-card>
   </div>
 </template>
 
 <script setup lang="ts">
+import http from "@/plugins/http";
 import { ref } from "vue";
-import {LoginForm} from '../interface/Login'
+import { LoginForm } from "../interface/Login";
 
-const title: String = "登录系统";
+import { userStore } from "@store/user";
+// 使普通数据变响应式的函数
+import { storeToRefs } from "pinia";
+// 实例化仓库
+const store = userStore();
+// 获取数据
+
+const { userinfo } = storeToRefs(store);
+
+const title: String = "登录";
 
 let loginForm = ref<LoginForm>({
-  name: "312",
-  password: "123",
+  name: "wth",
+  password: "123456",
 });
 
 const rules = {
@@ -38,7 +50,19 @@ const rules = {
 };
 
 function submitForm() {
-  console.log(loginForm.value);
+  // console.log(loginForm.value);
+  http
+    .post<any>("/security/login?username=" + loginForm.value.name + "&password=" + loginForm.value.password, {})
+    .then((reponse) => {
+      if (reponse.data != null && reponse.code == 200) {
+        // 此处结合 jpa的page返回为content ，mybatis应为 records
+        console.log(reponse, 123);
+        userinfo.value.roles = ["admin"];
+      }
+    })
+    .catch((err) => {
+      // TODO
+    });
 }
 </script>
 
@@ -46,24 +70,28 @@ function submitForm() {
 body {
   margin: 0px;
   padding: 0px;
-
 }
 
 .bg-box {
   width: 100%;
   height: 100%;
-  background-image: url("../assets/log-background/bg1.jpg");
+  // background-image: url("../assets/log-background/bg1.jpg");
   background-size: cover;
   background-attachment: fixed;
   /*关键*/
   background-position: top;
   overflow-y: hidden;
   min-height: 697px;
-  padding-top: 250px;
+  padding-top: 180px;
   zoom: 1;
 
+  .box-card {
+    width: 45%;
+    margin: auto;
+  }
+
   .loginForm {
-    width: 550px;
+    width: 450px;
     height: 300px;
     background-color: white;
     padding-top: 20px;
