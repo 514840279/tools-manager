@@ -49,6 +49,7 @@ export default defineConfig({
           *  最后请求的URL为: http://127.0.0.1:9693/httphwm/getList
           */
         target: 'http://chuxuezhe.wang:18001/',
+        // target: 'http://192.168.0.103:18001/',
         ws: true,
         changeOrigin: true,
         // 拦截到的请求路径 testaxios/httphwm/getList，/testaxios会被替换成空

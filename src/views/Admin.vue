@@ -82,7 +82,7 @@ const store = mainStore();
 // 解构并使数据具有响应式
 const { headindex, currentIndex, currentPath, currentList, asideWidth, isCollapse, ita } = storeToRefs(store);
 
-let circleUrl = ref<string>("favicon.ico");
+let circleUrl = ref<string>("/src/assets/favicon_logosc 1/favicon.ico");
 
 // 头部导航菜单
 let headMenu = ref<Menu>({
