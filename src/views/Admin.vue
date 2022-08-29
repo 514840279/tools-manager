@@ -252,7 +252,7 @@ let asides = ref<Array<Aside>>([
         index: "5-2",
         text: "基金",
         icon: "Message",
-        data: [{ index: "5-2-1", text: "基金列表", link: "/jijin" }],
+        data: [{ index: "5-2-1", text: "基金列表", link: "/jipage" }],
       },
     ],
   },

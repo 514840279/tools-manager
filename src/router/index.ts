@@ -146,9 +146,9 @@ const routes = [
     name: 'resultDetail',
     component: () => import('../views/manager/appl/search/ResultDetail.vue'),
   }, {
-    path: '/jijin',
-    name: 'jijin',
-    component: () => import('../views/manager/message/jijin/Index.vue'),
+    path: '/jipage',
+    name: 'jipage',
+    component: () => import('../views/manager/message/jijin/jijin/Index.vue'),
   }, {
     path: '/error',
     name: "error",
