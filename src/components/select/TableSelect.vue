@@ -1,14 +1,7 @@
 <template>
-  <el-card>
-    <div id="table-select">
-      <div id="title">
-        <b>{{ parents.title }}</b>
-      </div>
-      <el-scrollbar height="540px">
-        <div v-for="(item, key) in localData" :key="key" :class="selectData?.value == item.value ? 'scrollbar-demo-item' : 'scrollbar-select-item'" @click="clickOption(item)">{{ item.label }}</div>
-      </el-scrollbar>
-    </div>
-  </el-card>
+  <el-scrollbar height="540px">
+    <span v-for="(item, key) in localData" :key="key" :class="selectData?.value == item.value ? 'scrollbar-demo-item' : 'scrollbar-select-item'" @click="clickOption(item)" :title="item.label + '(' + item.title + ')'">{{ item.title ? item.title : item.label }}</span>
+  </el-scrollbar>
 </template>
 
 <script setup lang="ts">
@@ -18,11 +11,9 @@ import { onBeforeMount, ref } from "vue";
 const parents = withDefaults(
   defineProps<{
     data: Array<SelectOptions>;
-    title?: string;
   }>(),
   {
     data: () => [],
-    title: "",
   }
 );
 

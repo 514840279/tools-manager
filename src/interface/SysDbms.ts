@@ -1,23 +1,23 @@
 // `chuxue`.`sys_dbms_tabs_table_info`   
-export interface SysDbmsTabsTableInfo{
+export interface SysDbmsTabsTableInfo {
   createTime?: Date,
   createUser?: string,
   deleteFlag?: number,
   discription?: string,
   dissql?: number,
-  jdbcUuid?: string,
+  jdbcUuid?: string | null,
   sort?: number,
   tabsDesc?: string,
   tabsName?: string,
   tabsRows?: number,
   tabsSpace?: string,
-  typeCode?: string,
+  typeCode?: string | null,
   updateTime?: Date,
   updateUser?: string,
   uuid?: string,
 }
 
-export interface SysDbmsTabsCols{
+export interface SysDbmsTabsCols {
   uuid: string,
   updateTime?: Date,
   createTime?: Date,

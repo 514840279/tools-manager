@@ -96,13 +96,14 @@ let headMenu = ref<Menu>({
     { index: "2", text: "数据库管理" },
     { index: "3", text: "分析管理" },
     { index: "4", text: "爬虫管理" },
-    { index: "5", text: "消息中心" },
+    { index: "5", text: "数据清洗" },
+    { index: "6", text: "消息中心" },
   ],
 });
 // 替换的菜单
 let aside = ref<Aside>({});
 // 默认展开menu
-const openedsIndex: Array<String> = ["0-1", "1-1", "2-5", "3-1", "4-1", "5-1"];
+const openedsIndex: Array<String> = ["0-1", "1-1", "2-5", "3-1", "4-1", "5-1", "6-1"];
 // 菜单集
 let asides = ref<Array<Aside>>([
   {
@@ -151,7 +152,7 @@ let asides = ref<Array<Aside>>([
           { index: "2-1-1", text: "数据微服务", link: "/database" },
           { index: "2-1-3", text: "表管配置理", link: "/tables" },
           { index: "2-1-5", text: "字段管理", link: "/columns" },
-          { index: "2-1-6", text: "数据维护管理", link: "/columnsindex" },
+          { index: "2-1-6", text: "数据维护管理", link: "/advice" },
         ],
       },
       {
@@ -177,15 +178,7 @@ let asides = ref<Array<Aside>>([
           { index: "2-5-5", text: "查询", link: "/applSearch" },
         ],
       },
-      {
-        index: "2-2",
-        text: "数据迁移",
-        icon: "Message",
-        data: [
-          { index: "2-2-1", text: "简单复制", link: "/tabsmergeinfo" },
-          { index: "2-2-2", text: "复杂清洗", link: "/table" },
-        ],
-      },
+
       {
         index: "2-3",
         text: "代码管理",
@@ -218,6 +211,24 @@ let asides = ref<Array<Aside>>([
           { index: "3-1-2", text: "图形搭配", link: "" },
         ],
       },
+      {
+        index: "3-2",
+        text: "数据库分析",
+        icon: "Message",
+        data: [
+          { index: "3-1-1", text: "模板管理", link: "" },
+          { index: "3-1-2", text: "图形搭配", link: "" },
+        ],
+      },
+      {
+        index: "3-3",
+        text: "es分析",
+        icon: "Message",
+        data: [
+          { index: "3-1-1", text: "模板管理", link: "" },
+          { index: "3-1-2", text: "图形搭配", link: "" },
+        ],
+      },
     ],
   },
   {
@@ -235,6 +246,33 @@ let asides = ref<Array<Aside>>([
       },
     ],
   },
+  {
+    activeIndex: "4-1",
+    submenu: [
+      {
+        index: "4-1",
+        text: "爬虫管理",
+        icon: "Message",
+        data: [
+          { index: "4-1-1", text: "机器信息", link: "" },
+          { index: "4-1-2", text: "规则设置", link: "" },
+          { index: "4-1-3", text: "单表清洗", link: "" },
+        ],
+      },
+      {
+        index: "4-2",
+        text: "数据迁移",
+        icon: "Message",
+        data: [
+          { index: "4-2-1", text: "简单复制", link: "" },
+          { index: "4-2-2", text: "导入备份", link: "" },
+          { index: "4-2-2", text: "导出备份", link: "" },
+          { index: "4-2-2", text: "跨库迁移", link: "" },
+        ],
+      },
+    ],
+  },
+
   {
     activeIndex: "5-1",
     submenu: [

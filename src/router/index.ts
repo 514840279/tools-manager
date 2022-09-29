@@ -90,6 +90,10 @@ const routes = [
     name: "columns",
     component: () => import('../views/manager/dbm/column/Index.vue'),
   }, {
+    path: '/advice',
+    name: "advice",
+    component: () => import('../views/manager/dbm/advice/Index.vue'),
+  }, {
     path: '/generate',
     name: "generate",
     component: () => import('../views/manager/code/generate/Index.vue'),

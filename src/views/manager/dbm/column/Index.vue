@@ -1,7 +1,26 @@
 <template>
   <el-row>
     <el-col :span="6">
-      <TableSelect v-if="tabsSelect.length > 0" :data="tabsSelect" title="选择表" @on-select="clickTable"></TableSelect>
+      <el-card>
+        <div id="table-select">
+          <div id="title">
+            <b>选择表</b>
+          </div>
+          <el-row>
+            <el-col :span="12">
+              <el-select v-model="tabeParam.jdbcUuid" placeholder="选择微服务" size="small" @change="loadTabs(), init()" :clearable="true" :filterable="true">
+                <el-option v-for="item in jdbcSelect" :key="item.value" :label="item.label" :value="item.value" />
+              </el-select>
+            </el-col>
+            <el-col :span="12">
+              <el-select v-model="tabeParam.typeCode" placeholder="选择类型" size="small" @change="loadTabs(), init()" :clearable="true" :filterable="true">
+                <el-option v-for="item in typeSelect" :key="item.value" :label="item.label" :value="item.value" />
+              </el-select>
+            </el-col>
+          </el-row>
+          <TableSelect v-if="showSelectTabs && tabsSelect.length > 0" :data="tabsSelect" title="选择表" @on-select="clickTable"></TableSelect>
+        </div>
+      </el-card>
     </el-col>
     <el-col :span="18">
       <Table :columns="tablProp.columns" :rootUrl="tablProp.rootUrl" :optionBtn="localOptionBtn" :searchParameters="tablProp.searchParameters" :sortParameters="tablProp.sortParameters" style="margin-left: 15px">
@@ -34,6 +53,7 @@ import { Column, SearchType, SelectOptions, OptionBtn, PageParam, TableProps } f
 import { onBeforeMount, onMounted, ref } from "vue";
 import http from "@plugins/http";
 import TableSelect from "@components/select/TableSelect.vue";
+import { SysDbmsTabsTableInfo } from "@/interface/SysDbms";
 
 // let columns = ref<Array<Column>>();
 let loadColumns = ref<Array<Column>>();
@@ -86,9 +106,11 @@ let page = ref<PageParam<any>>({
   totalElements: 0,
 });
 
+let tabeParam = ref<SysDbmsTabsTableInfo>({});
+
 onBeforeMount(() => {
-  // loadType();
-  // loadJdbc();
+  loadType();
+  loadJdbc();
   loadIndex();
   loadTabs();
   init();
@@ -308,14 +330,23 @@ function loadType() {
 
 // 加载表信息
 function loadTabs() {
+  showSelectTabs.value = false;
+  tabsSelect.value = [];
+  if (tabeParam.value.jdbcUuid == "") {
+    tabeParam.value.jdbcUuid = null;
+  }
+  if (tabeParam.value.typeCode == "") {
+    tabeParam.value.typeCode = null;
+  }
   http
-    .post<any>("/serve/sysDbmsTabsTableInfo/findAll", { jdbcUuid: jdbcSelectValue.value })
+    .post<any>("/serve/sysDbmsTabsTableInfo/findAll", tabeParam.value)
     .then((response) => {
       if (response.data != null && response.code == 200) {
         response.data.forEach((element: any) => {
           let op: SelectOptions = {
             value: element.uuid,
             label: element.tabsName,
+            title: element.tabsDesc,
           };
           tabsSelect.value?.push(op);
         });
